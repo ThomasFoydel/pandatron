@@ -4,6 +4,7 @@ import Audio from 'Audio';
 
 const Oscillator = () => {
   const [masterGainValue, setMasterGainValue] = useState(0);
+
   const [oscillatorNodes, setOscillatorNodes] = useState([]);
 
   // initialize state for selected oscillator index
@@ -13,31 +14,34 @@ const Oscillator = () => {
   ] = useState(-1);
 
   const initializeMasterGain = () => {
-    Audio.masterGainNode.gain.setValueAtTime(0.5, Audio.context.currentTime);
+    // Connect the masterGainNode to the audio context to allow it to output sound.
     Audio.masterGainNode.connect(Audio.context.destination);
-    setMasterGainValue(0.5);
+
+    // Set masterGain Value to 0
+    Audio.masterGainNode.gain.setValueAtTime(0, Audio.context.currentTime);
   };
 
+  //initialize masterGainNode on first render
   useEffect(initializeMasterGain, []);
 
   const changeMasterVolume = e => {
-    Audio.masterGainNode.gain.setValueAtTime(
-      parseInt(e.target.value / 100),
-      Audio.context.currentTime
-    );
-
     setMasterGainValue(e.target.value / 100);
   };
 
   const addOscillatorNode = () => {
+    // Create a GainNode for the oscillator, set it to 0 volume and connect it to masterGainNode
     const oscillatorGainNode = Audio.context.createGain();
     oscillatorGainNode.gain.setValueAtTime(0, Audio.context.currentTime);
     oscillatorGainNode.connect(Audio.masterGainNode);
 
+    // Create OscillatorNode, connect it to its GainNode, and make it start playing.
     const oscillatorNode = Audio.context.createOscillator();
     oscillatorNode.connect(oscillatorGainNode);
     oscillatorNode.start();
 
+    // Store the nodes along with their values in state.
+    // Note: When an oscillator is created, frequency is set to 440,
+    // and type is set to 'sine' by default.
     const oscillatorNodeValues = {
       oscillatorNode: oscillatorNode,
       oscillatorGainNode: oscillatorGainNode,
@@ -110,6 +114,24 @@ const Oscillator = () => {
     }
   };
 
+  // Fade in the MasterGainNode gain value to masterGainValue on mouseDown by .001 seconds
+  const play = () => {
+    Audio.masterGainNode.gain.setTargetAtTime(
+      masterGainValue,
+      Audio.context.currentTime,
+      0.001
+    );
+  };
+
+  // Fade out the MasterGainNode gain value to 0 on mouseDown by .001 seconds
+  const pause = () => {
+    Audio.masterGainNode.gain.setTargetAtTime(
+      0,
+      Audio.context.currentTime,
+      0.001
+    );
+  };
+
   const oscillatorSelectOptions = oscillatorNodes.map((oscillatorNode, i) => (
     <option key={`oscillator-${i}`} value={i}>
       Oscillator {i}
@@ -117,7 +139,7 @@ const Oscillator = () => {
   ));
 
   return (
-    <div className='SynthPad'>
+    <div className='App'>
       <button onClick={addOscillatorNode}>Add New Oscillator</button>
 
       {/* Add onChange handler in order to setSelectedOscillatorNode, render selection options,
@@ -184,8 +206,9 @@ const Oscillator = () => {
         onChange={changeMasterVolume}
         className='pad-volume'
       />
-
-      <button className='play'>Play</button>
+      <button onMouseDown={play} onMouseUp={pause} className='play'>
+        Play
+      </button>
     </div>
   );
 };
