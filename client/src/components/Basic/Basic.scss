@@ -1,13 +1,20 @@
 .osc {
-  width: 40rem;
+  width: 30rem;
   padding: 1rem;
   margin: 1rem;
   background: linear-gradient(dodgerblue, rgb(53, 201, 255));
 }
 
 .osc-master {
-  width: 40rem;
+  width: 30rem;
   padding: 1rem;
   margin: 1rem;
   background: linear-gradient(dodgerblue, rgb(53, 201, 255));
+}
+
+.filter {
+  width: 30rem;
+  padding: 1rem;
+  margin: 1rem;
+  background: linear-gradient(rgb(255, 165, 30), rgb(255, 83, 53));
 }
