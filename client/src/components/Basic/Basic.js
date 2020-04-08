@@ -1,11 +1,31 @@
 import React, { useEffect } from 'react';
 import './Basic.scss';
-import block from 'IMreverbs/block.irs';
-
+// import block from 'IMreverbs/block.irs';
+import QwertyHancock from 'qwerty-hancock';
 // import example from './example';
 
 const Basic = () => {
   const actx = new AudioContext();
+  console.log(QwertyHancock);
+  useEffect(() => {
+    // const keyboard = new QwertyHancock({
+    //   id: 'keyboard',
+    //   width: 600,
+    //   height: 150,
+    //   octaves: 2,
+    // });
+
+    const keyboard = new QwertyHancock({
+      id: 'keyboard',
+      width: 1000,
+      height: 68,
+      octaves: 5,
+      startNote: 'C0',
+      // whiteKeyColour: 'blue',
+      // blackKeyColour: 'green',
+      // hoverColour: '#f3e939',
+    });
+  }, []);
 
   // function getSample(url, cb) {
   //   var request = new XMLHttpRequest();
@@ -52,18 +72,19 @@ const Basic = () => {
   const gain1 = actx.createGain();
   const gain2 = actx.createGain();
 
+  let delay1 = actx.createDelay(5.0);
+
+  const distortion1 = actx.createWaveShaper();
+  distortion1.curve = makeDistortionCurve(0);
+
   const reverbMixGainWet = actx.createGain();
   const reverbMixGainDry = actx.createGain();
   reverbMixGainWet.gain.value = 0.3;
   reverbMixGainDry.gain.value = 0.7;
 
-  const distortion1 = actx.createWaveShaper();
-  distortion1.curve = makeDistortionCurve(0);
   const convolver1 = actx.createConvolver();
-
-  var impulseBuffer = impulseResponse(4, 4, false);
+  let impulseBuffer = impulseResponse(4, 4, false);
   convolver1.buffer = impulseBuffer;
-  console.log(convolver1);
 
   gain1.gain.value = 0.5;
   gain2.gain.value = 0.5;
@@ -83,7 +104,9 @@ const Basic = () => {
   filter1.connect(compressor);
 
   compressor.connect(reverbMixGainDry);
-  compressor.connect(convolver1);
+
+  compressor.connect(delay1);
+  delay1.connect(convolver1);
 
   convolver1.connect(reverbMixGainWet);
 
@@ -101,11 +124,11 @@ const Basic = () => {
   };
 
   const changePitch1 = (e) => {
-    const newVal = +e.target.value + 200;
+    const newVal = +e.target.value;
     osc1.frequency.linearRampToValueAtTime(newVal, actx.currentTime + 0.1);
   };
   const changePitch2 = (e) => {
-    const newVal = +e.target.value + 200;
+    const newVal = +e.target.value;
     osc2.frequency.linearRampToValueAtTime(newVal, actx.currentTime + 0.1);
   };
 
@@ -115,7 +138,6 @@ const Basic = () => {
   };
 
   const mixReverbGain = (e) => {
-    console.log('mixReverbGain, e: ', e.target.value);
     let newDryVal;
     if (e.target.value < 100) {
       // newDryVal = 1 - e.target.value / 100;
@@ -159,6 +181,12 @@ const Basic = () => {
     convolver1.buffer = newBuffer;
   };
 
+  const changeDelayTime = (e) => {
+    const eventVal = +e.target.value / 20;
+    console.log(eventVal);
+    delay1.delayTime.setValueAtTime(eventVal.toFixed(1), actx.currentTime);
+  };
+
   let startedUp = false;
   const startUp = () => {
     if (!startedUp) {
@@ -182,7 +210,8 @@ const Basic = () => {
           </select>
         </div>
         <div>
-          change pitch 1<input type='range' onChange={changePitch1}></input>
+          change pitch 1
+          <input type='range' max='10000' onChange={changePitch1}></input>
         </div>
       </div>
 
@@ -198,7 +227,8 @@ const Basic = () => {
           </select>
         </div>
         <div>
-          change pitch 2<input type='range' onChange={changePitch2}></input>
+          change pitch 2
+          <input type='range' max='10000' onChange={changePitch2}></input>
         </div>
       </div>
 
@@ -247,6 +277,12 @@ const Basic = () => {
         </div>
         <button onClick={startUp}>start up</button>
       </div>
+
+      <div className='delay'>
+        delay <input type='range' onChange={changeDelayTime} />
+      </div>
+
+      <div id='keyboard'></div>
     </>
   );
 };
