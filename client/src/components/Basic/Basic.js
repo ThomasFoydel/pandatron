@@ -3,6 +3,7 @@ import './Basic.scss';
 // import block from 'IMreverbs/block.irs';
 import QwertyHancock from 'qwerty-hancock';
 // import example from './example';
+import oscClass from './oscClass';
 
 const Basic = () => {
   const actx = new AudioContext();
@@ -25,6 +26,9 @@ const Basic = () => {
       // blackKeyColour: 'green',
       // hoverColour: '#f3e939',
     });
+    keyboard.onKeyDown = () => {
+      const newOsc = new oscClass(actx, 'sawtooth', 600);
+    };
   }, []);
 
   // function getSample(url, cb) {
@@ -228,7 +232,7 @@ const Basic = () => {
         </div>
         <div>
           change pitch 2
-          <input type='range' max='10000' onChange={changePitch2}></input>
+          <input type='range' max='1000' onChange={changePitch2}></input>
         </div>
       </div>
 
