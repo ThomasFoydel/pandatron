@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Basic.scss';
 // import block from 'IMreverbs/block.irs';
 import QwertyHancock from 'qwerty-hancock';
@@ -6,28 +6,51 @@ import QwertyHancock from 'qwerty-hancock';
 import oscClass from './oscClass';
 
 const Basic = () => {
-  const actx = new AudioContext();
-  console.log(QwertyHancock);
-  useEffect(() => {
-    // const keyboard = new QwertyHancock({
-    //   id: 'keyboard',
-    //   width: 600,
-    //   height: 150,
-    //   octaves: 2,
-    // });
+  // const [attack, setAttack] = useState(1);
+  // const [decay, setDecay] = useState(1);
+  // const [sustain, setSustain] = useState(1);
+  // const [release, setRelease] = useState(1);
 
+  let attack = 1;
+  let decay = 1;
+  let sustain = 1;
+  let release = 1;
+
+  const actx = new AudioContext();
+  useEffect(() => {
     const keyboard = new QwertyHancock({
       id: 'keyboard',
       width: 1000,
       height: 68,
       octaves: 5,
-      startNote: 'C0',
+      startNote: 'C3',
       // whiteKeyColour: 'blue',
       // blackKeyColour: 'green',
       // hoverColour: '#f3e939',
     });
-    keyboard.onKeyDown = () => {
-      const newOsc = new oscClass(actx, 'sawtooth', 600);
+    let nodes = [];
+    keyboard.keyDown = (note, freq) => {
+      const envelope = { attack, decay, sustain, release };
+      const newOsc = new oscClass(
+        actx,
+        'sawtooth',
+        freq,
+        envelope,
+        oscMasterGain1
+      );
+      nodes.push(newOsc);
+    };
+    keyboard.keyUp = (note, freq) => {
+      var new_nodes = [];
+      for (var i = 0; i < nodes.length; i++) {
+        if (Math.round(nodes[i].osc.frequency.value) === Math.round(freq)) {
+          nodes[i].stop(0);
+          // nodes[i].osc.disconnect();
+        } else {
+          new_nodes.push(nodes[i]);
+        }
+      }
+      nodes = new_nodes;
     };
   }, []);
 
@@ -144,13 +167,11 @@ const Basic = () => {
   const mixReverbGain = (e) => {
     let newDryVal;
     if (e.target.value < 100) {
-      // newDryVal = 1 - e.target.value / 100;
       newDryVal = (100 - e.target.value) / 100;
     } else {
       newDryVal = 0;
     }
 
-    console.log('mixReverbGain, newDryVal: ', newDryVal.toFixed(2));
     reverbMixGainDry.gain.setValueAtTime(
       newDryVal.toFixed(2),
       actx.currentTime
@@ -187,7 +208,6 @@ const Basic = () => {
 
   const changeDelayTime = (e) => {
     const eventVal = +e.target.value / 20;
-    console.log(eventVal);
     delay1.delayTime.setValueAtTime(eventVal.toFixed(1), actx.currentTime);
   };
 
@@ -284,6 +304,38 @@ const Basic = () => {
 
       <div className='delay'>
         delay <input type='range' onChange={changeDelayTime} />
+      </div>
+
+      <div className='osc'>
+        <div>
+          Attack{' '}
+          <input
+            type='range'
+            max='500'
+            onChange={(e) => (attack = +e.target.value / 100)}
+          />
+        </div>
+        <div>
+          Decay{' '}
+          <input
+            type='range'
+            onChange={(e) => (decay = +e.target.value / 100)}
+          />
+        </div>
+        <div>
+          Sustain{' '}
+          <input
+            type='range'
+            onChange={(e) => (sustain = +e.target.value / 100)}
+          />
+        </div>
+        <div>
+          Release{' '}
+          <input
+            type='range'
+            onChange={(e) => (release = +e.target.value / 100)}
+          />
+        </div>
       </div>
 
       <div id='keyboard'></div>
