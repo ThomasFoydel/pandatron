@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Basic from 'components/Basic/Basic';
+import './App.scss';
 
 function App() {
   return (
-    <div className='App'>
+    <>
       <h1>panda</h1>
       <Basic />
-    </div>
+    </>
   );
 }
 

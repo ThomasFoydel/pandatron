@@ -1,5 +1,6 @@
-.osc {
-  width: 30rem;
+.osc,
+.subosc {
+  width: 17rem;
   padding: 1rem;
   margin: 1rem;
   background: linear-gradient(dodgerblue, rgb(53, 201, 255));
@@ -12,7 +13,9 @@
   background: linear-gradient(dodgerblue, rgb(53, 201, 255));
 }
 
-.filter,
+.filter1,
+.distortion,
+.reverb,
 .delay {
   width: 30rem;
   padding: 1rem;
