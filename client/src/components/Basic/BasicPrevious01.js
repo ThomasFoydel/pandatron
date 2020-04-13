@@ -16,17 +16,14 @@ const Basic = () => {
   let sustain = 1;
   let release = 1;
 
-  let wavetable1 = 'sawtooth';
-  let wavetable2 = 'sine';
-
   const actx = new AudioContext();
   useEffect(() => {
     const keyboard = new QwertyHancock({
       id: 'keyboard',
       width: 1000,
       height: 68,
-      octaves: 4,
-      startNote: 'C4',
+      octaves: 5,
+      startNote: 'C3',
       // whiteKeyColour: 'blue',
       // blackKeyColour: 'green',
       // hoverColour: '#f3e939',
@@ -36,25 +33,19 @@ const Basic = () => {
       const envelope = { attack, decay, sustain, release };
       const newOsc = new oscClass(
         actx,
-        wavetable1,
+        'sawtooth',
         freq,
         envelope,
         oscMasterGain1
       );
-      const newOsc2 = new oscClass(
-        actx,
-        wavetable2,
-        freq,
-        envelope,
-        oscMasterGain1
-      );
-      nodes.push(newOsc, newOsc2);
+      nodes.push(newOsc);
     };
     keyboard.keyUp = (note, freq) => {
       var new_nodes = [];
       for (var i = 0; i < nodes.length; i++) {
         if (Math.round(nodes[i].osc.frequency.value) === Math.round(freq)) {
           nodes[i].stop(0);
+          // nodes[i].osc.disconnect();
         } else {
           new_nodes.push(nodes[i]);
         }
@@ -62,6 +53,16 @@ const Basic = () => {
       nodes = new_nodes;
     };
   }, []);
+
+  // function getSample(url, cb) {
+  //   var request = new XMLHttpRequest();
+  //   request.open('GET', url);
+  //   request.responseType = 'arraybuffer';
+  //   request.onload = function () {
+  //     actx.decodeAudioData(request.response, cb);
+  //   };
+  //   request.send();
+  // }
 
   function makeDistortionCurve(amount) {
     var k = typeof amount === 'number' ? amount : 0,
@@ -93,6 +94,18 @@ const Basic = () => {
     return impulse;
   }
 
+  // const osc1 = actx.createOscillator();
+  // const osc2 = actx.createOscillator();
+  // const gain1 = actx.createGain();
+  // const gain2 = actx.createGain();
+
+  // gain1.gain.value = 0.5;
+  // gain2.gain.value = 0.5;
+  // osc1.connect(gain1);
+  // gain1.connect(oscMasterGain1);
+
+  // osc2.connect(gain2);
+  // gain2.connect(oscMasterGain1);
   let delay1 = actx.createDelay(5.0);
 
   const distortion1 = actx.createWaveShaper();
@@ -196,40 +209,49 @@ const Basic = () => {
     delay1.delayTime.setValueAtTime(eventVal.toFixed(1), actx.currentTime);
   };
 
+  // let startedUp = false;
+  // const startUp = () => {
+  //   if (!startedUp) {
+  //     osc1.start();
+  //     osc2.start();
+  //     startedUp = true;
+  //   }
+  // };
+
   return (
     <>
       <div className='osc'>
         osc 1
         <div>
           wavetable
-          <select onChange={(e) => (wavetable1 = e.target.value)}>
+          <select onChange={changeWaveTable1}>
             <option value='sine'>sine</option>
             <option value='sawtooth'>sawtooth</option>
             <option value='triangle'>triangle</option>
             <option value='square'>square</option>
           </select>
         </div>
-        {/* <div>
+        <div>
           change pitch 1
           <input type='range' max='10000' onChange={changePitch1}></input>
-        </div> */}
+        </div>
       </div>
 
       <div className='osc'>
         osc 2
         <div>
           wavetable
-          <select onChange={(e) => (wavetable2 = e.target.value)}>
+          <select onChange={changeWaveTable2}>
             <option value='sine'>sine</option>
             <option value='sawtooth'>sawtooth</option>
             <option value='triangle'>triangle</option>
             <option value='square'>square</option>
           </select>
         </div>
-        {/* <div>
+        <div>
           change pitch 2
           <input type='range' max='1000' onChange={changePitch2}></input>
-        </div> */}
+        </div>
       </div>
 
       <div className='filter1'>
@@ -275,6 +297,7 @@ const Basic = () => {
           osc master gain
           <input type='range' onChange={changeOscMasterGain1}></input>
         </div>
+        {/* <button onClick={startUp}>start up</button> */}
       </div>
 
       <div className='delay'>
