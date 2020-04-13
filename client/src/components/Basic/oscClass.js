@@ -1,6 +1,15 @@
 export default class oscClass {
-  constructor(context, type, frequency, detune, envelope, connection) {
+  constructor(
+    context,
+    type,
+    calculatedFrequency,
+    detune,
+    envelope,
+    connection,
+    initialFreq
+  ) {
     this.context = context;
+    this.initialFreq = initialFreq;
     this.osc = this.context.createOscillator();
     this.osc.start();
     this.osc.detune.setValueAtTime(detune, this.context.currentTime);
@@ -9,7 +18,7 @@ export default class oscClass {
     this.osc.type = type;
     this.osc.connect(this.gateGain);
     this.gateGain.connect(connection);
-    this.osc.frequency.value = frequency;
+    this.osc.frequency.value = calculatedFrequency;
 
     this.envelope = envelope
       ? envelope

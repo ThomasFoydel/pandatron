@@ -22,11 +22,11 @@ const OscController = ({
       <div>
         octave
         <select onChange={changeOctaveOsc}>
-          <option value='octaveTwoUp'>+2</option>
-          <option value='octaveOneUp'>+1</option>
-          <option value='octaveNone'>0</option>
-          <option value='octaveOneDown'>-1</option>
-          <option value='octaveTwoDown'>-2</option>
+          <option value={2}>+2</option>
+          <option value={1}>+1</option>
+          <option value={0}>0</option>
+          <option value={-1}>-1</option>
+          <option value={-2}>-2</option>
         </select>
       </div>
       <div>

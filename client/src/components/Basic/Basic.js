@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './Basic.scss';
-// import block from 'IMreverbs/block.irs';
 import QwertyHancock from 'qwerty-hancock';
-// import example from './example';
 import oscClass from './oscClass';
 import OscController from 'components/OscController/OscController';
+import {
+  makeDistortionCurve,
+  impulseResponse,
+  calcFreq,
+} from '../../util/util';
 
 const Basic = () => {
   const actx = new AudioContext();
@@ -13,6 +16,7 @@ const Basic = () => {
   // const [sustain, setSustain] = useState(1);
   // const [release, setRelease] = useState(1);
 
+  //OSCILLATOR SETTINGS
   let attack = 1;
   let decay = 1;
   let sustain = 1;
@@ -21,89 +25,16 @@ const Basic = () => {
   let wavetable2 = 'sine';
   let osc1Detune = 0;
   let osc2Detune = 0;
+  let osc1OctaveOffset = '0';
+  let osc2OctaveOffset = '0';
 
   let oscGain1 = actx.createGain(0.5);
   let oscGain2 = actx.createGain(0.5);
 
-  useEffect(() => {
-    const keyboard = new QwertyHancock({
-      id: 'keyboard',
-      width: 1000,
-      height: 68,
-      octaves: 4,
-      startNote: 'C4',
-      // whiteKeyColour: 'blue',
-      // blackKeyColour: 'green',
-      // hoverColour: '#f3e939',
-    });
-    let nodes = [];
-    keyboard.keyDown = (note, freq) => {
-      const envelope = { attack, decay, sustain, release };
-      const newOsc = new oscClass(
-        actx,
-        wavetable1,
-        freq,
-        osc1Detune,
-        envelope,
-        oscGain1
-      );
-      const newOsc2 = new oscClass(
-        actx,
-        wavetable2,
-        freq,
-        osc2Detune,
-        envelope,
-        oscGain2
-      );
-      nodes.push(newOsc, newOsc2);
-    };
-    keyboard.keyUp = (note, freq) => {
-      var new_nodes = [];
-      for (var i = 0; i < nodes.length; i++) {
-        if (Math.round(nodes[i].osc.frequency.value) === Math.round(freq)) {
-          nodes[i].stop(0);
-        } else {
-          new_nodes.push(nodes[i]);
-        }
-      }
-      nodes = new_nodes;
-    };
-  }, []);
-
-  function makeDistortionCurve(amount) {
-    var k = typeof amount === 'number' ? amount : 0,
-      n_samples = 44100,
-      curve = new Float32Array(n_samples),
-      deg = Math.PI / 180,
-      i = 0,
-      x;
-    for (; i < n_samples; ++i) {
-      x = (i * 2) / n_samples - 1;
-      curve[i] = ((3 + k) * x * 20 * deg) / (Math.PI + k * Math.abs(x));
-    }
-    return curve;
-  }
-
-  function impulseResponse(duration, decay, reverse) {
-    var sampleRate = actx.sampleRate;
-    var length = sampleRate * duration;
-    var impulse = actx.createBuffer(2, length, sampleRate);
-    var impulseL = impulse.getChannelData(0);
-    var impulseR = impulse.getChannelData(1);
-
-    if (!decay) decay = 2.0;
-    for (var i = 0; i < length; i++) {
-      var n = reverse ? length - i : i;
-      impulseL[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, decay);
-      impulseR[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, decay);
-    }
-    return impulse;
-  }
-
   let delay1 = actx.createDelay(5.0);
 
   const distortion1 = actx.createWaveShaper();
-  distortion1.curve = makeDistortionCurve(0);
+  distortion1.curve = makeDistortionCurve(0, actx);
 
   const reverbMixGainWet = actx.createGain();
   const reverbMixGainDry = actx.createGain();
@@ -111,7 +42,7 @@ const Basic = () => {
   reverbMixGainDry.gain.value = 0.7;
 
   const convolver1 = actx.createConvolver();
-  let impulseBuffer = impulseResponse(4, 4, false);
+  let impulseBuffer = impulseResponse(4, 4, false, actx);
   convolver1.buffer = impulseBuffer;
 
   const oscMasterGain1 = actx.createGain();
@@ -146,13 +77,9 @@ const Basic = () => {
 
   const detuneOsc1 = (e) => {
     osc1Detune = +e.target.value;
-    //   const newVal = +e.target.value;
-    //   osc1.frequency.linearRampToValueAtTime(newVal, actx.currentTime + 0.1);
   };
   const detuneOsc2 = (e) => {
     osc2Detune = +e.target.value;
-    //   const newVal = +e.target.value;
-    //   osc2.frequency.linearRampToValueAtTime(newVal, actx.currentTime + 0.1);
   };
 
   const mixGain = (e) => {
@@ -196,16 +123,20 @@ const Basic = () => {
     wavetable2 = e.target.value;
   };
 
-  const changeOctaveOsc1 = () => {};
+  const changeOctaveOsc1 = (e) => {
+    osc1OctaveOffset = e.target.value;
+  };
 
-  const changeOctaveOsc2 = () => {};
+  const changeOctaveOsc2 = (e) => {
+    osc2OctaveOffset = e.target.value;
+  };
 
   const changeDistortion = (e) => {
-    distortion1.curve = makeDistortionCurve(+e.target.value * 5);
+    distortion1.curve = makeDistortionCurve(+e.target.value * 5, actx);
   };
 
   const changeConvolverReverb = (e) => {
-    const newBuffer = impulseResponse(4, e.target.value, false);
+    const newBuffer = impulseResponse(4, e.target.value, false, actx);
     convolver1.buffer = newBuffer;
   };
 
@@ -213,6 +144,58 @@ const Basic = () => {
     const eventVal = +e.target.value / 20;
     delay1.delayTime.setValueAtTime(eventVal.toFixed(1), actx.currentTime);
   };
+
+  // CREATE KEYBOARD
+  useEffect(() => {
+    const keyboard = new QwertyHancock({
+      id: 'keyboard',
+      width: 1000,
+      height: 68,
+      octaves: 4,
+      startNote: 'C4',
+      whiteKeyColour: 'black',
+      blackKeyColour: 'white',
+      activeColour: 'red',
+    });
+    let nodes = [];
+    keyboard.keyDown = (note, freq) => {
+      const envelope = { attack, decay, sustain, release };
+
+      const osc1Freq = calcFreq(freq, osc1OctaveOffset);
+      const osc2Freq = calcFreq(freq, osc2OctaveOffset);
+
+      const newOsc1 = new oscClass(
+        actx,
+        wavetable1,
+        osc1Freq,
+        osc1Detune,
+        envelope,
+        oscGain1,
+        freq
+      );
+      const newOsc2 = new oscClass(
+        actx,
+        wavetable2,
+        osc2Freq,
+        osc2Detune,
+        envelope,
+        oscGain2,
+        freq
+      );
+      nodes.push(newOsc1, newOsc2);
+    };
+    keyboard.keyUp = (note, freq) => {
+      var new_nodes = [];
+      for (var i = 0; i < nodes.length; i++) {
+        if (Math.round(nodes[i].initialFreq) === Math.round(freq)) {
+          nodes[i].stop(0);
+        } else {
+          new_nodes.push(nodes[i]);
+        }
+      }
+      nodes = new_nodes;
+    };
+  }, []);
 
   return (
     <>
@@ -228,54 +211,6 @@ const Basic = () => {
         changeOctaveOsc={changeOctaveOsc2}
         detuneOsc={detuneOsc2}
       />
-      {/* <div className='osc'>
-        <h2>osc 1</h2>
-        <div>
-          wavetable
-          <select onChange={changeWaveTable1}>
-            <option value='sine'>sine</option>
-            <option value='sawtooth'>sawtooth</option>
-            <option value='triangle'>triangle</option>
-            <option value='square'>square</option>
-          </select>
-        </div>
-
-        <div>
-          octave
-          <select onChange={changeOctaveOsc1}>
-            <option value='octaveTwoUp'>+2</option>
-            <option value='octaveOneUp'>+1</option>
-            <option value='octaveNone'>0</option>
-            <option value='octaveOneDown'>-1</option>
-            <option value='octaveTwoDown'>-2</option>
-          </select>
-        </div>
-        <div>
-          detune
-          <input type='range' onChange={detuneOsc1} />
-        </div>
-      </div> */}
-
-      {/* <div className='osc'>
-        <h2>osc 2</h2>
-        <div>
-          wavetable
-          <select onChange={changeWaveTable2}>
-            <option value='sine'>sine</option>
-            <option value='sawtooth'>sawtooth</option>
-            <option value='triangle'>triangle</option>
-            <option value='square'>square</option>
-          </select>
-        </div>
-        <div>
-          detune
-          <input type='range' onChange={detuneOsc2} />
-        </div>
-        <div>
-          octave
-          <input type='range' onChange={changeOctaveOsc2} />
-        </div>
-      </div> */}
 
       <div className='osc'>sub osc</div>
 
