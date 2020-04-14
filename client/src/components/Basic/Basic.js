@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './Basic.scss';
 import QwertyHancock from 'qwerty-hancock';
 import oscClass from './oscClass';
+import noiseOscClass from './noiseOscClass';
+
 import OscController from 'components/OscController/OscController';
 import {
   makeDistortionCurve,
@@ -11,10 +13,6 @@ import {
 
 const Basic = () => {
   const actx = new AudioContext();
-  // const [attack, setAttack] = useState(1);
-  // const [decay, setDecay] = useState(1);
-  // const [sustain, setSustain] = useState(1);
-  // const [release, setRelease] = useState(1);
 
   //OSCILLATOR SETTINGS
   let attack = 1;
@@ -28,8 +26,12 @@ const Basic = () => {
   let osc1OctaveOffset = '0';
   let osc2OctaveOffset = '0';
 
+  let noiseOscVol = 0;
+  let noiseType = 'white';
+
   let oscGain1 = actx.createGain(0.5);
   let oscGain2 = actx.createGain(0.5);
+  let noiseGain = actx.createGain(0);
 
   let delay1 = actx.createDelay(5.0);
 
@@ -52,6 +54,7 @@ const Basic = () => {
   oscGain1.connect(oscMasterGain1);
   oscGain2.connect(oscMasterGain1);
   oscMasterGain1.connect(distortion1);
+  noiseGain.connect(distortion1);
   distortion1.connect(filter1);
   filter1.connect(compressor);
 
@@ -182,7 +185,16 @@ const Basic = () => {
         oscGain2,
         freq
       );
-      nodes.push(newOsc1, newOsc2);
+
+      const noiseOsc = new noiseOscClass(
+        actx,
+        noiseType,
+        envelope,
+        noiseGain,
+        freq,
+        noiseOscVol
+      );
+      nodes.push(newOsc1, newOsc2, noiseOsc);
     };
     keyboard.keyUp = (note, freq) => {
       var new_nodes = [];
@@ -214,7 +226,27 @@ const Basic = () => {
 
       <div className='osc'>sub osc</div>
 
-      <div className='osc'>noise osc</div>
+      <div className='osc'>
+        <h4>noise osc</h4>
+        <div>
+          <select
+            onChange={(e) => {
+              noiseType = e.target.value;
+            }}
+          >
+            <option value='white'>white</option>
+            <option value='brown'>brown</option>
+            <option value='pink'>pink</option>
+          </select>
+        </div>
+        <input
+          type='range'
+          onChange={(e) => {
+            console.log(+e.target.value / 100);
+            noiseOscVol = +e.target.value / 100;
+          }}
+        />
+      </div>
 
       <div className='osc-master'>
         osc master
