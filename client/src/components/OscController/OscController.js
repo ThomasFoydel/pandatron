@@ -29,10 +29,12 @@ const OscController = ({
           <option value={-2}>-2</option>
         </select>
       </div>
-      <div>
-        detune
-        <input type='range' onChange={detuneOsc} />
-      </div>
+      {detuneOsc && (
+        <div>
+          detune
+          <input type='range' onChange={detuneOsc} />
+        </div>
+      )}
     </div>
   );
 };

@@ -19,18 +19,25 @@ const Basic = () => {
   let decay = 1;
   let sustain = 1;
   let release = 1;
+
   let wavetable1 = 'sawtooth';
   let wavetable2 = 'sine';
+  let subOscType = 'sine';
+  let noiseType = 'white';
+
   let osc1Detune = 0;
   let osc2Detune = 0;
   let osc1OctaveOffset = '0';
   let osc2OctaveOffset = '0';
 
-  let noiseOscVol = 0;
-  let noiseType = 'white';
+  let subOscOctaveOffset = '0';
 
-  let oscGain1 = actx.createGain(0.5);
-  let oscGain2 = actx.createGain(0.5);
+  let subOscVol = 0;
+  let noiseOscVol = 0;
+
+  let subGain = actx.createGain();
+  let oscGain1 = actx.createGain();
+  let oscGain2 = actx.createGain();
   let noiseGain = actx.createGain(0);
 
   let delay1 = actx.createDelay(5.0);
@@ -56,7 +63,11 @@ const Basic = () => {
   oscMasterGain1.connect(distortion1);
   noiseGain.connect(distortion1);
   distortion1.connect(filter1);
+  // const intermediateGain = actx.createGain();
+  const subFilter = actx.createBiquadFilter();
   filter1.connect(compressor);
+  subGain.connect(subFilter);
+  subFilter.connect(compressor);
 
   compressor.connect(reverbMixGainDry);
 
@@ -126,12 +137,20 @@ const Basic = () => {
     wavetable2 = e.target.value;
   };
 
+  const changeWaveTableSub = (e) => {
+    subOscType = e.target.value;
+  };
+
   const changeOctaveOsc1 = (e) => {
     osc1OctaveOffset = e.target.value;
   };
 
   const changeOctaveOsc2 = (e) => {
     osc2OctaveOffset = e.target.value;
+  };
+
+  const changeOctaveSub = (e) => {
+    subOscOctaveOffset = e.target.value;
   };
 
   const changeDistortion = (e) => {
@@ -166,6 +185,7 @@ const Basic = () => {
 
       const osc1Freq = calcFreq(freq, osc1OctaveOffset);
       const osc2Freq = calcFreq(freq, osc2OctaveOffset);
+      const subOscFreq = calcFreq(freq, subOscOctaveOffset);
 
       const newOsc1 = new oscClass(
         actx,
@@ -186,6 +206,16 @@ const Basic = () => {
         freq
       );
 
+      const subOsc = new oscClass(
+        actx,
+        subOscType,
+        subOscFreq,
+        0,
+        envelope,
+        subGain,
+        freq
+      );
+
       const noiseOsc = new noiseOscClass(
         actx,
         noiseType,
@@ -194,7 +224,7 @@ const Basic = () => {
         freq,
         noiseOscVol
       );
-      nodes.push(newOsc1, newOsc2, noiseOsc);
+      nodes.push(newOsc1, newOsc2, subOsc, noiseOsc);
     };
     keyboard.keyUp = (note, freq) => {
       var new_nodes = [];
@@ -224,7 +254,22 @@ const Basic = () => {
         detuneOsc={detuneOsc2}
       />
 
-      <div className='osc'>sub osc</div>
+      <div className='osc-master'>
+        <h4>osc 1 and osc 2</h4>
+        <div>
+          mix gain 1 and 2<input type='range' onChange={mixGain}></input>
+        </div>
+        <div>
+          gain
+          <input type='range' onChange={changeOscMasterGain1}></input>
+        </div>
+      </div>
+
+      <OscController
+        name='sub osc'
+        changeWaveTable={changeWaveTableSub}
+        changeOctaveOsc={changeOctaveSub}
+      />
 
       <div className='osc'>
         <h4>noise osc</h4>
@@ -242,24 +287,12 @@ const Basic = () => {
         <input
           type='range'
           onChange={(e) => {
-            console.log(+e.target.value / 100);
             noiseOscVol = +e.target.value / 100;
           }}
         />
       </div>
 
-      <div className='osc-master'>
-        osc master
-        <div>
-          mix gain 1 and 2<input type='range' onChange={mixGain}></input>
-        </div>
-        <div>
-          osc master gain
-          <input type='range' onChange={changeOscMasterGain1}></input>
-        </div>
-      </div>
-
-      <div className='osc'>
+      <div className='adsr'>
         <div>
           Attack{' '}
           <input

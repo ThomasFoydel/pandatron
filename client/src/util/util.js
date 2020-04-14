@@ -87,7 +87,7 @@ export const noteFreqs = [
   { note: 'dSharp4', freq: 311.13 },
   { note: 'e4', freq: 329.63 },
   { note: 'f4', freq: 349.23 },
-  { note: 'fSharp4', freq: 269.99 },
+  { note: 'fSharp4', freq: 369.99 },
   { note: 'g4', freq: 392 },
   { note: 'gSharp4', freq: 415.3 },
   { note: 'a4', freq: 440 },
@@ -98,7 +98,7 @@ export const noteFreqs = [
   { note: 'cSharp5', freq: 554.37 },
   { note: 'd5', freq: 587.33 },
   { note: 'dSharp5', freq: 622.25 },
-  { note: 'e5', freq: 659.25 },
+  { note: 'e5', freq: 659.26 },
   { note: 'f5', freq: 698.46 },
   { note: 'fSharp5', freq: 739.99 },
   { note: 'g5', freq: 783.99 },
@@ -152,9 +152,9 @@ export const calcFreq = (frequency, offset) => {
   let octaveOffset = offset * 12;
 
   if (offset !== 0) {
-    const unshiftedIndex = noteFreqs.findIndex(
-      (note) => note.freq.toFixed(2) === frequency.toFixed(2)
-    );
+    const unshiftedIndex = noteFreqs.findIndex((note) => {
+      return note.freq.toFixed(2) === frequency.toFixed(2);
+    });
     const shiftedIndex = unshiftedIndex + octaveOffset;
     calculatedFrequency = noteFreqs[shiftedIndex].freq;
   }

@@ -13,12 +13,12 @@ export default class oscClass {
     this.osc = this.context.createOscillator();
     this.osc.start();
     this.osc.detune.setValueAtTime(detune, this.context.currentTime);
+    this.osc.type = type;
+    this.osc.frequency.value = calculatedFrequency;
     this.gateGain = this.context.createGain();
     this.gateGain.gain.value = 0;
-    this.osc.type = type;
     this.osc.connect(this.gateGain);
     this.gateGain.connect(connection);
-    this.osc.frequency.value = calculatedFrequency;
 
     this.envelope = envelope
       ? envelope
