@@ -10,6 +10,7 @@ import {
   impulseResponse,
   calcFreq,
 } from '../../util/util';
+import ADSRController from 'components/ADSRController/ADSRController';
 
 const Basic = () => {
   const actx = new AudioContext();
@@ -19,6 +20,7 @@ const Basic = () => {
   let decay = 1;
   let sustain = 1;
   let release = 1;
+  let initEnvelope = { attack, decay, sustain, release };
 
   let wavetable1 = 'sawtooth';
   let wavetable2 = 'sine';
@@ -153,6 +155,13 @@ const Basic = () => {
     subOscOctaveOffset = e.target.value;
   };
 
+  const changeOsc1Gain = (e) => {
+    oscGain1.gain.value = e;
+  };
+  const changeOsc2Gain = (e) => {
+    oscGain2.gain.value = e;
+  };
+
   const changeSubGain = (e) => {
     subGain.gain.value = e;
   };
@@ -171,11 +180,16 @@ const Basic = () => {
     delay1.delayTime.setValueAtTime(eventVal.toFixed(1), actx.currentTime);
   };
 
-  const changeOsc1Gain = (e) => {
-    oscGain1.gain.value = e;
-  };
-  const changeOsc2Gain = (e) => {
-    oscGain2.gain.value = e;
+  const changeADSR = (newVal, aspect) => {
+    if (aspect === 'attack') {
+      attack = newVal;
+    } else if (aspect === 'decay') {
+      decay = newVal;
+    } else if (aspect === 'sustain') {
+      sustain = newVal;
+    } else if (aspect === 'release') {
+      release = newVal;
+    }
   };
 
   // CREATE KEYBOARD
@@ -350,37 +364,10 @@ const Basic = () => {
               </div>
             </div>
             <div className='section2-grid-2'>
-              <div className='adsr'>
-                <div>
-                  Attack{' '}
-                  <input
-                    type='range'
-                    max='500'
-                    onChange={(e) => (attack = +e.target.value / 100)}
-                  />
-                </div>
-                <div>
-                  Decay{' '}
-                  <input
-                    type='range'
-                    onChange={(e) => (decay = +e.target.value / 100)}
-                  />
-                </div>
-                <div>
-                  Sustain{' '}
-                  <input
-                    type='range'
-                    onChange={(e) => (sustain = +e.target.value / 100)}
-                  />
-                </div>
-                <div>
-                  Release{' '}
-                  <input
-                    type='range'
-                    onChange={(e) => (release = +e.target.value / 100)}
-                  />
-                </div>
-              </div>
+              <ADSRController
+                changeADSR={changeADSR}
+                initEnvelope={initEnvelope}
+              />
             </div>
           </div>
           <div className='section2-grid-3'>SECTION2 GRID, AREA 3 GOES HERE</div>
