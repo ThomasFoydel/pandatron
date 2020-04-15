@@ -40,22 +40,29 @@ const OscController = ({
           src={waves[wavetable]}
           alt={`current wavetable: ${wavetable}`}
         />
-        <select className='wavetable-select center' onChange={updateWavetable}>
-          <option value='sine'>sine</option>
-          <option value='sawtooth'>sawtooth</option>
-          <option value='triangle'>triangle</option>
-          <option value='square'>square</option>
-        </select>
+        <div className='select-input center'>
+          <select
+            className='wavetable-select center'
+            onChange={updateWavetable}
+          >
+            <option value='sine'>sine</option>
+            <option value='sawtooth'>sawtooth</option>
+            <option value='triangle'>triangle</option>
+            <option value='square'>square</option>
+          </select>
+        </div>
       </div>
       <div className='octave center'>
         <b>octave</b>
-        <select onChange={changeOctaveOsc}>
-          <option value={2}>+2</option>
-          <option value={1}>+1</option>
-          <option value={0}>0</option>
-          <option value={-1}>-1</option>
-          <option value={-2}>-2</option>
-        </select>
+        <div className='select-input center'>
+          <select onChange={changeOctaveOsc}>
+            <option value={2}>+2</option>
+            <option value={1}>+1</option>
+            <option value={0}>0</option>
+            <option value={-1}>-1</option>
+            <option value={-2}>-2</option>
+          </select>
+        </div>
       </div>
       <div className={`flex${detuneOsc ? 'true' : 'false'} center`}>
         <div className='gain '>

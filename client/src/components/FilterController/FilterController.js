@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './FilterController.scss';
+import DropDown from 'components/DropDown/DropDown';
 
 const FilterController = ({
   changeFilter1Type,
@@ -7,10 +8,6 @@ const FilterController = ({
   changeFilter1Q,
   initParams,
 }) => {
-  // changeFilter1Type
-  // changeFilter1Freq
-  // changeFilter1Q
-
   const [filterDisplayVals, setFilterDisplayVals] = useState(initParams);
 
   const updateDisplay = (id, value) => {
@@ -33,16 +30,8 @@ const FilterController = ({
   return (
     <div className='filter1 '>
       <h2 className='center'>filter one</h2>
-      <select id='type' className='center' value={type} onChange={updateFilter}>
-        <option value='lowpass'>lowpass</option>
-        <option value='highpass'>highpass</option>
-        <option value='lowshelf'>lowshelf</option>
-        <option value='highshelf'>highshelf</option>
-        <option value='bandpass'>bandpass</option>
-        <option value='allpass'>allpass</option>
-        <option value='notch'>notch</option>
-      </select>
-      <div>
+
+      <div className='frequency'>
         <div className='center'>
           <b>frequency</b>
         </div>
@@ -65,6 +54,22 @@ const FilterController = ({
           value={Q}
           id='Q'
           onChange={updateFilter}
+        />
+      </div>
+      <div className='select-input center'>
+        <DropDown
+          updateFunction={updateFilter}
+          inputId={'type'}
+          initVal={type}
+          options={[
+            'lowpass',
+            'highpass',
+            'lowshelf',
+            'highshelf',
+            'bandpass',
+            'allpass',
+            'notch',
+          ]}
         />
       </div>
     </div>

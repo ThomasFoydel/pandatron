@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './Basic.scss';
 import QwertyHancock from 'qwerty-hancock';
 import oscClass from './oscClass';
@@ -340,39 +340,6 @@ const Basic = () => {
                   Q: filter1.Q.value,
                 }}
               />
-              {/* <div className='filter1 '>
-                <h2 className='center'>filter one</h2>
-                <select className='center' onChange={changeFilter1Type}>
-                  <option value='lowpass'>lowpass</option>
-                  <option value='highpass'>highpass</option>
-                  <option value='lowshelf'>lowshelf</option>
-                  <option value='highshelf'>highshelf</option>
-                  <option value='bandpass'>bandpass</option>
-                  <option value='allpass'>allpass</option>
-                  <option value='notch'>notch</option>
-                </select>
-                <div>
-                  <div className='center'>
-                    <b>frequency</b>
-                  </div>
-                  <input
-                    className='center'
-                    type='range'
-                    max='1000'
-                    onChange={changeFilter1Freq}
-                  />
-                </div>
-                <div>
-                  <div className='center'>
-                    <b>Q</b>
-                  </div>
-                  <input
-                    className='center'
-                    type='range'
-                    onChange={changeFilter1Q}
-                  />
-                </div>
-              </div> */}
             </div>
             <div className='section2-grid-2'>
               <ADSRController
