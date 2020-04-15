@@ -5,7 +5,7 @@ import './App.scss';
 function App() {
   return (
     <>
-      <h1>panda</h1>
+      <h1>pandatron</h1>
       <Basic />
     </>
   );

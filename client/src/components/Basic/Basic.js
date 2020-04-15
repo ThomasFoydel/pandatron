@@ -90,10 +90,10 @@ const Basic = () => {
   };
 
   const detuneOsc1 = (e) => {
-    osc1Detune = +e.target.value;
+    osc1Detune = e;
   };
   const detuneOsc2 = (e) => {
-    osc2Detune = +e.target.value;
+    osc2Detune = e;
   };
 
   const mixGain = (e) => {
@@ -122,12 +122,12 @@ const Basic = () => {
     );
   };
 
-  const changeOscMasterGain1 = (e) => {
-    oscMasterGain1.gain.linearRampToValueAtTime(
-      e.target.value / 100,
-      actx.currentTime
-    );
-  };
+  // const changeOscMasterGain1 = (e) => {
+  //   oscMasterGain1.gain.linearRampToValueAtTime(
+  //     e.target.value / 100,
+  //     actx.currentTime
+  //   );
+  // };
 
   const changeWaveTable1 = (e) => {
     wavetable1 = e.target.value;
@@ -254,116 +254,136 @@ const Basic = () => {
     <>
       <div className='main-grid'>
         <div className='main-grid-section-1'>
-          <OscController
-            name='osc 1'
-            changeWaveTable={changeWaveTable1}
-            changeOctaveOsc={changeOctaveOsc1}
-            detuneOsc={detuneOsc1}
-            changeGain={changeOsc1Gain}
-          />
-          <OscController
-            name='osc 2'
-            changeWaveTable={changeWaveTable2}
-            changeOctaveOsc={changeOctaveOsc2}
-            detuneOsc={detuneOsc2}
-            changeGain={changeOsc2Gain}
-          />
+          <div className='flex'>
+            <OscController
+              name='osc 1'
+              changeWaveTable={changeWaveTable1}
+              changeOctaveOsc={changeOctaveOsc1}
+              detuneOsc={detuneOsc1}
+              changeGain={changeOsc1Gain}
+            />
+            <OscController
+              name='osc 2'
+              changeWaveTable={changeWaveTable2}
+              changeOctaveOsc={changeOctaveOsc2}
+              detuneOsc={detuneOsc2}
+              changeGain={changeOsc2Gain}
+            />
+          </div>
 
-          <div className='osc-master'>
-            <h4>osc 1 and osc 2</h4>
-            <div>
-              mix gain 1 and 2<input type='range' onChange={mixGain}></input>
-            </div>
-            <div>
-              gain
-              <input type='range' onChange={changeOscMasterGain1}></input>
+          <div className='osc-mix center'>
+            <div className='center inputcontainer'>
+              <span className='oscname'>osc1</span>
+              <input type='range' onChange={mixGain} />
+              <span className='oscname'>osc2</span>
             </div>
           </div>
 
-          <OscController
-            name='sub osc'
-            changeWaveTable={changeWaveTableSub}
-            changeOctaveOsc={changeOctaveSub}
-            changeGain={changeSubGain}
-          />
+          <div className='flex'>
+            <OscController
+              name='sub osc'
+              changeWaveTable={changeWaveTableSub}
+              changeOctaveOsc={changeOctaveSub}
+              changeGain={changeSubGain}
+            />
 
-          <div className='osc'>
-            <h4>noise osc</h4>
-            <div>
-              <select
-                onChange={(e) => {
-                  noiseType = e.target.value;
-                }}
-              >
-                <option value='white'>white</option>
-                <option value='brown'>brown</option>
-                <option value='pink'>pink</option>
-              </select>
-            </div>
-            <div>
-              gain
-              <input
-                type='range'
-                onChange={(e) => {
-                  noiseOscVol = +e.target.value / 100;
-                }}
-              />
+            <div className='osc'>
+              <h4>noise osc</h4>
+              <div>
+                <select
+                  onChange={(e) => {
+                    noiseType = e.target.value;
+                  }}
+                >
+                  <option value='white'>white</option>
+                  <option value='brown'>brown</option>
+                  <option value='pink'>pink</option>
+                </select>
+              </div>
+              <div>
+                gain
+                <input
+                  type='range'
+                  onChange={(e) => {
+                    noiseOscVol = +e.target.value / 100;
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
         <div className='main-grid-section-2'>
-          <div className='filter1'>
-            <h2>filter one</h2>
-            <select onChange={changeFilter1Type}>
-              <option value='lowpass'>lowpass</option>
-              <option value='highpass'>highpass</option>
-              <option value='lowshelf'>lowshelf</option>
-              <option value='highshelf'>highshelf</option>
-              <option value='bandpass'>bandpass</option>
-              <option value='allpass'>allpass</option>
-              <option value='notch'>notch</option>
-            </select>
-            <div>
-              frequency
-              <input type='range' max='1000' onChange={changeFilter1Freq} />
+          <div className='section2-grid'>
+            <div className='section2-grid-1'>
+              <div className='filter1 '>
+                <h2 className='center'>filter one</h2>
+                <select className='center' onChange={changeFilter1Type}>
+                  <option value='lowpass'>lowpass</option>
+                  <option value='highpass'>highpass</option>
+                  <option value='lowshelf'>lowshelf</option>
+                  <option value='highshelf'>highshelf</option>
+                  <option value='bandpass'>bandpass</option>
+                  <option value='allpass'>allpass</option>
+                  <option value='notch'>notch</option>
+                </select>
+                <div>
+                  <div className='center'>
+                    <b>frequency</b>
+                  </div>
+                  <input
+                    className='center'
+                    type='range'
+                    max='1000'
+                    onChange={changeFilter1Freq}
+                  />
+                </div>
+                <div>
+                  <div className='center'>
+                    <b>Q</b>
+                  </div>
+                  <input
+                    className='center'
+                    type='range'
+                    onChange={changeFilter1Q}
+                  />
+                </div>
+              </div>
             </div>
-            <div>
-              Q
-              <input type='range' onChange={changeFilter1Q} />
+            <div className='section2-grid-2'>
+              <div className='adsr'>
+                <div>
+                  Attack{' '}
+                  <input
+                    type='range'
+                    max='500'
+                    onChange={(e) => (attack = +e.target.value / 100)}
+                  />
+                </div>
+                <div>
+                  Decay{' '}
+                  <input
+                    type='range'
+                    onChange={(e) => (decay = +e.target.value / 100)}
+                  />
+                </div>
+                <div>
+                  Sustain{' '}
+                  <input
+                    type='range'
+                    onChange={(e) => (sustain = +e.target.value / 100)}
+                  />
+                </div>
+                <div>
+                  Release{' '}
+                  <input
+                    type='range'
+                    onChange={(e) => (release = +e.target.value / 100)}
+                  />
+                </div>
+              </div>
             </div>
           </div>
-
-          <div className='adsr'>
-            <div>
-              Attack{' '}
-              <input
-                type='range'
-                max='500'
-                onChange={(e) => (attack = +e.target.value / 100)}
-              />
-            </div>
-            <div>
-              Decay{' '}
-              <input
-                type='range'
-                onChange={(e) => (decay = +e.target.value / 100)}
-              />
-            </div>
-            <div>
-              Sustain{' '}
-              <input
-                type='range'
-                onChange={(e) => (sustain = +e.target.value / 100)}
-              />
-            </div>
-            <div>
-              Release{' '}
-              <input
-                type='range'
-                onChange={(e) => (release = +e.target.value / 100)}
-              />
-            </div>
-          </div>
+          <div className='section2-grid-3'>SECTION2 GRID, AREA 3 GOES HERE</div>
         </div>
         <div className='main-grid-section-3'>
           <div className='distortion'>
@@ -391,7 +411,7 @@ const Basic = () => {
           </div>
         </div>
         <div className='main-grid-section-4'>
-          <div id='keyboard'></div>
+          <div className='keyboard' id='keyboard'></div>
         </div>
       </div>
     </>
