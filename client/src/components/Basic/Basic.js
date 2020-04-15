@@ -38,7 +38,7 @@ const Basic = () => {
   let subGain = actx.createGain();
   let oscGain1 = actx.createGain();
   let oscGain2 = actx.createGain();
-  let noiseGain = actx.createGain(0);
+  let noiseGain = actx.createGain();
 
   let delay1 = actx.createDelay(5.0);
 
@@ -63,7 +63,7 @@ const Basic = () => {
   oscMasterGain1.connect(distortion1);
   noiseGain.connect(distortion1);
   distortion1.connect(filter1);
-  // const intermediateGain = actx.createGain();
+
   const subFilter = actx.createBiquadFilter();
   filter1.connect(compressor);
   subGain.connect(subFilter);
@@ -153,6 +153,10 @@ const Basic = () => {
     subOscOctaveOffset = e.target.value;
   };
 
+  const changeSubGain = (e) => {
+    subGain.gain.value = e;
+  };
+
   const changeDistortion = (e) => {
     distortion1.curve = makeDistortionCurve(+e.target.value * 5, actx);
   };
@@ -165,6 +169,13 @@ const Basic = () => {
   const changeDelayTime = (e) => {
     const eventVal = +e.target.value / 20;
     delay1.delayTime.setValueAtTime(eventVal.toFixed(1), actx.currentTime);
+  };
+
+  const changeOsc1Gain = (e) => {
+    oscGain1.gain.value = e;
+  };
+  const changeOsc2Gain = (e) => {
+    oscGain2.gain.value = e;
   };
 
   // CREATE KEYBOARD
@@ -185,7 +196,7 @@ const Basic = () => {
 
       const osc1Freq = calcFreq(freq, osc1OctaveOffset);
       const osc2Freq = calcFreq(freq, osc2OctaveOffset);
-      const subOscFreq = calcFreq(freq, subOscOctaveOffset);
+      const subOscFreq = calcFreq(freq, subOscOctaveOffset - 1);
 
       const newOsc1 = new oscClass(
         actx,
@@ -241,134 +252,148 @@ const Basic = () => {
 
   return (
     <>
-      <OscController
-        name='osc 1'
-        changeWaveTable={changeWaveTable1}
-        changeOctaveOsc={changeOctaveOsc1}
-        detuneOsc={detuneOsc1}
-      />
-      <OscController
-        name='osc 2'
-        changeWaveTable={changeWaveTable2}
-        changeOctaveOsc={changeOctaveOsc2}
-        detuneOsc={detuneOsc2}
-      />
-
-      <div className='osc-master'>
-        <h4>osc 1 and osc 2</h4>
-        <div>
-          mix gain 1 and 2<input type='range' onChange={mixGain}></input>
-        </div>
-        <div>
-          gain
-          <input type='range' onChange={changeOscMasterGain1}></input>
-        </div>
-      </div>
-
-      <OscController
-        name='sub osc'
-        changeWaveTable={changeWaveTableSub}
-        changeOctaveOsc={changeOctaveSub}
-      />
-
-      <div className='osc'>
-        <h4>noise osc</h4>
-        <div>
-          <select
-            onChange={(e) => {
-              noiseType = e.target.value;
-            }}
-          >
-            <option value='white'>white</option>
-            <option value='brown'>brown</option>
-            <option value='pink'>pink</option>
-          </select>
-        </div>
-        <input
-          type='range'
-          onChange={(e) => {
-            noiseOscVol = +e.target.value / 100;
-          }}
-        />
-      </div>
-
-      <div className='adsr'>
-        <div>
-          Attack{' '}
-          <input
-            type='range'
-            max='500'
-            onChange={(e) => (attack = +e.target.value / 100)}
+      <div className='main-grid'>
+        <div className='main-grid-section-1'>
+          <OscController
+            name='osc 1'
+            changeWaveTable={changeWaveTable1}
+            changeOctaveOsc={changeOctaveOsc1}
+            detuneOsc={detuneOsc1}
+            changeGain={changeOsc1Gain}
           />
-        </div>
-        <div>
-          Decay{' '}
-          <input
-            type='range'
-            onChange={(e) => (decay = +e.target.value / 100)}
+          <OscController
+            name='osc 2'
+            changeWaveTable={changeWaveTable2}
+            changeOctaveOsc={changeOctaveOsc2}
+            detuneOsc={detuneOsc2}
+            changeGain={changeOsc2Gain}
           />
-        </div>
-        <div>
-          Sustain{' '}
-          <input
-            type='range'
-            onChange={(e) => (sustain = +e.target.value / 100)}
+
+          <div className='osc-master'>
+            <h4>osc 1 and osc 2</h4>
+            <div>
+              mix gain 1 and 2<input type='range' onChange={mixGain}></input>
+            </div>
+            <div>
+              gain
+              <input type='range' onChange={changeOscMasterGain1}></input>
+            </div>
+          </div>
+
+          <OscController
+            name='sub osc'
+            changeWaveTable={changeWaveTableSub}
+            changeOctaveOsc={changeOctaveSub}
+            changeGain={changeSubGain}
           />
-        </div>
-        <div>
-          Release{' '}
-          <input
-            type='range'
-            onChange={(e) => (release = +e.target.value / 100)}
-          />
-        </div>
-      </div>
 
-      <div className='filter1'>
-        <h2>filter one</h2>
-        <select onChange={changeFilter1Type}>
-          <option value='lowpass'>lowpass</option>
-          <option value='highpass'>highpass</option>
-          <option value='lowshelf'>lowshelf</option>
-          <option value='highshelf'>highshelf</option>
-          <option value='bandpass'>bandpass</option>
-          <option value='allpass'>allpass</option>
-          <option value='notch'>notch</option>
-        </select>
-        <div>
-          frequency
-          <input type='range' max='1000' onChange={changeFilter1Freq} />
-        </div>
-        <div>
-          Q
-          <input type='range' onChange={changeFilter1Q} />
-        </div>
-      </div>
-      <div className='distortion'>
-        distortion
-        <input onChange={changeDistortion} type='range' />
-      </div>
-
-      <div className='delay'>
-        <h2>delay</h2>
-        time <input type='range' onChange={changeDelayTime} />
-      </div>
-
-      <div className='reverb'>
-        <h2>reverb</h2>
-        <span>duration</span>
-        <div>
-          <input type='range' onChange={changeConvolverReverb} />
-        </div>
-        <div>
-          <span>dry/wet</span>
-          <div>
-            <input type='range' onChange={mixReverbGain} />
+          <div className='osc'>
+            <h4>noise osc</h4>
+            <div>
+              <select
+                onChange={(e) => {
+                  noiseType = e.target.value;
+                }}
+              >
+                <option value='white'>white</option>
+                <option value='brown'>brown</option>
+                <option value='pink'>pink</option>
+              </select>
+            </div>
+            <div>
+              gain
+              <input
+                type='range'
+                onChange={(e) => {
+                  noiseOscVol = +e.target.value / 100;
+                }}
+              />
+            </div>
           </div>
         </div>
-      </div>
+        <div className='main-grid-section-2'>
+          <div className='filter1'>
+            <h2>filter one</h2>
+            <select onChange={changeFilter1Type}>
+              <option value='lowpass'>lowpass</option>
+              <option value='highpass'>highpass</option>
+              <option value='lowshelf'>lowshelf</option>
+              <option value='highshelf'>highshelf</option>
+              <option value='bandpass'>bandpass</option>
+              <option value='allpass'>allpass</option>
+              <option value='notch'>notch</option>
+            </select>
+            <div>
+              frequency
+              <input type='range' max='1000' onChange={changeFilter1Freq} />
+            </div>
+            <div>
+              Q
+              <input type='range' onChange={changeFilter1Q} />
+            </div>
+          </div>
 
-      <div id='keyboard'></div>
+          <div className='adsr'>
+            <div>
+              Attack{' '}
+              <input
+                type='range'
+                max='500'
+                onChange={(e) => (attack = +e.target.value / 100)}
+              />
+            </div>
+            <div>
+              Decay{' '}
+              <input
+                type='range'
+                onChange={(e) => (decay = +e.target.value / 100)}
+              />
+            </div>
+            <div>
+              Sustain{' '}
+              <input
+                type='range'
+                onChange={(e) => (sustain = +e.target.value / 100)}
+              />
+            </div>
+            <div>
+              Release{' '}
+              <input
+                type='range'
+                onChange={(e) => (release = +e.target.value / 100)}
+              />
+            </div>
+          </div>
+        </div>
+        <div className='main-grid-section-3'>
+          <div className='distortion'>
+            distortion
+            <input onChange={changeDistortion} type='range' />
+          </div>
+
+          <div className='delay'>
+            <h2>delay</h2>
+            time <input type='range' onChange={changeDelayTime} />
+          </div>
+
+          <div className='reverb'>
+            <h2>reverb</h2>
+            <span>duration</span>
+            <div>
+              <input type='range' onChange={changeConvolverReverb} />
+            </div>
+            <div>
+              <span>dry/wet</span>
+              <div>
+                <input type='range' onChange={mixReverbGain} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className='main-grid-section-4'>
+          <div id='keyboard'></div>
+        </div>
+      </div>
     </>
   );
 };
