@@ -11,6 +11,7 @@ import {
   calcFreq,
 } from '../../util/util';
 import ADSRController from 'components/ADSRController/ADSRController';
+import FilterController from 'components/FilterController/FilterController';
 
 const Basic = () => {
   const actx = new AudioContext();
@@ -81,14 +82,14 @@ const Basic = () => {
   reverbMixGainDry.connect(actx.destination);
   reverbMixGainWet.connect(actx.destination);
 
-  const changeFilter1Type = (e) => {
-    filter1.type = e.target.value;
+  const changeFilter1Type = (val) => {
+    filter1.type = val;
   };
-  const changeFilter1Freq = (e) => {
-    filter1.frequency.setValueAtTime(e.target.value, actx.currentTime);
+  const changeFilter1Freq = (val) => {
+    filter1.frequency.setValueAtTime(val, actx.currentTime);
   };
-  const changeFilter1Q = (e) => {
-    filter1.Q.setValueAtTime(e.target.value, actx.currentTime);
+  const changeFilter1Q = (val) => {
+    filter1.Q.setValueAtTime(val, actx.currentTime);
   };
 
   const detuneOsc1 = (e) => {
@@ -329,7 +330,17 @@ const Basic = () => {
         <div className='main-grid-section-2'>
           <div className='section2-grid'>
             <div className='section2-grid-1'>
-              <div className='filter1 '>
+              <FilterController
+                changeFilter1Type={changeFilter1Type}
+                changeFilter1Freq={changeFilter1Freq}
+                changeFilter1Q={changeFilter1Q}
+                initParams={{
+                  type: filter1.type,
+                  frequency: filter1.frequency.value,
+                  Q: filter1.Q.value,
+                }}
+              />
+              {/* <div className='filter1 '>
                 <h2 className='center'>filter one</h2>
                 <select className='center' onChange={changeFilter1Type}>
                   <option value='lowpass'>lowpass</option>
@@ -361,7 +372,7 @@ const Basic = () => {
                     onChange={changeFilter1Q}
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
             <div className='section2-grid-2'>
               <ADSRController

@@ -48,10 +48,14 @@ const ADSRController = ({ changeADSR, initEnvelope }) => {
           />
         </div>
         <div>
-          <span className='aspect-initial' value={release * 100}>
-            R
-          </span>
-          <input type='range' id='release' max='500' onChange={updateADSR} />
+          <span className='aspect-initial'>R</span>
+          <input
+            type='range'
+            id='release'
+            max='500'
+            value={release * 100}
+            onChange={updateADSR}
+          />
         </div>
       </div>
       <div className='value-displays'>
