@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster:wght@400;700&display=swap');
 *,
 *::after,
 *::before {
@@ -22,4 +23,23 @@ body {
   //   font-size: 14px;
   line-height: 1.7;
   box-sizing: border-box;
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+}
+
+.center {
+  margin-left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.synthname {
+  font-family: 'Lobster', 'sans-serif';
+  font-size: 5rem;
+  letter-spacing: 2rem;
+  margin-left: -2rem;
+  text-align: center;
 }
