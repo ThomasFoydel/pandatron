@@ -15,7 +15,7 @@ const DropDown = ({ options, updateFunction, initVal, inputId }) => {
 
   return (
     <div className='dropdown'>
-      <div className='closed option' onClick={() => setOpened(true)}>
+      <div className='closed option' onClick={() => setOpened(!opened)}>
         {currentVal}
       </div>
 

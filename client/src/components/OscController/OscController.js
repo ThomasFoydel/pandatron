@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Knob } from 'react-rotary-knob';
+import DropDown from 'components/DropDown/DropDown';
 
 import waves from 'imgs/wavesIcons/index';
 import './OscController.scss';
@@ -23,6 +24,7 @@ const OscController = ({
   };
 
   const updateWavetable = (e) => {
+    e.target.value = e.target.id;
     setWavetable(e.target.value);
     changeWaveTable(e);
   };
@@ -35,12 +37,52 @@ const OscController = ({
     <div className='osccontrol'>
       <h2 className='name center'>{name}</h2>
       <div>
-        <img
+        {/* <img
           className='wavetable-icon center'
           src={waves[wavetable]}
           alt={`current wavetable: ${wavetable}`}
-        />
-        <div className='select-input center'>
+        /> */}
+        <div className='wavetable-control'>
+          <img
+            onClick={updateWavetable}
+            className={`wavetable-icon ${
+              wavetable === 'sine' && 'current-wavetable'
+            }`}
+            src={waves['sine']}
+            id='sine'
+            alt={`sine ${wavetable === 'sine' && 'current wavetable'}`}
+          />
+          <img
+            onClick={updateWavetable}
+            className={`wavetable-icon ${
+              wavetable === 'sawtooth' && 'current-wavetable'
+            }`}
+            src={waves['sawtooth']}
+            id='sawtooth'
+            alt={`sawtooth ${wavetable === 'sawtooth' && 'current wavetable'}`}
+          />
+
+          <img
+            onClick={updateWavetable}
+            className={`wavetable-icon ${
+              wavetable === 'triangle' && 'current-wavetable'
+            }`}
+            src={waves['triangle']}
+            id='triangle'
+            alt={`triangle ${wavetable === 'triangle' && 'current wavetable'}`}
+          />
+
+          <img
+            onClick={updateWavetable}
+            className={`wavetable-icon ${
+              wavetable === 'square' && 'current-wavetable'
+            }`}
+            src={waves['square']}
+            id='square'
+            alt={`square ${wavetable === 'square' && 'current wavetable'}`}
+          />
+        </div>
+        {/* <div className='select-input center'>
           <select
             className='wavetable-select center'
             onChange={updateWavetable}
@@ -50,7 +92,15 @@ const OscController = ({
             <option value='triangle'>triangle</option>
             <option value='square'>square</option>
           </select>
-        </div>
+        </div> */}
+        {/* <div className='select-input dropdown-container center'>
+          <DropDown
+            options={['sine', 'sawtooth', 'triangle', 'square']}
+            updateFunction={updateWavetable}
+            initVal={'sine'}
+            inputId={'type'}
+          />
+        </div> */}
       </div>
       <div className='octave center'>
         <b>octave</b>

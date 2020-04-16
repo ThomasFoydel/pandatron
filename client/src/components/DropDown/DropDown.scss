@@ -5,6 +5,7 @@
   border-radius: 5px;
   //   padding: 0.3rem 0rem;
   width: 9rem;
+  min-height: 5rem !important;
 
   .open {
     position: absolute;
@@ -19,9 +20,14 @@
     }
   }
 
+  .closed {
+    border: solid black 2px;
+  }
+
   .option {
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 4px;
+
     &:hover {
       background-color: rgb(185, 185, 185);
     }

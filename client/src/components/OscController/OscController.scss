@@ -12,10 +12,20 @@
   }
   .wavetable-icon {
     width: 4rem;
-    display: block;
+    display: inline-block;
+    margin: 0;
+    opacity: 0.3;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    &:hover {
+      opacity: 0.75;
+    }
   }
 
-  .wavetable-select {
+  .wavetable-control {
+    display: flex;
+    padding-left: 0.3rem;
+    width: 100%;
   }
   .flextrue {
     display: flex;
@@ -23,6 +33,10 @@
     .gain {
       margin-right: 2rem;
     }
+  }
+
+  .current-wavetable {
+    opacity: 1;
   }
 
   .octave {

@@ -56,7 +56,7 @@ const FilterController = ({
           onChange={updateFilter}
         />
       </div>
-      <div className='select-input center'>
+      <div className='center'>
         <DropDown
           updateFunction={updateFilter}
           inputId={'type'}
