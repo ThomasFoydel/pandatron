@@ -1,0 +1,22 @@
+.noiseosccontrol {
+  width: 17rem;
+  margin: 0 1rem;
+  border: 2px solid black;
+  border-radius: 5px;
+  position: relative;
+
+  .name {
+    font-size: 2rem;
+    letter-spacing: 0.2rem;
+    width: 10rem;
+    white-space: nowrap;
+    margin-bottom: 3rem;
+  }
+  .dropdown {
+    position: absolute;
+    top: 4rem;
+  }
+  .gain-knob {
+    margin-top: 8.4rem;
+  }
+}

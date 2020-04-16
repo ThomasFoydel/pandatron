@@ -85,7 +85,7 @@ const OscController = ({
       </div>
 
       <div className={`flex${detuneOsc ? 'true' : 'false'} center`}>
-        <div className='gain '>
+        <div className='gain'>
           <div>
             <h3>gain</h3>
 

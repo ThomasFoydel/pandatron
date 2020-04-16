@@ -12,6 +12,7 @@ import {
 } from '../../util/util';
 import ADSRController from 'components/ADSRController/ADSRController';
 import FilterController from 'components/FilterController/FilterController';
+import NoiseOscController from 'components/NoiseOscController/NoiseOscController';
 
 const Basic = () => {
   const actx = new AudioContext();
@@ -144,6 +145,10 @@ const Basic = () => {
     subOscType = e.target.value;
   };
 
+  const changeNoiseType = (e) => {
+    noiseType = e;
+  };
+
   const changeOctaveOsc1 = (e) => {
     osc1OctaveOffset = e.target.value;
   };
@@ -165,6 +170,10 @@ const Basic = () => {
 
   const changeSubGain = (e) => {
     subGain.gain.value = e;
+  };
+
+  const changeNoiseGain = (e) => {
+    noiseOscVol = e;
   };
 
   const changeDistortion = (e) => {
@@ -301,8 +310,12 @@ const Basic = () => {
               changeOctaveOsc={changeOctaveSub}
               changeGain={changeSubGain}
             />
-
-            <div className='osc'>
+            <NoiseOscController
+              changeNoiseGain={changeNoiseGain}
+              changeNoiseType={changeNoiseType}
+              initGain={noiseOscVol}
+            />
+            {/* <div className='osc'>
               <h4>noise osc</h4>
               <div>
                 <select
@@ -324,7 +337,7 @@ const Basic = () => {
                   }}
                 />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className='main-grid-section-2'>
