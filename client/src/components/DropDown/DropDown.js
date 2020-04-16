@@ -3,36 +3,37 @@ import './DropDown.scss';
 
 const DropDown = ({ options, updateFunction, initVal, inputId }) => {
   const [opened, setOpened] = useState(false);
-  const [currentVal, setCurrentVal] = useState(initVal);
+  const [currentVal, setCurrentVal] = useState(initVal.val);
 
   const selectOption = (e) => {
-    let newVal = e.target.id;
-
-    setCurrentVal(newVal);
+    setCurrentVal(e);
     setOpened(false);
-    updateFunction({ target: { value: newVal, id: inputId } });
+    updateFunction({ target: { value: e, id: inputId } });
   };
 
   return (
-    <div className='dropdown'>
-      <div className='closed option' onClick={() => setOpened(!opened)}>
-        {currentVal}
-      </div>
+    <div
+      className={`dropdown dropdown-open${opened}`}
+      onMouseEnter={() => setOpened(true)}
+      onMouseLeave={() => setOpened(false)}
+    >
+      <div className='closed option'>{currentVal}</div>
 
       {opened && (
         <div className='open center'>
           {options.map((option) => {
+            console.log(option.val);
             return (
               <div
                 className={`option ${
-                  currentVal === option && 'current-option'
+                  currentVal === option.val && 'current-option'
                 }`}
-                value={option}
-                id={option}
-                onClick={(option) => selectOption(option)}
-                key={option}
+                value={option.val}
+                id={option.val}
+                onClick={() => selectOption(option.val)}
+                key={option.val}
               >
-                {option}
+                {option.text}
               </div>
             );
           })}

@@ -82,38 +82,8 @@ const OscController = ({
             alt={`square ${wavetable === 'square' && 'current wavetable'}`}
           />
         </div>
-        {/* <div className='select-input center'>
-          <select
-            className='wavetable-select center'
-            onChange={updateWavetable}
-          >
-            <option value='sine'>sine</option>
-            <option value='sawtooth'>sawtooth</option>
-            <option value='triangle'>triangle</option>
-            <option value='square'>square</option>
-          </select>
-        </div> */}
-        {/* <div className='select-input dropdown-container center'>
-          <DropDown
-            options={['sine', 'sawtooth', 'triangle', 'square']}
-            updateFunction={updateWavetable}
-            initVal={'sine'}
-            inputId={'type'}
-          />
-        </div> */}
       </div>
-      <div className='octave center'>
-        <b>octave</b>
-        <div className='select-input center'>
-          <select onChange={changeOctaveOsc}>
-            <option value={2}>+2</option>
-            <option value={1}>+1</option>
-            <option value={0}>0</option>
-            <option value={-1}>-1</option>
-            <option value={-2}>-2</option>
-          </select>
-        </div>
-      </div>
+
       <div className={`flex${detuneOsc ? 'true' : 'false'} center`}>
         <div className='gain '>
           <div>
@@ -148,6 +118,23 @@ const OscController = ({
             />
           </div>
         )}
+      </div>
+      <div className='octave center'>
+        <b>octave</b>
+        <div className=' osccontrol-dropdown'>
+          <DropDown
+            options={[
+              { val: 2, text: '+2' },
+              { val: 1, text: '+1' },
+              { val: 0, text: '0' },
+              { val: -1, text: '-1' },
+              { val: -2, text: '-2' },
+            ]}
+            updateFunction={changeOctaveOsc}
+            inputId={'type'}
+            initVal={{ val: 0, text: '0' }}
+          />
+        </div>
       </div>
     </div>
   );

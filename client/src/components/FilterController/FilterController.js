@@ -56,19 +56,19 @@ const FilterController = ({
           onChange={updateFilter}
         />
       </div>
-      <div className='center'>
+      <div className='center filter1-dropdown'>
         <DropDown
           updateFunction={updateFilter}
           inputId={'type'}
-          initVal={type}
+          initVal={{ val: 'lowpass', text: 'lowpass' }}
           options={[
-            'lowpass',
-            'highpass',
-            'lowshelf',
-            'highshelf',
-            'bandpass',
-            'allpass',
-            'notch',
+            { val: 'lowpass', text: 'lowpass' },
+            { val: 'highpass', text: 'highpass' },
+            { val: 'lowshelf', text: 'lowshelf' },
+            { val: 'highshelf', text: 'highshelf' },
+            { val: 'bandpass', text: 'bandpass' },
+            { val: 'allpass', text: 'allpass' },
+            { val: 'notch', text: 'notch' },
           ]}
         />
       </div>
