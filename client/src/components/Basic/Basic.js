@@ -16,9 +16,9 @@ import ADSRController from 'components/ADSRController/ADSRController';
 import FilterController from 'components/FilterController/FilterController';
 import NoiseOscController from 'components/NoiseOscController/NoiseOscController';
 import DistortionController from 'components/DistortionController/DistortionController';
+import Distortion2Controller from 'components/Distortion2Controller/Distortion2Controller';
 import DelayController from 'components/DelayController/DelayController';
 import ReverbController from 'components/ReverbController/ReverbController';
-
 import './Basic.scss';
 const Basic = () => {
   // const actx = new AudioContext();
@@ -62,12 +62,15 @@ const Basic = () => {
   const dist1DryGain = actx.createGain();
   dist1WetGain.gain.value = 0.3;
   dist1DryGain.gain.value = 0.7;
+  const distortion1MixedGain = actx.createGain();
 
   const filter1 = actx.createBiquadFilter();
+  filter1.dryWet = 1;
   const filter1WetGain = actx.createGain();
   const filter1DryGain = actx.createGain();
   filter1WetGain.gain.value = 1;
   filter1DryGain.gain.value = 0;
+  const filter1MixedGain = actx.createGain();
 
   const distortion2 = new Pizzicato.Effects.Distortion();
 
@@ -101,15 +104,17 @@ const Basic = () => {
   sourcesGain.connect(distortion1);
   sourcesGain.connect(dist1DryGain);
   distortion1.connect(dist1WetGain);
-  dist1WetGain.connect(filter1);
-  dist1DryGain.connect(filter1);
+  dist1WetGain.connect(distortion1MixedGain);
+  dist1DryGain.connect(distortion1MixedGain);
+  distortion1MixedGain.connect(distortion2);
 
-  distortion1.connect(filter1DryGain);
+  distortion2.connect(filter1);
+  distortion2.connect(filter1DryGain);
 
-  filter1.connect(compressor);
-
-  filter1DryGain.connect(compressor);
-  filter1WetGain.connect(compressor);
+  filter1.connect(filter1WetGain);
+  filter1WetGain.connect(filter1MixedGain);
+  filter1DryGain.connect(filter1MixedGain);
+  filter1MixedGain.connect(compressor);
 
   subGain.connect(subFilter);
   subFilter.connect(compressor);
@@ -141,9 +146,14 @@ const Basic = () => {
   };
 
   const changeFilter1Mix = (e) => {
-    const val = +e;
-    filter1DryGain.gain.setValueAtTime((100 - val) / 100, actx.currentTime);
-    filter1WetGain.gain.setValueAtTime(val / 100, actx.currentTime);
+    const numE = +e;
+    const val = numE.toFixed(2);
+    const newDryVal = ((100 - val) / 100).toFixed(2);
+    filter1.dryWet = newDryVal;
+    const newWetVal = (val / 100).toFixed(2);
+
+    filter1DryGain.gain.setValueAtTime(newDryVal, actx.currentTime);
+    filter1WetGain.gain.setValueAtTime(newWetVal, actx.currentTime);
   };
 
   const changeFilter1Gain = (e) => {
@@ -232,8 +242,20 @@ const Basic = () => {
     noiseOscVol = e;
   };
 
-  const changeDistortion = (e) => {
+  const changeDistortion1Amount = (e) => {
     distortion1.curve = makeDistortionCurve(e * 5, actx);
+  };
+
+  const changeDistortion1Mix = (e) => {
+    const newDry = (100 - e) / 100;
+    const newWet = e / 100;
+
+    dist1DryGain.gain.setValueAtTime(newDry, actx.currentTime);
+    dist1WetGain.gain.setValueAtTime(newWet, actx.currentTime);
+  };
+
+  const changeDistortion2Gain = (e) => {
+    distortion2.gain = e;
   };
 
   const changeReverbDecay = (e) => {
@@ -394,7 +416,7 @@ const Basic = () => {
                   type: filter1.type,
                   frequency: filter1.frequency.value,
                   Q: filter1.Q.value,
-                  mix: 1,
+                  mix: filter1.dryWet,
                   gain: filter1.gain.value,
                 }}
               />
@@ -410,7 +432,11 @@ const Basic = () => {
         </div>
         <div className='main-grid-section-3'>
           <div className='effect-rack'>
-            <DistortionController changeDistortion={changeDistortion} />
+            <DistortionController
+              initVals={{ amountVal: 0, mixVal: dist1DryGain.gain.value }}
+              changeDistortion1Amount={changeDistortion1Amount}
+              changeDistortion1Mix={changeDistortion1Mix}
+            />
             <DelayController
               changeDelayTime={changeDelayTime}
               initVal={delay1.delayTime.value}
@@ -426,22 +452,14 @@ const Basic = () => {
               }}
             />
           </div>
-          {/* <div className='reverb'>
-            <h2>reverb</h2>
-            <span>duration</span>
-            <div>
-              <input type='range' onChange={changeConvolverReverb} />
-            </div>
-            <div>
-              <span>dry/wet</span>
-              <div>
-                <input type='range' onChange={mixReverbGain} />
-              </div>
-            </div>
-          </div>*/}
+
+          <Distortion2Controller
+            changeDistortion2Gain={changeDistortion2Gain}
+            initVal={distortion2.gain}
+          />
         </div>
         <div className='main-grid-section-4'>
-          <div className='keyboard' id='keyboard'></div>
+          <div className='keyboard' id='keyboard' />
         </div>
       </div>
     </>

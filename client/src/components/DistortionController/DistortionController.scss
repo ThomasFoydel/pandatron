@@ -9,5 +9,11 @@
   background: rgba(255, 255, 255, 0.623);
   .inner {
     width: 100%;
+    .knob {
+      max-width: 40px;
+    }
+  }
+  input {
+    width: 80%;
   }
 }

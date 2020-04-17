@@ -45,12 +45,12 @@ const FilterController = ({
       <div className='sliders'>
         <div className='frequency'>
           <div className='center'>
-            <b>frequency</b>
+            <b>frequency: </b> {filterDisplayVals.frequency}
           </div>
           <input
             className='center'
             type='range'
-            max='1000'
+            max='19000'
             id='frequency'
             value={frequency}
             onChange={updateFilter}
@@ -59,7 +59,8 @@ const FilterController = ({
         {showQInput && (
           <div>
             <div className='center'>
-              <b>Q</b>
+              <b>Q: </b>
+              {filterDisplayVals.Q}
             </div>
             <input
               className='center'
@@ -70,19 +71,6 @@ const FilterController = ({
             />
           </div>
         )}
-
-        <div>
-          <div className='center'>
-            <b>mix</b>
-          </div>
-          <input
-            className='center'
-            type='range'
-            value={mix}
-            id='mix'
-            onChange={updateFilter}
-          />
-        </div>
 
         {showGainInput && (
           <div>
@@ -98,6 +86,20 @@ const FilterController = ({
             />
           </div>
         )}
+
+        <div>
+          <div className='center'>
+            <b>mix: </b>
+            {filterDisplayVals.mix}
+          </div>
+          <input
+            className='center'
+            type='range'
+            value={mix}
+            id='mix'
+            onChange={updateFilter}
+          />
+        </div>
       </div>
 
       <div className='filter1-dropdown center'>
