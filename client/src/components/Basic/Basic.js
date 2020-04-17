@@ -21,7 +21,7 @@ import DelayController from 'components/DelayController/DelayController';
 import ReverbController from 'components/ReverbController/ReverbController';
 import QuadrafuzzController from 'components/QuadrafuzzController/QuadrafuzzController';
 import FlangerController from 'components/FlangerController/FlangerController';
-
+import RingModulatorController from 'components/RingModulatorController/RingModulatorController';
 import './Basic.scss';
 const Basic = () => {
   // const actx = new AudioContext();
@@ -82,7 +82,7 @@ const Basic = () => {
     midLowGain: 0.8,
     midHighGain: 0.5,
     highGain: 0.6,
-    mix: 1.0,
+    mix: 0,
   };
   const quadrafuzz1 = new Pizzicato.Effects.Quadrafuzz(quadrafuzzInitVals);
 
@@ -91,9 +91,18 @@ const Basic = () => {
     speed: 0.2,
     depth: 0.1,
     feedback: 0.1,
-    mix: 0.5,
+    mix: 0,
   };
   const flanger1 = new Pizzicato.Effects.Flanger(flanger1InitVals);
+
+  const ringModulatorInitVals = {
+    speed: 10,
+    distortion: 4,
+    mix: 0,
+  };
+  const ringModulator = new Pizzicato.Effects.RingModulator(
+    ringModulatorInitVals
+  );
 
   const delay1 = actx.createDelay(5.0);
 
@@ -111,6 +120,9 @@ const Basic = () => {
   const compressor = actx.createDynamicsCompressor();
   const limiter = actx.createDynamicsCompressor();
 
+  // // // CONNECTIONS // // //
+  // // // CONNECTIONS // // //
+  // // // CONNECTIONS // // //
   // // // CONNECTIONS // // //
 
   // SOURCES
@@ -139,7 +151,9 @@ const Basic = () => {
   filter1DryGain.connect(filter1MixedGain);
   filter1MixedGain.connect(flanger1);
 
-  flanger1.connect(compressor);
+  flanger1.connect(ringModulator);
+
+  ringModulator.connect(compressor);
 
   subGain.connect(subFilter);
   subFilter.connect(compressor);
@@ -328,6 +342,19 @@ const Basic = () => {
     } else {
       flanger1[prop] = val;
     }
+  };
+
+  const changePizzicatoEffect = (effect, prop, val) => {
+    if (prop === 'mix') {
+      effect.dryGainNode.gain.setValueAtTime(1 - val, actx.currentTime);
+      effect.wetGainNode.gain.setValueAtTime(val, actx.currentTime);
+    } else {
+      effect[prop] = val;
+    }
+  };
+
+  const changeRingModulator = (prop, val) => {
+    changePizzicatoEffect(ringModulator, prop, val);
   };
 
   // CREATE KEYBOARD
@@ -523,6 +550,10 @@ const Basic = () => {
             <FlangerController
               initVals={flanger1InitVals}
               changeFlanger1={changeFlanger1}
+            />
+            <RingModulatorController
+              initVals={ringModulatorInitVals}
+              changeRingModulator={changeRingModulator}
             />
           </div>
         </div>
