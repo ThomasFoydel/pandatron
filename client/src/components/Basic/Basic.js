@@ -63,8 +63,8 @@ const Basic = () => {
 
   const dist1WetGain = actx.createGain();
   const dist1DryGain = actx.createGain();
-  dist1WetGain.gain.value = 0.3;
-  dist1DryGain.gain.value = 0.7;
+  dist1WetGain.gain.value = 0;
+  dist1DryGain.gain.value = 1;
   const distortion1MixedGain = actx.createGain();
 
   const filter1 = actx.createBiquadFilter();
@@ -139,18 +139,16 @@ const Basic = () => {
   filter1DryGain.connect(filter1MixedGain);
   filter1MixedGain.connect(flanger1);
 
-  quadrafuzz1.connect(flanger1);
-
   flanger1.connect(compressor);
 
   subGain.connect(subFilter);
   subFilter.connect(compressor);
-  compressor.connect(reverbMixGainDry);
 
   compressor.connect(delay1);
   delay1.connect(convolver1);
+  delay1.connect(reverbMixGainDry);
 
-  convolver1.connect(reverbMixGainWet);
+  // convolver1.connect(reverbMixGainWet);
 
   reverbMixGainDry.connect(reverbJoinGain);
   reverbMixGainWet.connect(reverbJoinGain);
@@ -273,8 +271,8 @@ const Basic = () => {
   };
 
   const changeDistortion1Mix = (e) => {
-    const newDry = e / 100;
-    const newWet = (100 - e) / 100;
+    const newWet = e / 100;
+    const newDry = (100 - e) / 100;
 
     dist1DryGain.gain.setValueAtTime(newDry, actx.currentTime);
     dist1WetGain.gain.setValueAtTime(newWet, actx.currentTime);
@@ -415,6 +413,11 @@ const Basic = () => {
               changeOctaveOsc={changeOctaveOsc1}
               detuneOsc={detuneOsc1}
               changeGain={changeOsc1Gain}
+              initVals={{
+                wavetable: wavetable1,
+                envelope: initEnvelope,
+                offset: osc1OctaveOffset,
+              }}
             />
             <OscController
               name='osc 2'
@@ -422,6 +425,11 @@ const Basic = () => {
               changeOctaveOsc={changeOctaveOsc2}
               detuneOsc={detuneOsc2}
               changeGain={changeOsc2Gain}
+              initVals={{
+                wavetable: wavetable2,
+                envelope: initEnvelope,
+                offset: osc2OctaveOffset,
+              }}
             />
           </div>
 
@@ -439,6 +447,11 @@ const Basic = () => {
               changeWaveTable={changeWaveTableSub}
               changeOctaveOsc={changeOctaveSub}
               changeGain={changeSubGain}
+              initVals={{
+                wavetable: subOscType,
+                envelope: initEnvelope,
+                offset: subOscOctaveOffset,
+              }}
             />
             <NoiseOscController
               changeNoiseGain={changeNoiseGain}
@@ -477,7 +490,7 @@ const Basic = () => {
         <div className='main-grid-section-3'>
           <div className='effect-rack'>
             <DistortionController
-              initVals={{ amountVal: 0, mixVal: dist1DryGain.gain.value * 100 }}
+              initVals={{ amountVal: 0, mixVal: dist1WetGain.gain.value * 100 }}
               changeDistortion1Amount={changeDistortion1Amount}
               changeDistortion1Mix={changeDistortion1Mix}
             />

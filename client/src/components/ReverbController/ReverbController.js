@@ -34,12 +34,13 @@ const ReverbController = ({
   return (
     <div className='reverb'>
       <h2 className='center'>reverb</h2>
-      <span>decay: {decay}</span>
+      <div className='slider-input'>
+        <div className='display'>decay: {decay}</div>
+        <input type='range' value={decay} max={100} onChange={updateDecay} />
+      </div>
 
-      <input type='range' value={decay} max={100} onChange={updateDecay} />
-
-      <div>
-        <span>duration: {duration}</span>
+      <div className='slider-input'>
+        <div className='display'>duration: {duration}</div>
 
         <input
           type='range'
@@ -54,7 +55,7 @@ const ReverbController = ({
         </div>
 
         <Knob
-          className='center'
+          className='center knob'
           style={{ display: 'inline-block' }}
           min={0}
           max={100}

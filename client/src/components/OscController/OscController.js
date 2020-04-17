@@ -11,11 +11,11 @@ const OscController = ({
   detuneOsc,
   name,
   changeGain,
+  initVals,
 }) => {
   const [gainVal, setGainVal] = useState(0.5);
   const [detuneVal, setDetuneVal] = useState(0);
-  const [wavetable, setWavetable] = useState('sine');
-  console.log();
+  const [wavetable, setWavetable] = useState(initVals.wavetable);
 
   const changeOscGain = (e) => {
     const newVal = e / 1000;
@@ -37,11 +37,6 @@ const OscController = ({
     <div className='osccontrol'>
       <h2 className='name center'>{name}</h2>
       <div>
-        {/* <img
-          className='wavetable-icon center'
-          src={waves[wavetable]}
-          alt={`current wavetable: ${wavetable}`}
-        /> */}
         <div className='wavetable-control'>
           <img
             onClick={updateWavetable}
