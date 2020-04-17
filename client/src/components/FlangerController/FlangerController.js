@@ -14,7 +14,7 @@ const FlangerController = ({ changeFlanger1, initVals }) => {
       <h2 className='center'>flanger</h2>
       {Object.keys(display).map((value) => {
         return (
-          <div className='center' key={value}>
+          <div className='input' key={value}>
             <div>
               <b>{value}: </b> {display[value]}
             </div>
