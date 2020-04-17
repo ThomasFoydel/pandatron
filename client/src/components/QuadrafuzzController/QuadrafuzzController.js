@@ -10,7 +10,7 @@ const QuadrafuzzController = ({ changeQuadrafuzz, initVals }) => {
   };
   const { lowGain, midLowGain, midHighGain, highGain, mix } = display;
   return (
-    <div>
+    <div className='quadrafuzz'>
       <h2>quadrafuzz</h2>
 
       <h6>low</h6>

@@ -8,7 +8,7 @@ const Distortion2Controller = ({ changeDistortion2Gain, initVal }) => {
   return (
     <div className='distortion2'>
       <h6 className='center'>distortion II</h6>
-      <input type='range' onChange={updateDistortion2Gain} />
+      <input className='center' type='range' onChange={updateDistortion2Gain} />
     </div>
   );
 };
