@@ -20,6 +20,7 @@ import Distortion2Controller from 'components/Distortion2Controller/Distortion2C
 import DelayController from 'components/DelayController/DelayController';
 import ReverbController from 'components/ReverbController/ReverbController';
 import QuadrafuzzController from 'components/QuadrafuzzController/QuadrafuzzController';
+import FlangerController from 'components/FlangerController/FlangerController';
 
 import './Basic.scss';
 const Basic = () => {
@@ -76,14 +77,23 @@ const Basic = () => {
 
   const distortion2 = new Pizzicato.Effects.Distortion();
 
-  const quadrafuzzOptions = {
+  const quadrafuzzInitVals = {
     lowGain: 0.6,
     midLowGain: 0.8,
     midHighGain: 0.5,
     highGain: 0.6,
     mix: 1.0,
   };
-  const quadrafuzz1 = new Pizzicato.Effects.Quadrafuzz(quadrafuzzOptions);
+  const quadrafuzz1 = new Pizzicato.Effects.Quadrafuzz(quadrafuzzInitVals);
+
+  const flanger1InitVals = {
+    time: 0.45,
+    speed: 0.2,
+    depth: 0.1,
+    feedback: 0.1,
+    mix: 0.5,
+  };
+  const flanger1 = new Pizzicato.Effects.Flanger(flanger1InitVals);
 
   const delay1 = actx.createDelay(5.0);
 
@@ -127,11 +137,14 @@ const Basic = () => {
   filter1.connect(filter1WetGain);
   filter1WetGain.connect(filter1MixedGain);
   filter1DryGain.connect(filter1MixedGain);
-  filter1MixedGain.connect(compressor);
+  filter1MixedGain.connect(flanger1);
+
+  quadrafuzz1.connect(flanger1);
+
+  flanger1.connect(compressor);
 
   subGain.connect(subFilter);
   subFilter.connect(compressor);
-
   compressor.connect(reverbMixGainDry);
 
   compressor.connect(delay1);
@@ -202,7 +215,7 @@ const Basic = () => {
       newDryVal.toFixed(2),
       actx.currentTime
     );
-    reverbMixGainWet.gain.setValueAtTime(e / 100, actx.currentTime);
+    reverbMixGainWet.gain.linearRampToValueAtTime(e / 100, actx.currentTime);
   };
 
   // const changeOscMasterGain1 = (e) => {
@@ -307,6 +320,15 @@ const Basic = () => {
       quadrafuzz1.wetGainNode.gain.setValueAtTime(val, actx.currentTime);
     } else {
       quadrafuzz1[prop] = val;
+    }
+  };
+
+  const changeFlanger1 = (prop, val) => {
+    if (prop === 'mix') {
+      flanger1.dryGainNode.gain.setValueAtTime(1 - val, actx.currentTime);
+      flanger1.wetGainNode.gain.setValueAtTime(val, actx.currentTime);
+    } else {
+      flanger1[prop] = val;
     }
   };
 
@@ -473,17 +495,23 @@ const Basic = () => {
                 mixGain: reverbMixGainDry.gain.value,
               }}
             />
+            <Distortion2Controller
+              changeDistortion2Gain={changeDistortion2Gain}
+              initVal={distortion2.gain}
+            />
           </div>
 
-          <Distortion2Controller
-            changeDistortion2Gain={changeDistortion2Gain}
-            initVal={distortion2.gain}
-          />
+          <div className='flex'>
+            <QuadrafuzzController
+              changeQuadrafuzz={changeQuadrafuzz}
+              initVals={quadrafuzzInitVals}
+            />
 
-          <QuadrafuzzController
-            changeQuadrafuzz={changeQuadrafuzz}
-            initVals={quadrafuzzOptions}
-          />
+            <FlangerController
+              initVals={flanger1InitVals}
+              changeFlanger1={changeFlanger1}
+            />
+          </div>
         </div>
         <div className='main-grid-section-4'>
           <div className='keyboard' id='keyboard' />
