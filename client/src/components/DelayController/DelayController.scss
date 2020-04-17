@@ -1,0 +1,22 @@
+.delay {
+  border: 2px solid black;
+  border-radius: 5px;
+  width: 30%;
+  margin: 0 0.2rem;
+  min-width: 12rem;
+  background: rgba(255, 255, 255, 0.623);
+  .time {
+    width: 100%;
+    .title {
+      text-align: center;
+      width: 100%;
+    }
+  }
+  .amount {
+    width: 100%;
+    .title {
+      text-align: center;
+      width: 100%;
+    }
+  }
+}

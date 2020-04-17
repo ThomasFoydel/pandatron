@@ -1,11 +1,3 @@
-.osc,
-.subosc {
-  padding: 1rem;
-  margin: 1rem;
-  border: 2px solid black;
-  border-radius: 5px;
-}
-
 .osc-mix {
   width: 36rem;
   margin: 1rem;
@@ -28,20 +20,16 @@
   }
 }
 
-.distortion,
-.reverb,
-.delay,
-.adsr {
-  border: 2px solid black;
-  border-radius: 5px;
-}
-
 // synth layout
 
 .main-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
+  height: 100vh;
+  width: 98vw;
+  margin-left: 50vw;
+  transform: translateX(-50%);
 }
 
 .main-grid-section-1 {
@@ -55,6 +43,7 @@
 }
 .main-grid-section-4 {
   grid-area: 2 / 1 / 3 / 4;
+  height: 20rem;
 }
 
 .section2-grid {
@@ -81,7 +70,12 @@
 }
 
 .keyboard {
+  top: 2rem;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.effect-rack {
+  display: flex;
 }

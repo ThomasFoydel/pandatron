@@ -1,6 +1,6 @@
 export function makeDistortionCurve(amount, actx) {
   var k = typeof amount === 'number' ? amount : 0,
-    n_samples = 44100,
+    n_samples = 256,
     curve = new Float32Array(n_samples),
     deg = Math.PI / 180,
     i = 0,
@@ -25,6 +25,10 @@ export function impulseResponse(duration, decay, reverse, actx) {
     impulseL[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, decay);
     impulseR[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, decay);
   }
+  impulse.decayVal = decay;
+  impulse.durationVal = duration;
+  impulse.reverse = reverse;
+
   return impulse;
 }
 

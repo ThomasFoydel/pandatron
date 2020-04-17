@@ -13,6 +13,9 @@ import {
 import ADSRController from 'components/ADSRController/ADSRController';
 import FilterController from 'components/FilterController/FilterController';
 import NoiseOscController from 'components/NoiseOscController/NoiseOscController';
+import DistortionController from 'components/DistortionController/DistortionController';
+import DelayController from 'components/DelayController/DelayController';
+import ReverbController from 'components/ReverbController/ReverbController';
 
 const Basic = () => {
   const actx = new AudioContext();
@@ -110,8 +113,8 @@ const Basic = () => {
 
   const mixReverbGain = (e) => {
     let newDryVal;
-    if (e.target.value < 100) {
-      newDryVal = (100 - e.target.value) / 100;
+    if (e < 100) {
+      newDryVal = (100 - e) / 100;
     } else {
       newDryVal = 0;
     }
@@ -120,10 +123,7 @@ const Basic = () => {
       newDryVal.toFixed(2),
       actx.currentTime
     );
-    reverbMixGainWet.gain.setValueAtTime(
-      e.target.value / 100,
-      actx.currentTime
-    );
+    reverbMixGainWet.gain.setValueAtTime(e / 100, actx.currentTime);
   };
 
   // const changeOscMasterGain1 = (e) => {
@@ -177,17 +177,25 @@ const Basic = () => {
   };
 
   const changeDistortion = (e) => {
-    distortion1.curve = makeDistortionCurve(+e.target.value * 5, actx);
+    distortion1.curve = makeDistortionCurve(e * 5, actx);
   };
 
-  const changeConvolverReverb = (e) => {
-    const newBuffer = impulseResponse(4, e.target.value, false, actx);
+  const changeReverbDecay = (e) => {
+    const newVal = e;
+    const { durationVal, reverse } = convolver1.buffer;
+    const newBuffer = impulseResponse(durationVal, newVal, reverse, actx);
+    convolver1.buffer = newBuffer;
+  };
+
+  const changeReverbDuration = (e) => {
+    const newVal = e;
+    const { decayVal, reverse } = convolver1.buffer;
+    const newBuffer = impulseResponse(newVal, decayVal, reverse, actx);
     convolver1.buffer = newBuffer;
   };
 
   const changeDelayTime = (e) => {
-    const eventVal = +e.target.value / 20;
-    delay1.delayTime.setValueAtTime(eventVal.toFixed(1), actx.currentTime);
+    delay1.delayTime.setValueAtTime(e.toFixed(1), actx.currentTime);
   };
 
   const changeADSR = (newVal, aspect) => {
@@ -315,29 +323,6 @@ const Basic = () => {
               changeNoiseType={changeNoiseType}
               initGain={noiseOscVol}
             />
-            {/* <div className='osc'>
-              <h4>noise osc</h4>
-              <div>
-                <select
-                  onChange={(e) => {
-                    noiseType = e.target.value;
-                  }}
-                >
-                  <option value='white'>white</option>
-                  <option value='brown'>brown</option>
-                  <option value='pink'>pink</option>
-                </select>
-              </div>
-              <div>
-                gain
-                <input
-                  type='range'
-                  onChange={(e) => {
-                    noiseOscVol = +e.target.value / 100;
-                  }}
-                />
-              </div>
-            </div> */}
           </div>
         </div>
         <div className='main-grid-section-2'>
@@ -364,17 +349,24 @@ const Basic = () => {
           <div className='section2-grid-3'>SECTION2 GRID, AREA 3 GOES HERE</div>
         </div>
         <div className='main-grid-section-3'>
-          <div className='distortion'>
-            distortion
-            <input onChange={changeDistortion} type='range' />
-          </div>
+          <div className='effect-rack'>
+            <DistortionController changeDistortion={changeDistortion} />
+            <DelayController
+              changeDelayTime={changeDelayTime}
+              initVal={delay1.delayTime.value}
+            />
 
-          <div className='delay'>
-            <h2>delay</h2>
-            time <input type='range' onChange={changeDelayTime} />
+            <ReverbController
+              changeReverbDecay={changeReverbDecay}
+              changeReverbDuration={changeReverbDuration}
+              mixReverbGain={mixReverbGain}
+              initVals={{
+                ...convolver1.buffer,
+                mixGain: reverbMixGainDry.gain.value,
+              }}
+            />
           </div>
-
-          <div className='reverb'>
+          {/* <div className='reverb'>
             <h2>reverb</h2>
             <span>duration</span>
             <div>
@@ -386,7 +378,7 @@ const Basic = () => {
                 <input type='range' onChange={mixReverbGain} />
               </div>
             </div>
-          </div>
+          </div>*/}
         </div>
         <div className='main-grid-section-4'>
           <div className='keyboard' id='keyboard'></div>

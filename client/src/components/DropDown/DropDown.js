@@ -21,22 +21,19 @@ const DropDown = ({ options, updateFunction, initVal, inputId }) => {
 
       {opened && (
         <div className='open center'>
-          {options.map((option) => {
-            console.log(option.val);
-            return (
-              <div
-                className={`option ${
-                  currentVal === option.val && 'current-option'
-                }`}
-                value={option.val}
-                id={option.val}
-                onClick={() => selectOption(option.val)}
-                key={option.val}
-              >
-                {option.text}
-              </div>
-            );
-          })}
+          {options.map((option) => (
+            <div
+              className={`option ${
+                currentVal === option.val && 'current-option'
+              }`}
+              value={option.val}
+              id={option.val}
+              onClick={() => selectOption(option.val)}
+              key={option.val}
+            >
+              {option.text}
+            </div>
+          ))}
         </div>
       )}
     </div>

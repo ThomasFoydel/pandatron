@@ -88,8 +88,6 @@ const OscController = ({
         <div className='gain'>
           <div>
             <h3>gain</h3>
-
-            {(gainVal * 1000).toFixed(2)}
           </div>
           <Knob
             style={{ display: 'inline-block' }}
@@ -99,14 +97,13 @@ const OscController = ({
             unlockDistance={10}
             onChange={changeOscGain}
           />
+          {(gainVal * 1000).toFixed(2)}
         </div>
 
         {detuneOsc && (
           <div className='detune'>
             <div>
               <h3>detune</h3>
-
-              {detuneVal.toFixed(2)}
             </div>
             <Knob
               style={{ display: 'inline-block' }}
@@ -116,6 +113,7 @@ const OscController = ({
               unlockDistance={10}
               onChange={updateDetune}
             />
+            {detuneVal.toFixed(2)}
           </div>
         )}
       </div>

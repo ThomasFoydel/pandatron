@@ -15,13 +15,13 @@ const NoiseOscController = ({ changeNoiseGain, changeNoiseType, initGain }) => {
     changeNoiseType(value);
     setType(value);
   };
+
   return (
     <div className='noiseosccontrol'>
       <h4 className='name center'>noise osc</h4>
 
       <div className='gain-knob center'>
         <h3>gain</h3>
-        <div>{(gain * 1000).toFixed(2)}</div>
 
         <Knob
           style={{ display: 'inline-block' }}
@@ -31,6 +31,7 @@ const NoiseOscController = ({ changeNoiseGain, changeNoiseType, initGain }) => {
           unlockDistance={10}
           onChange={updateGain}
         />
+        <div>{(gain * 1000).toFixed(2)}</div>
       </div>
       <div className='dropdown center'>
         <DropDown
