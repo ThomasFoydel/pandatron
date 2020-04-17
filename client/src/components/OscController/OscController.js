@@ -97,7 +97,7 @@ const OscController = ({
             unlockDistance={10}
             onChange={changeOscGain}
           />
-          {(gainVal * 1000).toFixed(2)}
+          <div>{(gainVal * 1000).toFixed(2)}</div>
         </div>
 
         {detuneOsc && (

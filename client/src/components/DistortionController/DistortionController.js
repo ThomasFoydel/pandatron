@@ -24,7 +24,7 @@ const DistortionController = ({
     <div className='distortion'>
       <div className='center inner'>
         <h2>distortion I</h2>
-        <div className='center'>amount</div>
+        <h6 className='center'>amount</h6>
         <Knob
           className='knob'
           style={{ display: 'inline-block' }}

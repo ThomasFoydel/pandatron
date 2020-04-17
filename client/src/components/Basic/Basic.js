@@ -19,6 +19,8 @@ import DistortionController from 'components/DistortionController/DistortionCont
 import Distortion2Controller from 'components/Distortion2Controller/Distortion2Controller';
 import DelayController from 'components/DelayController/DelayController';
 import ReverbController from 'components/ReverbController/ReverbController';
+import QuadrafuzzController from 'components/QuadrafuzzController/QuadrafuzzController';
+
 import './Basic.scss';
 const Basic = () => {
   // const actx = new AudioContext();
@@ -74,6 +76,15 @@ const Basic = () => {
 
   const distortion2 = new Pizzicato.Effects.Distortion();
 
+  const quadrafuzzOptions = {
+    lowGain: 0.6,
+    midLowGain: 0.8,
+    midHighGain: 0.5,
+    highGain: 0.6,
+    mix: 1.0,
+  };
+  const quadrafuzz1 = new Pizzicato.Effects.Quadrafuzz(quadrafuzzOptions);
+
   const delay1 = actx.createDelay(5.0);
 
   const reverbMixGainWet = actx.createGain();
@@ -108,8 +119,10 @@ const Basic = () => {
   dist1DryGain.connect(distortion1MixedGain);
   distortion1MixedGain.connect(distortion2);
 
-  distortion2.connect(filter1);
-  distortion2.connect(filter1DryGain);
+  distortion2.connect(quadrafuzz1);
+
+  quadrafuzz1.connect(filter1);
+  quadrafuzz1.connect(filter1DryGain);
 
   filter1.connect(filter1WetGain);
   filter1WetGain.connect(filter1MixedGain);
@@ -247,8 +260,8 @@ const Basic = () => {
   };
 
   const changeDistortion1Mix = (e) => {
-    const newDry = (100 - e) / 100;
-    const newWet = e / 100;
+    const newDry = e / 100;
+    const newWet = (100 - e) / 100;
 
     dist1DryGain.gain.setValueAtTime(newDry, actx.currentTime);
     dist1WetGain.gain.setValueAtTime(newWet, actx.currentTime);
@@ -285,6 +298,15 @@ const Basic = () => {
       sustain = newVal;
     } else if (aspect === 'release') {
       release = newVal;
+    }
+  };
+
+  const changeQuadrafuzz = (prop, val) => {
+    if (prop === 'mix') {
+      quadrafuzz1.dryGainNode.gain.setValueAtTime(1 - val, actx.currentTime);
+      quadrafuzz1.wetGainNode.gain.setValueAtTime(val, actx.currentTime);
+    } else {
+      quadrafuzz1[prop] = val;
     }
   };
 
@@ -433,7 +455,7 @@ const Basic = () => {
         <div className='main-grid-section-3'>
           <div className='effect-rack'>
             <DistortionController
-              initVals={{ amountVal: 0, mixVal: dist1DryGain.gain.value }}
+              initVals={{ amountVal: 0, mixVal: dist1DryGain.gain.value * 100 }}
               changeDistortion1Amount={changeDistortion1Amount}
               changeDistortion1Mix={changeDistortion1Mix}
             />
@@ -456,6 +478,11 @@ const Basic = () => {
           <Distortion2Controller
             changeDistortion2Gain={changeDistortion2Gain}
             initVal={distortion2.gain}
+          />
+
+          <QuadrafuzzController
+            changeQuadrafuzz={changeQuadrafuzz}
+            initVals={quadrafuzzOptions}
           />
         </div>
         <div className='main-grid-section-4'>
