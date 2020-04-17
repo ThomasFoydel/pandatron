@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react';
-import './Basic.scss';
 import QwertyHancock from 'qwerty-hancock';
+import Pizzicato from 'pizzicato';
+
 import oscClass from './oscClass';
 import noiseOscClass from './noiseOscClass';
 
-import OscController from 'components/OscController/OscController';
 import {
   makeDistortionCurve,
   impulseResponse,
   calcFreq,
 } from '../../util/util';
+
+import OscController from 'components/OscController/OscController';
 import ADSRController from 'components/ADSRController/ADSRController';
 import FilterController from 'components/FilterController/FilterController';
 import NoiseOscController from 'components/NoiseOscController/NoiseOscController';
@@ -17,8 +19,10 @@ import DistortionController from 'components/DistortionController/DistortionCont
 import DelayController from 'components/DelayController/DelayController';
 import ReverbController from 'components/ReverbController/ReverbController';
 
+import './Basic.scss';
 const Basic = () => {
-  const actx = new AudioContext();
+  // const actx = new AudioContext();
+  const actx = Pizzicato.context;
 
   //OSCILLATOR SETTINGS
   let attack = 1;
@@ -39,40 +43,74 @@ const Basic = () => {
 
   let subOscOctaveOffset = '0';
 
-  let subOscVol = 0;
+  // let subOscVol = 0;
   let noiseOscVol = 0;
 
-  let subGain = actx.createGain();
-  let oscGain1 = actx.createGain();
-  let oscGain2 = actx.createGain();
-  let noiseGain = actx.createGain();
+  const oscGain1 = actx.createGain();
+  const oscGain2 = actx.createGain();
+  const oscMasterGain1 = actx.createGain();
+  const noiseGain = actx.createGain();
+  const subGain = actx.createGain();
+  const sourcesGain = actx.createGain();
 
-  let delay1 = actx.createDelay(5.0);
+  const subFilter = actx.createBiquadFilter();
 
   const distortion1 = actx.createWaveShaper();
   distortion1.curve = makeDistortionCurve(0, actx);
+
+  const dist1WetGain = actx.createGain();
+  const dist1DryGain = actx.createGain();
+  dist1WetGain.gain.value = 0.3;
+  dist1DryGain.gain.value = 0.7;
+
+  const filter1 = actx.createBiquadFilter();
+  const filter1WetGain = actx.createGain();
+  const filter1DryGain = actx.createGain();
+  filter1WetGain.gain.value = 1;
+  filter1DryGain.gain.value = 0;
+
+  const distortion2 = new Pizzicato.Effects.Distortion();
+
+  const delay1 = actx.createDelay(5.0);
 
   const reverbMixGainWet = actx.createGain();
   const reverbMixGainDry = actx.createGain();
   reverbMixGainWet.gain.value = 0.3;
   reverbMixGainDry.gain.value = 0.7;
 
+  const reverbJoinGain = actx.createGain();
+
   const convolver1 = actx.createConvolver();
-  let impulseBuffer = impulseResponse(4, 4, false, actx);
+  const impulseBuffer = impulseResponse(4, 4, false, actx);
   convolver1.buffer = impulseBuffer;
 
-  const oscMasterGain1 = actx.createGain();
-  const filter1 = actx.createBiquadFilter();
   const compressor = actx.createDynamicsCompressor();
+  const limiter = actx.createDynamicsCompressor();
 
+  // // // CONNECTIONS // // //
+
+  // SOURCES
   oscGain1.connect(oscMasterGain1);
   oscGain2.connect(oscMasterGain1);
-  oscMasterGain1.connect(distortion1);
-  noiseGain.connect(distortion1);
-  distortion1.connect(filter1);
+  oscMasterGain1.connect(sourcesGain);
+  noiseGain.connect(sourcesGain);
 
-  const subFilter = actx.createBiquadFilter();
+  // EFFECTS
+
+  //WA distortion
+  sourcesGain.connect(distortion1);
+  sourcesGain.connect(dist1DryGain);
+  distortion1.connect(dist1WetGain);
+  dist1WetGain.connect(filter1);
+  dist1DryGain.connect(filter1);
+
+  distortion1.connect(filter1DryGain);
+
   filter1.connect(compressor);
+
+  filter1DryGain.connect(compressor);
+  filter1WetGain.connect(compressor);
+
   subGain.connect(subFilter);
   subFilter.connect(compressor);
 
@@ -83,8 +121,14 @@ const Basic = () => {
 
   convolver1.connect(reverbMixGainWet);
 
-  reverbMixGainDry.connect(actx.destination);
-  reverbMixGainWet.connect(actx.destination);
+  reverbMixGainDry.connect(reverbJoinGain);
+  reverbMixGainWet.connect(reverbJoinGain);
+
+  reverbJoinGain.connect(limiter);
+
+  limiter.connect(actx.destination);
+
+  // // // FUNCTIONS // // //
 
   const changeFilter1Type = (val) => {
     filter1.type = val;
@@ -94,6 +138,18 @@ const Basic = () => {
   };
   const changeFilter1Q = (val) => {
     filter1.Q.setValueAtTime(val, actx.currentTime);
+  };
+
+  const changeFilter1Mix = (e) => {
+    const val = +e;
+    filter1DryGain.gain.setValueAtTime((100 - val) / 100, actx.currentTime);
+    filter1WetGain.gain.setValueAtTime(val / 100, actx.currentTime);
+  };
+
+  const changeFilter1Gain = (e) => {
+    const newVal = +e / 20;
+
+    filter1.gain.setValueAtTime(newVal, actx.currentTime);
   };
 
   const detuneOsc1 = (e) => {
@@ -332,10 +388,14 @@ const Basic = () => {
                 changeFilter1Type={changeFilter1Type}
                 changeFilter1Freq={changeFilter1Freq}
                 changeFilter1Q={changeFilter1Q}
+                changeFilter1Mix={changeFilter1Mix}
+                changeFilter1Gain={changeFilter1Gain}
                 initParams={{
                   type: filter1.type,
                   frequency: filter1.frequency.value,
                   Q: filter1.Q.value,
+                  mix: 1,
+                  gain: filter1.gain.value,
                 }}
               />
             </div>

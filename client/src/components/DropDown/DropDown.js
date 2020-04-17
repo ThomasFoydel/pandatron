@@ -13,7 +13,7 @@ const DropDown = ({ options, updateFunction, initVal, inputId }) => {
 
   return (
     <div
-      className={`dropdown dropdown-open${opened}`}
+      className={`dropdown center dropdown-open${opened}`}
       onMouseEnter={() => setOpened(true)}
       onMouseLeave={() => setOpened(false)}
     >

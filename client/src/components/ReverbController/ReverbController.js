@@ -11,7 +11,7 @@ const ReverbController = ({
   const [decay, setDecay] = useState(decayVal * 7);
   const [duration, setDuration] = useState(durationVal * 7);
   const [isReversed, setIsReverse] = useState(reverse);
-  const [mix, setMix] = useState(mixGain.toFixed(2));
+  const [mix, setMix] = useState(mixGain.toFixed(0));
 
   const updateDecay = (e) => {
     const newVal = +e.target.value;
