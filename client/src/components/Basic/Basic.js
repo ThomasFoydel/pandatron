@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
 import QwertyHancock from 'qwerty-hancock';
 import Pizzicato from 'pizzicato';
-
 import oscClass from './oscClass';
 import noiseOscClass from './noiseOscClass';
+import chordAnalyzer from 'util/chordAnalyzer';
 
 import {
   makeDistortionCurve,
   impulseResponse,
   calcFreq,
+  noteFreqs,
+  findWithAttr,
 } from '../../util/util';
 
 import OscController from 'components/OscController/OscController';
@@ -370,6 +372,9 @@ const Basic = () => {
       activeColour: 'red',
     });
     let nodes = [];
+    let notesForChordAnalysis = [];
+    const chordDisplay = document.getElementById('chord-display');
+
     keyboard.keyDown = (note, freq) => {
       const envelope = { attack, decay, sustain, release };
 
@@ -414,7 +419,16 @@ const Basic = () => {
         freq,
         noiseOscVol
       );
+
       nodes.push(newOsc1, newOsc2, subOsc, noiseOsc);
+
+      // CHORD ANALYSIS
+
+      const noteIndex = findWithAttr(noteFreqs, 'note', note);
+      notesForChordAnalysis.push(noteIndex - 48);
+      const chordName = chordAnalyzer(notesForChordAnalysis);
+      // console.log('key DOWN chord name: ', chordName);
+      chordDisplay.innerHTML = chordName;
     };
     keyboard.keyUp = (note, freq) => {
       var new_nodes = [];
@@ -426,6 +440,22 @@ const Basic = () => {
         }
       }
       nodes = new_nodes;
+
+      // CHORD ANALYSIS
+      // it's minus 48 because the keyboard is set to start on C4 instead of C0
+      const noteIndex = findWithAttr(noteFreqs, 'note', note);
+      const filteredNoteArray = notesForChordAnalysis.filter(
+        (item) => item !== noteIndex - 48
+      );
+      notesForChordAnalysis = [...filteredNoteArray];
+      const chordName = chordAnalyzer(notesForChordAnalysis);
+      // console.log('key UP chord name: ', chordName);
+      if (chordName) {
+        chordDisplay.innerHTML = chordName;
+      } else {
+        chordDisplay.innerHTML = '';
+      }
+      // console.log('key UP notesForChordAnalysis: ', notesForChordAnalysis);
     };
   }, []);
 
@@ -512,7 +542,9 @@ const Basic = () => {
               />
             </div>
           </div>
-          <div className='section2-grid-3'>SECTION2 GRID, AREA 3 GOES HERE</div>
+          <div className='section2-grid-3'>
+            <h6 id='chord-display' className='center chord-display'></h6>
+          </div>
         </div>
         <div className='main-grid-section-3'>
           <div className='effect-rack'>
@@ -557,6 +589,7 @@ const Basic = () => {
             />
           </div>
         </div>
+
         <div className='main-grid-section-4'>
           <div className='keyboard' id='keyboard' />
         </div>

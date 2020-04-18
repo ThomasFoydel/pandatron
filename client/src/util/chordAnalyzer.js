@@ -12,6 +12,7 @@ var num_notes = 12;
  * Only meant for use on arrays of same length
  */
 function searchSet(spacings, chords) {
+  let equal;
   for (var property in chords) {
     if (chords.hasOwnProperty(property)) {
       equal = true;
@@ -161,7 +162,11 @@ const notes = [
 // example: [0, 3, 7, 11] = C mi maj7
 //
 
-const chordAnalyzer = (positions) => {
+const chordAnalyzer = (positionsInput) => {
+  let positions = [...positionsInput];
+
+  console.log('positions: ', positions[0]);
+
   //   let positions = [];
   let spacings = [];
   let root_note = '';
