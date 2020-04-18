@@ -162,7 +162,7 @@ const Basic = () => {
   delay1.connect(convolver1);
   delay1.connect(reverbMixGainDry);
 
-  // convolver1.connect(reverbMixGainWet);
+  convolver1.connect(reverbMixGainWet);
 
   reverbMixGainDry.connect(reverbJoinGain);
   reverbMixGainWet.connect(reverbJoinGain);

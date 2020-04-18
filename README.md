@@ -1,1 +1,1 @@
-# a template for mern projects to be deployed to heroku
+# A synthesizer for the browser
