@@ -13,35 +13,33 @@ const DelayController = ({ changeDelayTime, initVal }) => {
   return (
     <div className='delay'>
       <h2 className='center'>delay</h2>
-      <div className='flex'>
-        <div className='time'>
-          <h6 className='title'>time</h6>
+      <div className='time'>
+        <h6 className='title'>time</h6>
 
-          <Knob
-            style={{ display: 'inline-block' }}
-            className='center'
-            min={0}
-            max={100}
-            value={time * 100}
-            unlockDistance={10}
-            onChange={updateDelayTime}
-          />
-          <div className='center'>{time.toFixed(2)}</div>
-        </div>
+        <Knob
+          style={{ display: 'inline-block' }}
+          className='center knob'
+          min={0}
+          max={100}
+          value={time * 100}
+          unlockDistance={10}
+          onChange={updateDelayTime}
+        />
+        <div className='value-display center'>{time.toFixed(2)}</div>
+      </div>
 
-        <div className='amount'>
-          <h6 className='title'>wet / dry</h6>
-          <Knob
-            style={{ display: 'inline-block' }}
-            className='center'
-            min={0}
-            max={100}
-            // value={time * 100}
-            unlockDistance={10}
-            //   onChange={updateDelayTime}
-          />
-          <div className='center'>{time.toFixed(2)}</div>
-        </div>
+      <div className='amount'>
+        <h6 className='title'>wet / dry</h6>
+        <Knob
+          style={{ display: 'inline-block' }}
+          className='center knob'
+          min={0}
+          max={100}
+          // value={time * 100}
+          unlockDistance={10}
+          //   onChange={updateDelayTime}
+        />
+        <div className='value-display center'>{time.toFixed(2)}</div>
       </div>
     </div>
   );

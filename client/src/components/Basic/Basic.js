@@ -18,7 +18,7 @@ import OscController from 'components/Controls/OscControls/OscController/OscCont
 import NoiseOscController from 'components/Controls/OscControls/NoiseOscController/NoiseOscController';
 
 import ADSRController from 'components/Controls/ADSRFilterEq/ADSRController/ADSRController';
-import FilterController from 'components/Controls/Effects/FilterController/FilterController';
+import FilterController from 'components/Controls/ADSRFilterEq/FilterController/FilterController';
 import DelayController from 'components/Controls/Effects/DelayController/DelayController';
 import ReverbController from 'components/Controls/Effects/ReverbController/ReverbController';
 import DistortionController from 'components/Controls/Effects/DistortionController/DistortionController';
@@ -163,6 +163,7 @@ const Basic = () => {
   // // // CONNECTIONS // // //
   // // // CONNECTIONS // // //
   // // // CONNECTIONS // // //
+  // // // CONNECTIONS // // //
 
   // SOURCES
   oscGain1.connect(oscMasterGain1);
@@ -192,7 +193,9 @@ const Basic = () => {
 
   flanger1.connect(ringModulator);
 
-  ringModulator.connect(compressor);
+  ringModulator.connect(pingPongDelay);
+
+  pingPongDelay.connect(compressor);
 
   subGain.connect(subFilter);
   subFilter.connect(compressor);
@@ -210,6 +213,10 @@ const Basic = () => {
 
   limiter.connect(actx.destination);
 
+  // // // FUNCTIONS // // //
+  // // // FUNCTIONS // // //
+  // // // FUNCTIONS // // //
+  // // // FUNCTIONS // // //
   // // // FUNCTIONS // // //
 
   const changeFilter1Type = (val) => {
@@ -587,9 +594,6 @@ const Basic = () => {
             </div>
           </div>
           <div className='section2-grid-3'>
-            <button onClick={changeCurrentChordDisplay}>
-              changeCurrentChordDisplay
-            </button>
             <div id='chord-panda' className='chord-panda'>
               <img
                 src={currentPanda}
@@ -609,25 +613,25 @@ const Basic = () => {
               changeDistortion1Mix={changeDistortion1Mix}
             />
             <EffectController
-              effectName='quadrafuzz'
-              changeEffect={changeQuadrafuzz}
-              initVals={quadrafuzzInitVals}
-            />
-            <EffectController
               effectName='distortion II'
               changeEffect={changeDistortion2Gain}
               initVals={{ gain: distortion2.gain }}
-            />
-
-            <EffectController
-              effectName='flanger'
-              initVals={flanger1InitVals}
-              changeEffect={changeFlanger1}
             />
             <EffectController
               effectName='ring mod'
               initVals={ringModulatorInitVals}
               changeEffect={changeRingModulator}
+            />
+            <EffectController
+              effectName='flanger'
+              initVals={flanger1InitVals}
+              changeEffect={changeFlanger1}
+            />
+
+            <EffectController
+              effectName='quadrafuzz'
+              changeEffect={changeQuadrafuzz}
+              initVals={quadrafuzzInitVals}
             />
           </div>
 
@@ -651,7 +655,7 @@ const Basic = () => {
             />
 
             <EffectController
-              effectName='ping pong delay'
+              effectName='ping pong'
               initVals={pingPongDelayInitVals}
               changeEffect={changePingPongDelay}
             />

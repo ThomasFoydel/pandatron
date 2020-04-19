@@ -35,7 +35,7 @@ const DistortionController = ({
           onChange={updateAmount}
         />
         <div>{(amount * 5).toFixed(2)}</div>
-        <h6 className='center'>dry / wet</h6>
+        <h6 className='center'>dry/wet</h6>
         <input value={displayMixVal} type='range' onChange={updateMix} />
         <div className='center'>{mix}</div>
       </div>
