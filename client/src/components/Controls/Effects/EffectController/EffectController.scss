@@ -1,0 +1,22 @@
+.effect-controller {
+  border-radius: 5px;
+  border: 0.2rem solid black;
+  background: rgba(255, 255, 255, 0.623);
+  margin: 0.2rem;
+  padding: 0.2rem;
+  width: 10rem;
+
+  .name {
+    width: 100%;
+    font-size: 1.3rem;
+  }
+
+  .param-name {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .input {
+    width: 100%;
+  }
+}

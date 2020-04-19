@@ -14,18 +14,16 @@ import {
   findWithAttr,
 } from '../../util/util';
 
-import OscController from 'components/OscController/OscController';
-import ADSRController from 'components/ADSRController/ADSRController';
-import FilterController from 'components/FilterController/FilterController';
-import NoiseOscController from 'components/NoiseOscController/NoiseOscController';
-import DistortionController from 'components/DistortionController/DistortionController';
-import Distortion2Controller from 'components/Distortion2Controller/Distortion2Controller';
-import DelayController from 'components/DelayController/DelayController';
-import ReverbController from 'components/ReverbController/ReverbController';
-import QuadrafuzzController from 'components/QuadrafuzzController/QuadrafuzzController';
-import FlangerController from 'components/FlangerController/FlangerController';
-import RingModulatorController from 'components/RingModulatorController/RingModulatorController';
-import PingPongController from 'components/PingPongController/PingPongController';
+import OscController from 'components/Controls/OscControls/OscController/OscController';
+import NoiseOscController from 'components/Controls/OscControls/NoiseOscController/NoiseOscController';
+
+import ADSRController from 'components/Controls/ADSRFilterEq/ADSRController/ADSRController';
+import FilterController from 'components/Controls/Effects/FilterController/FilterController';
+import DelayController from 'components/Controls/Effects/DelayController/DelayController';
+import ReverbController from 'components/Controls/Effects/ReverbController/ReverbController';
+import DistortionController from 'components/Controls/Effects/DistortionController/DistortionController';
+import EffectController from 'components/Controls/Effects/EffectController/EffectController';
+
 import './Basic.scss';
 const Basic = () => {
   const { panda1, panda2, panda3, panda4, panda5, panda6, panda7 } = pandaFaces;
@@ -107,6 +105,7 @@ const Basic = () => {
   const filter1MixedGain = actx.createGain();
 
   const distortion2 = new Pizzicato.Effects.Distortion();
+  distortion2.gain = 0;
 
   const quadrafuzzInitVals = {
     lowGain: 0.6,
@@ -270,13 +269,6 @@ const Basic = () => {
     reverbMixGainWet.gain.linearRampToValueAtTime(e / 100, actx.currentTime);
   };
 
-  // const changeOscMasterGain1 = (e) => {
-  //   oscMasterGain1.gain.linearRampToValueAtTime(
-  //     e.target.value / 100,
-  //     actx.currentTime
-  //   );
-  // };
-
   const changeWaveTable1 = (e) => {
     wavetable1 = e.target.value;
   };
@@ -416,8 +408,7 @@ const Basic = () => {
     let nodes = [];
     let notesForChordAnalysis = [];
     const chordDisplay = document.getElementById('chord-display');
-    const pandaDisplay = document.getElementsByClassName('chord-panda');
-    console.log('panda display: ', pandaDisplay);
+    // const pandaDisplay = document.getElementsByClassName('chord-panda');
 
     keyboard.keyDown = (note, freq) => {
       const envelope = { attack, decay, sustain, release };
@@ -617,11 +608,53 @@ const Basic = () => {
               changeDistortion1Amount={changeDistortion1Amount}
               changeDistortion1Mix={changeDistortion1Mix}
             />
+            <EffectController
+              effectName='quadrafuzz'
+              changeEffect={changeQuadrafuzz}
+              initVals={quadrafuzzInitVals}
+            />
+            <EffectController
+              effectName='distortion II'
+              changeEffect={changeDistortion2Gain}
+              initVals={{ gain: distortion2.gain }}
+            />
+
+            <EffectController
+              effectName='flanger'
+              initVals={flanger1InitVals}
+              changeEffect={changeFlanger1}
+            />
+            <EffectController
+              effectName='ring mod'
+              initVals={ringModulatorInitVals}
+              changeEffect={changeRingModulator}
+            />
+          </div>
+
+          <div className='flex'>
+            {/* <QuadrafuzzController
+              changeQuadrafuzz={changeQuadrafuzz}
+              initVals={quadrafuzzInitVals}
+            /> */}
+
+            {/* <FlangerController
+              initVals={flanger1InitVals}
+              changeFlanger1={changeFlanger1}
+            /> */}
+            {/* <RingModulatorController
+              initVals={ringModulatorInitVals}
+              changeRingModulator={changeRingModulator}
+            /> */}
             <DelayController
               changeDelayTime={changeDelayTime}
               initVal={delay1.delayTime.value}
             />
 
+            <EffectController
+              effectName='ping pong delay'
+              initVals={pingPongDelayInitVals}
+              changeEffect={changePingPongDelay}
+            />
             <ReverbController
               changeReverbDecay={changeReverbDecay}
               changeReverbDuration={changeReverbDuration}
@@ -630,30 +663,6 @@ const Basic = () => {
                 ...convolver1.buffer,
                 mixGain: reverbMixGainDry.gain.value,
               }}
-            />
-            <Distortion2Controller
-              changeDistortion2Gain={changeDistortion2Gain}
-              initVal={distortion2.gain}
-            />
-          </div>
-
-          <div className='flex'>
-            <QuadrafuzzController
-              changeQuadrafuzz={changeQuadrafuzz}
-              initVals={quadrafuzzInitVals}
-            />
-
-            <FlangerController
-              initVals={flanger1InitVals}
-              changeFlanger1={changeFlanger1}
-            />
-            <RingModulatorController
-              initVals={ringModulatorInitVals}
-              changeRingModulator={changeRingModulator}
-            />
-            <PingPongController
-              initVals={pingPongDelayInitVals}
-              changePingPongDelay={changePingPongDelay}
             />
           </div>
         </div>

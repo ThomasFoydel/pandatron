@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Knob } from 'react-rotary-knob';
 import DropDown from 'components/DropDown/DropDown';
 
-import waves from 'imgs/wavesIcons/index';
+import waves from 'imgs/wavesIcons';
 import './OscController.scss';
 
 const OscController = ({
