@@ -4,6 +4,7 @@ import Pizzicato from 'pizzicato';
 import oscClass from './oscClass';
 import noiseOscClass from './noiseOscClass';
 import chordAnalyzer from 'util/chordAnalyzer';
+import pandaFaces from 'imgs/pandapics';
 
 import {
   makeDistortionCurve,
@@ -24,8 +25,34 @@ import ReverbController from 'components/ReverbController/ReverbController';
 import QuadrafuzzController from 'components/QuadrafuzzController/QuadrafuzzController';
 import FlangerController from 'components/FlangerController/FlangerController';
 import RingModulatorController from 'components/RingModulatorController/RingModulatorController';
+
 import './Basic.scss';
 const Basic = () => {
+  const { panda1, panda2, panda3, panda4, panda5, panda6, panda7 } = pandaFaces;
+  let currentPanda = panda7;
+  const changeCurrentChordDisplay = (newPanda) => {
+    console.log('changeCurrentChordDisplay: ', currentPanda);
+    currentPanda = newPanda;
+    const panda = document.getElementById('panda-display');
+    panda.src = newPanda;
+  };
+
+  const updatePanda = (chord) => {
+    if (chord.includes('7')) {
+      changeCurrentChordDisplay(panda6);
+    } else if (chord.includes('sus')) {
+      changeCurrentChordDisplay(panda4);
+    } else if (chord.includes('dim')) {
+      changeCurrentChordDisplay(panda3);
+    } else if (chord.includes('mi') || chord.includes('minor')) {
+      changeCurrentChordDisplay(panda2);
+    } else if (chord.includes('ma') || chord.includes('major')) {
+      changeCurrentChordDisplay(panda1);
+    } else {
+      changeCurrentChordDisplay(panda7);
+    }
+  };
+
   // const actx = new AudioContext();
   const actx = Pizzicato.context;
 
@@ -363,9 +390,9 @@ const Basic = () => {
   useEffect(() => {
     const keyboard = new QwertyHancock({
       id: 'keyboard',
-      width: 1000,
+      width: 400,
       height: 68,
-      octaves: 4,
+      octaves: 1.4,
       startNote: 'C4',
       whiteKeyColour: 'black',
       blackKeyColour: 'white',
@@ -374,6 +401,8 @@ const Basic = () => {
     let nodes = [];
     let notesForChordAnalysis = [];
     const chordDisplay = document.getElementById('chord-display');
+    const pandaDisplay = document.getElementsByClassName('chord-panda');
+    console.log('panda display: ', pandaDisplay);
 
     keyboard.keyDown = (note, freq) => {
       const envelope = { attack, decay, sustain, release };
@@ -425,11 +454,15 @@ const Basic = () => {
       // CHORD ANALYSIS
 
       const noteIndex = findWithAttr(noteFreqs, 'note', note);
+      // it's minus 48 because the keyboard is set to start on C4 instead of C0
       notesForChordAnalysis.push(noteIndex - 48);
       const chordName = chordAnalyzer(notesForChordAnalysis);
-      // console.log('key DOWN chord name: ', chordName);
       chordDisplay.innerHTML = chordName;
+      // pandaDisplay.setAttribute('chord', chordName);
+      // changeCurrentChordDisplay(chordName);
+      updatePanda(chordName);
     };
+
     keyboard.keyUp = (note, freq) => {
       var new_nodes = [];
       for (var i = 0; i < nodes.length; i++) {
@@ -442,9 +475,9 @@ const Basic = () => {
       nodes = new_nodes;
 
       // CHORD ANALYSIS
-      // it's minus 48 because the keyboard is set to start on C4 instead of C0
       const noteIndex = findWithAttr(noteFreqs, 'note', note);
       const filteredNoteArray = notesForChordAnalysis.filter(
+        // it's minus 48 because the keyboard is set to start on C4 instead of C0
         (item) => item !== noteIndex - 48
       );
       notesForChordAnalysis = [...filteredNoteArray];
@@ -452,10 +485,15 @@ const Basic = () => {
       // console.log('key UP chord name: ', chordName);
       if (chordName) {
         chordDisplay.innerHTML = chordName;
+        // pandaDisplay.setAttribute('chord', chordName);
+        // changeCurrentChordDisplay(chordName);
+        updatePanda(chordName);
       } else {
         chordDisplay.innerHTML = '';
+        // pandaDisplay.setAttribute('chord', '');
+        // changeCurrentChordDisplay('');
+        updatePanda('');
       }
-      // console.log('key UP notesForChordAnalysis: ', notesForChordAnalysis);
     };
   }, []);
 
@@ -543,6 +581,17 @@ const Basic = () => {
             </div>
           </div>
           <div className='section2-grid-3'>
+            <button onClick={changeCurrentChordDisplay}>
+              changeCurrentChordDisplay
+            </button>
+            <div id='chord-panda' className='chord-panda'>
+              <img
+                src={currentPanda}
+                alt='panda-display'
+                id='panda-display'
+                className='panda-display'
+              />
+            </div>
             <h6 id='chord-display' className='center chord-display'></h6>
           </div>
         </div>
