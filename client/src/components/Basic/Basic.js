@@ -25,7 +25,7 @@ import ReverbController from 'components/ReverbController/ReverbController';
 import QuadrafuzzController from 'components/QuadrafuzzController/QuadrafuzzController';
 import FlangerController from 'components/FlangerController/FlangerController';
 import RingModulatorController from 'components/RingModulatorController/RingModulatorController';
-
+import PingPongController from 'components/PingPongController/PingPongController';
 import './Basic.scss';
 const Basic = () => {
   const { panda1, panda2, panda3, panda4, panda5, panda6, panda7 } = pandaFaces;
@@ -40,6 +40,8 @@ const Basic = () => {
   const updatePanda = (chord) => {
     if (chord.includes('7')) {
       changeCurrentChordDisplay(panda6);
+    } else if (chord.includes('6')) {
+      changeCurrentChordDisplay(panda5);
     } else if (chord.includes('sus')) {
       changeCurrentChordDisplay(panda4);
     } else if (chord.includes('dim')) {
@@ -131,6 +133,15 @@ const Basic = () => {
   };
   const ringModulator = new Pizzicato.Effects.RingModulator(
     ringModulatorInitVals
+  );
+
+  const pingPongDelayInitVals = {
+    feedback: 0.6,
+    time: 0.4,
+    mix: 0,
+  };
+  const pingPongDelay = new Pizzicato.Effects.PingPongDelay(
+    pingPongDelayInitVals
   );
 
   const delay1 = actx.createDelay(5.0);
@@ -386,6 +397,10 @@ const Basic = () => {
     changePizzicatoEffect(ringModulator, prop, val);
   };
 
+  const changePingPongDelay = (prop, val) => {
+    changePizzicatoEffect(pingPongDelay, prop, val);
+  };
+
   // CREATE KEYBOARD
   useEffect(() => {
     const keyboard = new QwertyHancock({
@@ -635,6 +650,10 @@ const Basic = () => {
             <RingModulatorController
               initVals={ringModulatorInitVals}
               changeRingModulator={changeRingModulator}
+            />
+            <PingPongController
+              initVals={pingPongDelayInitVals}
+              changePingPongDelay={changePingPongDelay}
             />
           </div>
         </div>
