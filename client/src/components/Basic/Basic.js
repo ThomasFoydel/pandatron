@@ -135,26 +135,37 @@ const Basic = () => {
   );
 
   const pingPongDelayInitVals = {
-    feedback: 0.6,
+    feedback: 0.2,
     time: 0.4,
-    mix: 0,
+    mix: 0.1,
   };
   const pingPongDelay = new Pizzicato.Effects.PingPongDelay(
     pingPongDelayInitVals
   );
 
   const delay1 = actx.createDelay(5.0);
+  const delay1Dry = actx.createGain();
+  const delay1Wet = actx.createGain();
+  const delay1Combined = actx.createGain();
+  delay1Dry.gain.value = 1;
+  delay1Wet.gain.value = 0;
 
-  const reverbMixGainWet = actx.createGain();
-  const reverbMixGainDry = actx.createGain();
-  reverbMixGainWet.gain.value = 0.3;
-  reverbMixGainDry.gain.value = 0.7;
-
+  const reverb1Wet = actx.createGain();
+  const reverb1Dry = actx.createGain();
+  reverb1Wet.gain.value = 0.3;
+  reverb1Dry.gain.value = 0.7;
   const reverbJoinGain = actx.createGain();
-
-  const convolver1 = actx.createConvolver();
+  const reverb1 = actx.createConvolver();
   const impulseBuffer = impulseResponse(4, 4, false, actx);
-  convolver1.buffer = impulseBuffer;
+  reverb1.buffer = impulseBuffer;
+
+  const reverb2InitVals = {
+    time: 1,
+    decay: 0.8,
+    reverse: true,
+    mix: 0.5,
+  };
+  const reverb2 = new Pizzicato.Effects.Reverb();
 
   const compressor = actx.createDynamicsCompressor();
   const limiter = actx.createDynamicsCompressor();
@@ -195,20 +206,25 @@ const Basic = () => {
 
   ringModulator.connect(pingPongDelay);
 
-  pingPongDelay.connect(compressor);
-
+  // SUB SHOULD PASS ALL/MOST FX
   subGain.connect(subFilter);
   subFilter.connect(compressor);
+  // SUB SHOULD PASS ALL/MOST FX
 
   compressor.connect(delay1);
-  delay1.connect(convolver1);
-  delay1.connect(reverbMixGainDry);
+  compressor.connect(delay1Dry);
+  delay1.connect(delay1Wet);
+  delay1Wet.connect(delay1Combined);
+  delay1Dry.connect(delay1Combined);
+  delay1Combined.connect(pingPongDelay);
 
-  convolver1.connect(reverbMixGainWet);
+  //pingpong goes here
+  pingPongDelay.connect(reverb1);
+  pingPongDelay.connect(reverb1Dry);
 
-  reverbMixGainDry.connect(reverbJoinGain);
-  reverbMixGainWet.connect(reverbJoinGain);
-
+  reverb1.connect(reverb1Wet);
+  reverb1Dry.connect(reverbJoinGain);
+  reverb1Wet.connect(reverbJoinGain);
   reverbJoinGain.connect(limiter);
 
   limiter.connect(actx.destination);
@@ -269,11 +285,8 @@ const Basic = () => {
       newDryVal = 0;
     }
 
-    reverbMixGainDry.gain.setValueAtTime(
-      newDryVal.toFixed(2),
-      actx.currentTime
-    );
-    reverbMixGainWet.gain.linearRampToValueAtTime(e / 100, actx.currentTime);
+    reverb1Dry.gain.setValueAtTime(newDryVal.toFixed(2), actx.currentTime);
+    reverb1Wet.gain.linearRampToValueAtTime(e / 100, actx.currentTime);
   };
 
   const changeWaveTable1 = (e) => {
@@ -337,20 +350,30 @@ const Basic = () => {
 
   const changeReverbDecay = (e) => {
     const newVal = e;
-    const { durationVal, reverse } = convolver1.buffer;
+    const { durationVal, reverse } = reverb1.buffer;
     const newBuffer = impulseResponse(durationVal, newVal, reverse, actx);
-    convolver1.buffer = newBuffer;
+    reverb1.buffer = newBuffer;
   };
 
   const changeReverbDuration = (e) => {
     const newVal = e;
-    const { decayVal, reverse } = convolver1.buffer;
+    const { decayVal, reverse } = reverb1.buffer;
     const newBuffer = impulseResponse(newVal, decayVal, reverse, actx);
-    convolver1.buffer = newBuffer;
+    reverb1.buffer = newBuffer;
   };
 
   const changeDelayTime = (e) => {
     delay1.delayTime.setValueAtTime(e.toFixed(1), actx.currentTime);
+  };
+
+  const changeDelayMix = (e) => {
+    const numE = +e;
+    const val = numE.toFixed(2);
+    const newDryVal = ((100 - val) / 100).toFixed(2);
+    delay1.dryWet = newDryVal;
+    const newWetVal = (val / 100).toFixed(2);
+    delay1Dry.gain.setValueAtTime(newDryVal, actx.currentTime);
+    delay1Wet.gain.setValueAtTime(newWetVal, actx.currentTime);
   };
 
   const changeADSR = (newVal, aspect) => {
@@ -471,8 +494,6 @@ const Basic = () => {
       notesForChordAnalysis.push(noteIndex - 48);
       const chordName = chordAnalyzer(notesForChordAnalysis);
       chordDisplay.innerHTML = chordName;
-      // pandaDisplay.setAttribute('chord', chordName);
-      // changeCurrentChordDisplay(chordName);
       updatePanda(chordName);
     };
 
@@ -495,16 +516,11 @@ const Basic = () => {
       );
       notesForChordAnalysis = [...filteredNoteArray];
       const chordName = chordAnalyzer(notesForChordAnalysis);
-      // console.log('key UP chord name: ', chordName);
       if (chordName) {
         chordDisplay.innerHTML = chordName;
-        // pandaDisplay.setAttribute('chord', chordName);
-        // changeCurrentChordDisplay(chordName);
         updatePanda(chordName);
       } else {
         chordDisplay.innerHTML = '';
-        // pandaDisplay.setAttribute('chord', '');
-        // changeCurrentChordDisplay('');
         updatePanda('');
       }
     };
@@ -594,7 +610,7 @@ const Basic = () => {
             </div>
           </div>
           <div className='section2-grid-3'>
-            <div id='chord-panda' className='chord-panda'>
+            <div id='chord-panda' className='chord-panda center'>
               <img
                 src={currentPanda}
                 alt='panda-display'
@@ -650,8 +666,12 @@ const Basic = () => {
               changeRingModulator={changeRingModulator}
             /> */}
             <DelayController
+              changeMix={changeDelayMix}
               changeDelayTime={changeDelayTime}
-              initVal={delay1.delayTime.value}
+              initVals={{
+                time: delay1.delayTime.value,
+                mix: delay1Wet.gain.value,
+              }}
             />
 
             <EffectController
@@ -664,8 +684,8 @@ const Basic = () => {
               changeReverbDuration={changeReverbDuration}
               mixReverbGain={mixReverbGain}
               initVals={{
-                ...convolver1.buffer,
-                mixGain: reverbMixGainDry.gain.value,
+                ...reverb1.buffer,
+                mixGain: reverb1Dry.gain.value,
               }}
             />
           </div>

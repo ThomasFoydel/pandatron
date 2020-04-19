@@ -85,6 +85,7 @@ const OscController = ({
             <h3>gain</h3>
           </div>
           <Knob
+            className='knob'
             style={{ display: 'inline-block' }}
             min={0}
             max={1000}
@@ -102,6 +103,7 @@ const OscController = ({
             </div>
             <Knob
               style={{ display: 'inline-block' }}
+              className='knob'
               min={-1000}
               max={1000}
               value={detuneVal * 10}

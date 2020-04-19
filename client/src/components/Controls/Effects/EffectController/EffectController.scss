@@ -3,7 +3,7 @@
   border: 0.2rem solid black;
   background: rgba(255, 255, 255, 0.623);
   margin: 0.2rem;
-  padding: 0.2rem;
+  padding: 0.2rem 0;
   width: 10rem;
 
   .name {
@@ -15,7 +15,9 @@
     width: 100%;
     font-size: 1rem;
   }
-
+  .inputs-container {
+    padding: 0 0.6rem;
+  }
   .input {
     width: 100%;
   }

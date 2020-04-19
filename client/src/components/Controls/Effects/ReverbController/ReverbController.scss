@@ -7,10 +7,10 @@
   background: rgba(255, 255, 255, 0.623);
   padding: 0.3rem;
 
-  line-height: 1.6rem;
+  line-height: 1.9rem;
   b {
     height: 1rem;
-    line-height: 1rem;
+    // line-height: 1rem;
   }
   input {
     width: 100%;
@@ -24,7 +24,5 @@
   }
   .knob {
     max-width: 5.7rem;
-    margin-top: -0.5rem;
-    margin-bottom: -0.6rem;
   }
 }

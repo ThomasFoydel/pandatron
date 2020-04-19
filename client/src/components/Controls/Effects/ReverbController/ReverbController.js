@@ -35,12 +35,16 @@ const ReverbController = ({
     <div className='reverb'>
       <h2 className='center'>reverb</h2>
       <div className='slider-input'>
-        <div className='display'>decay: {decay}</div>
+        <div className='display'>
+          <b>decay</b> {decay}
+        </div>
         <input type='range' value={decay} max={100} onChange={updateDecay} />
       </div>
 
       <div className='slider-input'>
-        <div className='display'>duration: {duration}</div>
+        <div className='display'>
+          <b>duration</b> {duration}
+        </div>
 
         <input
           type='range'
@@ -51,7 +55,7 @@ const ReverbController = ({
       </div>
       <div>
         <div className='center'>
-          <b>wet/dry</b>
+          <b>mix</b>
         </div>
 
         <Knob

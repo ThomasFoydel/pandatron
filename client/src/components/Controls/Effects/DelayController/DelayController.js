@@ -2,14 +2,20 @@ import React, { useState } from 'react';
 import './DelayController.scss';
 import { Knob } from 'react-rotary-knob';
 
-const DelayController = ({ changeDelayTime, initVal }) => {
-  const [time, setTime] = useState(initVal * 100);
-  const [mix, setMix] = useState(0);
+const DelayController = ({ changeDelayTime, initVals, changeMix }) => {
+  const [time, setTime] = useState(initVals.time * 100);
+  const [mix, setMix] = useState(initVals.mix);
 
   const updateDelayTime = (e) => {
     changeDelayTime(e / 100);
     setTime(e / 100);
   };
+
+  const updateDelayMix = (e) => {
+    changeMix(e);
+    setMix(e / 100);
+  };
+
   return (
     <div className='delay'>
       <h2 className='center'>delay</h2>
@@ -35,11 +41,11 @@ const DelayController = ({ changeDelayTime, initVal }) => {
           className='center knob'
           min={0}
           max={100}
-          // value={time * 100}
+          value={mix * 100}
           unlockDistance={10}
-          //   onChange={updateDelayTime}
+          onChange={updateDelayMix}
         />
-        <div className='value-display center'>{time.toFixed(2)}</div>
+        <div className='value-display center'>{mix.toFixed(2)}</div>
       </div>
     </div>
   );
