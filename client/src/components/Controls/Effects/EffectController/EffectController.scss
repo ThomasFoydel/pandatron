@@ -20,15 +20,35 @@
   }
   .input {
     width: 100%;
+    margin-top: -0.2rem;
   }
 
   .knob {
     max-width: 5.8rem;
   }
+  .reverse-btn {
+    padding: 4px;
+    padding-top: 0.2rem;
+    width: 9rem;
+    cursor: pointer;
+  }
+  .reversible {
+    background: #eee;
+    color: #222;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .reversed-true {
+    color: #eee;
+    background: #222;
+    transform: rotateY(180deg);
+    cursor: pointer;
+  }
 }
 .minified-true {
   .inputs-container {
     transform: scale(0.9);
+    margin-top: -1rem;
   }
 
   .param-name {

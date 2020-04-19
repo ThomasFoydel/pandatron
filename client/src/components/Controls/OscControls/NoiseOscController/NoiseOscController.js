@@ -24,6 +24,7 @@ const NoiseOscController = ({ changeNoiseGain, changeNoiseType, initGain }) => {
         <h3>gain</h3>
 
         <Knob
+          className='knob'
           style={{ display: 'inline-block' }}
           min={0}
           max={1000}

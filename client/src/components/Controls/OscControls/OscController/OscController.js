@@ -104,8 +104,8 @@ const OscController = ({
             <Knob
               style={{ display: 'inline-block' }}
               className='knob'
-              min={-1000}
-              max={1000}
+              min={-200}
+              max={200}
               value={detuneVal * 10}
               unlockDistance={10}
               onChange={updateDetune}

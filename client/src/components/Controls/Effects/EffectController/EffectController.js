@@ -3,15 +3,19 @@ import { Knob } from 'react-rotary-knob';
 
 import './EffectController.scss';
 
-const EffectController = ({ effectName, initVals, changeEffect }) => {
+const EffectController = ({ effectName, initVals, changeEffect, minified }) => {
   const [display, setDisplay] = useState(initVals);
-
+  const [reversed, setReversed] = useState(false);
   const update = (e) => {
     const { id, value } = e.target;
     changeEffect(id, value / 100);
     setDisplay({ ...display, [id]: value });
   };
-  const minified = effectName === 'flanger' || effectName === 'quadrafuzz';
+  const toggleReverse = () => {
+    changeEffect('reverse', !reversed);
+    setReversed(!reversed);
+  };
+  // const minified = effectName === 'flanger' || effectName === 'quadrafuzz';
   return (
     <div className={`effect-controller minified-${minified}`}>
       <h2 className='name center'>{effectName}</h2>
@@ -33,6 +37,16 @@ const EffectController = ({ effectName, initVals, changeEffect }) => {
                   }
                 />
                 <div className='center'>{display[parameter].toFixed(2)}</div>
+              </div>
+            );
+          } else if (parameter === 'reverse') {
+            return (
+              <div>
+                <div className={`reverse-btn center`} onClick={toggleReverse}>
+                  <div className={`reversible reversed-${reversed}`}>
+                    reverse
+                  </div>
+                </div>
               </div>
             );
           } else {

@@ -137,7 +137,7 @@ const Basic = () => {
   const pingPongDelayInitVals = {
     feedback: 0.2,
     time: 0.4,
-    mix: 0.1,
+    mix: 0,
   };
   const pingPongDelay = new Pizzicato.Effects.PingPongDelay(
     pingPongDelayInitVals
@@ -152,8 +152,8 @@ const Basic = () => {
 
   const reverb1Wet = actx.createGain();
   const reverb1Dry = actx.createGain();
-  reverb1Wet.gain.value = 0.3;
-  reverb1Dry.gain.value = 0.7;
+  reverb1Wet.gain.value = 0;
+  reverb1Dry.gain.value = 1;
   const reverbJoinGain = actx.createGain();
   const reverb1 = actx.createConvolver();
   const impulseBuffer = impulseResponse(4, 4, false, actx);
@@ -163,12 +163,15 @@ const Basic = () => {
     time: 1,
     decay: 0.8,
     reverse: true,
-    mix: 0.5,
+    mix: 0,
   };
-  const reverb2 = new Pizzicato.Effects.Reverb();
+  const reverb2 = new Pizzicato.Effects.Reverb(reverb2InitVals);
 
   const compressor = actx.createDynamicsCompressor();
-  const limiter = actx.createDynamicsCompressor();
+  const limiter = new Pizzicato.Effects.Compressor({
+    threshold: -24,
+    ratio: 12,
+  });
 
   // // // CONNECTIONS // // //
   // // // CONNECTIONS // // //
@@ -206,11 +209,6 @@ const Basic = () => {
 
   ringModulator.connect(pingPongDelay);
 
-  // SUB SHOULD PASS ALL/MOST FX
-  subGain.connect(subFilter);
-  subFilter.connect(compressor);
-  // SUB SHOULD PASS ALL/MOST FX
-
   compressor.connect(delay1);
   compressor.connect(delay1Dry);
   delay1.connect(delay1Wet);
@@ -225,8 +223,13 @@ const Basic = () => {
   reverb1.connect(reverb1Wet);
   reverb1Dry.connect(reverbJoinGain);
   reverb1Wet.connect(reverbJoinGain);
-  reverbJoinGain.connect(limiter);
+  reverbJoinGain.connect(reverb2);
+  reverb2.connect(limiter);
 
+  // SUB SHOULD PASS ALL/MOST FX
+  subGain.connect(subFilter);
+  subFilter.connect(limiter);
+  // SUB SHOULD PASS ALL/MOST FX
   limiter.connect(actx.destination);
 
   // // // FUNCTIONS // // //
@@ -423,6 +426,10 @@ const Basic = () => {
     changePizzicatoEffect(pingPongDelay, prop, val);
   };
 
+  const changeReverb2 = (prop, val) => {
+    changePizzicatoEffect(reverb2, prop, val);
+  };
+
   // CREATE KEYBOARD
   useEffect(() => {
     const keyboard = new QwertyHancock({
@@ -445,7 +452,7 @@ const Basic = () => {
 
       const osc1Freq = calcFreq(freq, osc1OctaveOffset);
       const osc2Freq = calcFreq(freq, osc2OctaveOffset);
-      const subOscFreq = calcFreq(freq, subOscOctaveOffset - 1);
+      const subOscFreq = calcFreq(freq, subOscOctaveOffset - 2);
 
       const newOsc1 = new oscClass(
         actx,
@@ -642,12 +649,14 @@ const Basic = () => {
               effectName='flanger'
               initVals={flanger1InitVals}
               changeEffect={changeFlanger1}
+              minified={true}
             />
 
             <EffectController
               effectName='quadrafuzz'
               changeEffect={changeQuadrafuzz}
               initVals={quadrafuzzInitVals}
+              minified={true}
             />
           </div>
 
@@ -687,6 +696,11 @@ const Basic = () => {
                 ...reverb1.buffer,
                 mixGain: reverb1Dry.gain.value,
               }}
+            />
+            <EffectController
+              effectName='reverb II'
+              initVals={reverb2InitVals}
+              changeEffect={changeReverb2}
             />
           </div>
         </div>
