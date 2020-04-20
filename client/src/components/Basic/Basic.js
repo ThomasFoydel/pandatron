@@ -481,9 +481,6 @@ const Basic = () => {
 
   const toggleLfo1 = (lfoIsActive) => {
     const now = actx.currentTime;
-    lfo1Dry.gain.cancelScheduledValues(now);
-    lfo1Wet.gain.cancelScheduledValues(now);
-    lfo1.gain.cancelScheduledValues(now);
     if (lfoIsActive) {
       // TURN OFF
       lfo1Dry.gain.exponentialRampToValueAtTime(1, now);
