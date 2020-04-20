@@ -41,7 +41,7 @@ const EffectController = ({ effectName, initVals, changeEffect, minified }) => {
             );
           } else if (parameter === 'reverse') {
             return (
-              <div>
+              <div key={parameter}>
                 <div className={`reverse-btn center`} onClick={toggleReverse}>
                   <div className={`reversible reversed-${reversed}`}>
                     reverse

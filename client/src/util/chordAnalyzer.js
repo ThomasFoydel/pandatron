@@ -165,8 +165,6 @@ const notes = [
 const chordAnalyzer = (positionsInput) => {
   let positions = [...positionsInput];
 
-  console.log('positions: ', positions[0]);
-
   //   let positions = [];
   let spacings = [];
   let root_note = '';

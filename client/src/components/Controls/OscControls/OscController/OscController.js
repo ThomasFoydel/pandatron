@@ -13,7 +13,7 @@ const OscController = ({
   changeGain,
   initVals,
 }) => {
-  const [gainVal, setGainVal] = useState(0.5);
+  const [gainVal, setGainVal] = useState(initVals.gain);
   const [detuneVal, setDetuneVal] = useState(0);
   const [wavetable, setWavetable] = useState(initVals.wavetable);
 

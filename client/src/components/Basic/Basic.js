@@ -17,6 +17,7 @@ import {
 import OscController from 'components/Controls/OscControls/OscController/OscController';
 import NoiseOscController from 'components/Controls/OscControls/NoiseOscController/NoiseOscController';
 
+import MouseFieldController from 'components/Controls/MouseFieldController/MouseFieldController';
 import ADSRController from 'components/Controls/ADSRFilterEq/ADSRController/ADSRController';
 import FilterController from 'components/Controls/ADSRFilterEq/FilterController/FilterController';
 import DelayController from 'components/Controls/Effects/DelayController/DelayController';
@@ -29,7 +30,6 @@ const Basic = () => {
   const { panda1, panda2, panda3, panda4, panda5, panda6, panda7 } = pandaFaces;
   let currentPanda = panda7;
   const changeCurrentChordDisplay = (newPanda) => {
-    console.log('changeCurrentChordDisplay: ', currentPanda);
     currentPanda = newPanda;
     const panda = document.getElementById('panda-display');
     panda.src = newPanda;
@@ -83,6 +83,7 @@ const Basic = () => {
   const oscMasterGain1 = actx.createGain();
   const noiseGain = actx.createGain();
   const subGain = actx.createGain();
+  subGain.gain.value = 0;
   const sourcesGain = actx.createGain();
 
   const subFilter = actx.createBiquadFilter();
@@ -173,6 +174,29 @@ const Basic = () => {
     ratio: 12,
   });
 
+  // const lowPassFilterInitVals = {
+  //   frequency: 400,
+  //   peak: 10,
+  // };
+
+  // const lowPassFilter = new Pizzicato.Effects.LowPassFilter(
+  //   lowPassFilterInitVals
+  // );
+
+  const lfo1Osc = actx.createOscillator();
+  const lfo1 = actx.createGain();
+  const lowPassFilter = actx.createBiquadFilter();
+  const lfo1Wet = actx.createGain();
+  const lfo1Dry = actx.createGain();
+  lfo1Wet.gain.value = 0;
+  lfo1Dry.gain.value = 1;
+  const lfo1Combined = actx.createGain();
+
+  let lfo1Started = false;
+  lfo1Osc.connect(lfo1);
+
+  lfo1.connect(lfo1Wet.gain);
+
   // // // CONNECTIONS // // //
   // // // CONNECTIONS // // //
   // // // CONNECTIONS // // //
@@ -230,7 +254,15 @@ const Basic = () => {
   subGain.connect(subFilter);
   subFilter.connect(limiter);
   // SUB SHOULD PASS ALL/MOST FX
-  limiter.connect(actx.destination);
+  limiter.connect(lowPassFilter);
+  limiter.connect(lfo1Dry);
+
+  /// put back on
+  lowPassFilter.connect(lfo1Wet);
+  ///
+  lfo1Wet.connect(lfo1Combined);
+  lfo1Dry.connect(lfo1Combined);
+  lfo1Combined.connect(actx.destination);
 
   // // // FUNCTIONS // // //
   // // // FUNCTIONS // // //
@@ -430,6 +462,41 @@ const Basic = () => {
     changePizzicatoEffect(reverb2, prop, val);
   };
 
+  const changeMouseLfo = (x, y) => {
+    if (!lfo1Started) {
+      lfo1Osc.start();
+      lfo1Started = true;
+    }
+    lowPassFilter.frequency.linearRampToValueAtTime(
+      ((1 - y) * 18000).toFixed(2),
+      actx.currentTime
+    );
+    lfo1Osc.frequency.linearRampToValueAtTime(
+      (x * 12).toFixed(2),
+      actx.currentTime
+    );
+    // lfo1.frequency = x * 18000;
+    // lfo1.gain = y;
+  };
+
+  const toggleLfo1 = (lfoIsActive) => {
+    const now = actx.currentTime;
+    lfo1Dry.gain.cancelScheduledValues(now);
+    lfo1Wet.gain.cancelScheduledValues(now);
+    lfo1.gain.cancelScheduledValues(now);
+    if (lfoIsActive) {
+      // TURN OFF
+      lfo1Dry.gain.exponentialRampToValueAtTime(1, now);
+      lfo1Wet.gain.exponentialRampToValueAtTime(0.01, now);
+      lfo1.gain.exponentialRampToValueAtTime(0.01, now);
+    } else {
+      // TURN ON
+      lfo1Dry.gain.exponentialRampToValueAtTime(0.01, now);
+      lfo1Wet.gain.exponentialRampToValueAtTime(1, now);
+      lfo1.gain.exponentialRampToValueAtTime(1, now);
+    }
+  };
+
   // CREATE KEYBOARD
   useEffect(() => {
     const keyboard = new QwertyHancock({
@@ -445,7 +512,6 @@ const Basic = () => {
     let nodes = [];
     let notesForChordAnalysis = [];
     const chordDisplay = document.getElementById('chord-display');
-    // const pandaDisplay = document.getElementsByClassName('chord-panda');
 
     keyboard.keyDown = (note, freq) => {
       const envelope = { attack, decay, sustain, release };
@@ -534,7 +600,7 @@ const Basic = () => {
   }, []);
 
   return (
-    <>
+    <div className='synth'>
       <div className='main-grid'>
         <div className='main-grid-section-1'>
           <div className='flex'>
@@ -548,6 +614,7 @@ const Basic = () => {
                 wavetable: wavetable1,
                 envelope: initEnvelope,
                 offset: osc1OctaveOffset,
+                gain: 0.5,
               }}
             />
             <OscController
@@ -560,6 +627,7 @@ const Basic = () => {
                 wavetable: wavetable2,
                 envelope: initEnvelope,
                 offset: osc2OctaveOffset,
+                gain: 0.5,
               }}
             />
           </div>
@@ -582,6 +650,7 @@ const Basic = () => {
                 wavetable: subOscType,
                 envelope: initEnvelope,
                 offset: subOscOctaveOffset,
+                gain: 0.3,
               }}
             />
             <NoiseOscController
@@ -604,7 +673,7 @@ const Basic = () => {
                   type: filter1.type,
                   frequency: filter1.frequency.value,
                   Q: filter1.Q.value,
-                  mix: filter1.dryWet,
+                  mix: 100 - filter1.dryWet,
                   gain: filter1.gain.value,
                 }}
               />
@@ -615,17 +684,26 @@ const Basic = () => {
                 initEnvelope={initEnvelope}
               />
             </div>
-          </div>
-          <div className='section2-grid-3'>
-            <div id='chord-panda' className='chord-panda center'>
-              <img
-                src={currentPanda}
-                alt='panda-display'
-                id='panda-display'
-                className='panda-display'
-              />
+
+            <div className='section2-grid-3'>
+              <div className='flex'>
+                <MouseFieldController
+                  changeMouseLfo={changeMouseLfo}
+                  toggleLfo1={toggleLfo1}
+                />
+                <div>
+                  <div id='chord-panda' className='chord-panda'>
+                    <img
+                      src={currentPanda}
+                      alt='panda-display'
+                      id='panda-display'
+                      className='panda-display'
+                    />
+                  </div>
+                  <h6 id='chord-display' className='center chord-display'></h6>
+                </div>
+              </div>
             </div>
-            <h6 id='chord-display' className='center chord-display'></h6>
           </div>
         </div>
         <div className='main-grid-section-3'>
@@ -661,19 +739,6 @@ const Basic = () => {
           </div>
 
           <div className='flex'>
-            {/* <QuadrafuzzController
-              changeQuadrafuzz={changeQuadrafuzz}
-              initVals={quadrafuzzInitVals}
-            /> */}
-
-            {/* <FlangerController
-              initVals={flanger1InitVals}
-              changeFlanger1={changeFlanger1}
-            /> */}
-            {/* <RingModulatorController
-              initVals={ringModulatorInitVals}
-              changeRingModulator={changeRingModulator}
-            /> */}
             <DelayController
               changeMix={changeDelayMix}
               changeDelayTime={changeDelayTime}
@@ -709,7 +774,7 @@ const Basic = () => {
           <div className='keyboard' id='keyboard' />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
