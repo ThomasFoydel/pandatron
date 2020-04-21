@@ -106,7 +106,7 @@ const FilterController = ({
         <DropDown
           updateFunction={updateFilter}
           inputId={'type'}
-          initVal={{ val: 'lowpass', text: 'lowpass' }}
+          initVal={{ val: 'highpass', text: 'highpass' }}
           options={[
             { val: 'lowpass', text: 'lowpass' },
             { val: 'highpass', text: 'highpass' },

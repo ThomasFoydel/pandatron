@@ -106,9 +106,14 @@
 
 .panda-display {
   width: 16rem;
-  border: 2px solid black;
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.623);
-  margin: 1rem;
+  // border: 2px solid black;
+  // border-radius: 5px;
+  // background: rgba(255, 255, 255, 0.623);
   transition: all 0.5s ease;
+
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+
+  position: absolute;
 }

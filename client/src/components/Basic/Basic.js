@@ -98,6 +98,7 @@ const Basic = () => {
   const distortion1MixedGain = actx.createGain();
 
   const filter1 = actx.createBiquadFilter();
+  filter1.type = 'highpass';
   filter1.dryWet = 1;
   const filter1WetGain = actx.createGain();
   const filter1DryGain = actx.createGain();
@@ -687,8 +688,17 @@ const Basic = () => {
                 <MouseFieldController
                   changeMouseLfo={changeMouseLfo}
                   toggleLfo1={toggleLfo1}
-                />
-                <div>
+                >
+                  <div id='chord-panda' className='chord-panda'>
+                    <img
+                      src={currentPanda}
+                      alt='panda-display'
+                      id='panda-display'
+                      className='panda-display'
+                    />
+                  </div>
+                </MouseFieldController>
+                {/* <div>
                   <div id='chord-panda' className='chord-panda'>
                     <img
                       src={currentPanda}
@@ -698,7 +708,10 @@ const Basic = () => {
                     />
                   </div>
                   <h6 id='chord-display' className='center chord-display'></h6>
-                </div>
+                </div> */}
+              </div>
+              <div>
+                <h6 id='chord-display' className='center chord-display'></h6>
               </div>
             </div>
           </div>

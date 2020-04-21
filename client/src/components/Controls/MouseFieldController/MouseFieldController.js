@@ -1,28 +1,9 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
+import { useContainerDimensions } from 'util/custom-hooks';
+import { animated, config, useSpring } from 'react-spring';
 import './MouseFieldController.scss';
 
-export const useContainerDimensions = (myRef) => {
-  const getDimensions = () => ({
-    width: myRef.current.offsetWidth,
-    height: myRef.current.offsetHeight,
-  });
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  useEffect(() => {
-    const handleResize = () => {
-      setDimensions(getDimensions());
-    };
-    if (myRef.current) {
-      setDimensions(getDimensions());
-    }
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [myRef]);
-  return dimensions;
-};
-
-const MouseFieldController = ({ changeMouseLfo, toggleLfo1 }) => {
+const MouseFieldController = ({ changeMouseLfo, toggleLfo1, children }) => {
   const componentRef = useRef();
   const { width, height } = useContainerDimensions(componentRef);
 
@@ -49,6 +30,7 @@ const MouseFieldController = ({ changeMouseLfo, toggleLfo1 }) => {
 
   const handleMouseLeave = () => {
     if (active) {
+      let zero = 0;
       setActive(false);
       setXVal(0);
       setYVal(0);
@@ -57,16 +39,26 @@ const MouseFieldController = ({ changeMouseLfo, toggleLfo1 }) => {
     }
   };
 
+  const animationProps = useSpring({
+    background: `rgba(${xVal * 255},${yVal * 90}, 0, 1)`,
+    config: config.molasses,
+  });
+
   return (
-    <div
-      ref={componentRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className='mousefield'
-    >
-      <div>x: {xVal}</div>
-      <div>y: {yVal}</div>
-    </div>
+    <>
+      <animated.div
+        ref={componentRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className='mousefield'
+        style={animationProps}
+        // style={{ background: `rgba(${xVal * 255},${yVal * 90}, 0, 0.7)` }}
+      >
+        <div className='center'>x: {(xVal * 100).toFixed(0)}</div>
+        <div className='center'>y: {(yVal * 100).toFixed(0)} </div>
+        {children}
+      </animated.div>
+    </>
   );
 };
 
