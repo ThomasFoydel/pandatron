@@ -24,6 +24,7 @@ import DelayController from 'components/Controls/Effects/DelayController/DelayCo
 import ReverbController from 'components/Controls/Effects/ReverbController/ReverbController';
 import DistortionController from 'components/Controls/Effects/DistortionController/DistortionController';
 import EffectController from 'components/Controls/Effects/EffectController/EffectController';
+import MasterGain from 'components/Controls/MasterGain/MasterGain';
 
 import './Basic.scss';
 const Basic = () => {
@@ -80,9 +81,10 @@ const Basic = () => {
 
   const oscGain1 = actx.createGain();
   const oscGain2 = actx.createGain();
-  const oscGainDefaultVal = 0.2;
+  const oscGainDefaultVal = 0.1;
   oscGain1.gain.value = oscGainDefaultVal;
   oscGain2.gain.value = oscGainDefaultVal;
+
   const oscMasterGain1 = actx.createGain();
   const noiseGain = actx.createGain();
   const subGain = actx.createGain();
@@ -201,6 +203,8 @@ const Basic = () => {
 
   lfo1.connect(lfo1Wet.gain);
 
+  const masterGain = actx.createGain();
+
   // // // CONNECTIONS // // //
   // // // CONNECTIONS // // //
   // // // CONNECTIONS // // //
@@ -261,12 +265,11 @@ const Basic = () => {
   limiter.connect(lowPassFilter);
   limiter.connect(lfo1Dry);
 
-  /// put back on
   lowPassFilter.connect(lfo1Wet);
-  ///
   lfo1Wet.connect(lfo1Combined);
   lfo1Dry.connect(lfo1Combined);
-  lfo1Combined.connect(actx.destination);
+  lfo1Combined.connect(masterGain);
+  masterGain.connect(actx.destination);
 
   // // // FUNCTIONS // // //
   // // // FUNCTIONS // // //
@@ -479,8 +482,6 @@ const Basic = () => {
       (x * 12).toFixed(2),
       actx.currentTime
     );
-    // lfo1.frequency = x * 18000;
-    // lfo1.gain = y;
   };
 
   const toggleLfo1 = (lfoIsActive) => {
@@ -496,6 +497,10 @@ const Basic = () => {
       lfo1Wet.gain.exponentialRampToValueAtTime(1, now);
       lfo1.gain.exponentialRampToValueAtTime(1, now);
     }
+  };
+
+  const changeMasterGain = (e) => {
+    masterGain.gain.exponentialRampToValueAtTime(e / 100, actx.currentTime);
   };
 
   // CREATE KEYBOARD
@@ -785,6 +790,7 @@ const Basic = () => {
 
         <div className='main-grid-section-4'>
           <div className='keyboard' id='keyboard' />
+          <MasterGain changeMasterGain={changeMasterGain} />
         </div>
       </div>
     </div>
