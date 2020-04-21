@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
-import QwertyHancock from 'qwerty-hancock';
+import QwertyHancock from '../../qwerty-hancock/dist/qwerty-hancock';
 import Pizzicato from 'pizzicato';
 import oscClass from './oscClass';
 import noiseOscClass from './noiseOscClass';
-import chordAnalyzer from 'util/chordAnalyzer';
-import pandaFaces from 'imgs/pandapics';
 
+import chordAnalyzer from 'util/chordAnalyzer';
 import {
   makeDistortionCurve,
   impulseResponse,
@@ -25,6 +24,7 @@ import ReverbController from 'components/Controls/Effects/ReverbController/Rever
 import DistortionController from 'components/Controls/Effects/DistortionController/DistortionController';
 import EffectController from 'components/Controls/Effects/EffectController/EffectController';
 import MasterGain from 'components/Controls/MasterGain/MasterGain';
+import pandaFaces from 'imgs/pandapics';
 
 import './Basic.scss';
 const Basic = () => {
@@ -205,6 +205,12 @@ const Basic = () => {
 
   const masterGain = actx.createGain();
 
+  // analyzer
+  const analyzer = actx.createAnalyser();
+  analyzer.fftSize = 256; // 32 64 128 256 512 1024 2048 4096 8192 16384 32768
+  const analyzerBufferLength = analyzer.frequencyBinCount;
+  const analyzerData = new Uint8Array(analyzerBufferLength);
+  console.log('DATA ARRAY: ', analyzerData);
   // // // CONNECTIONS // // //
   // // // CONNECTIONS // // //
   // // // CONNECTIONS // // //
@@ -270,6 +276,8 @@ const Basic = () => {
   lfo1Dry.connect(lfo1Combined);
   lfo1Combined.connect(masterGain);
   masterGain.connect(actx.destination);
+
+  masterGain.connect(analyzer);
 
   // // // FUNCTIONS // // //
   // // // FUNCTIONS // // //
@@ -606,107 +614,108 @@ const Basic = () => {
   }, []);
 
   return (
-    <div className='synth'>
-      <div className='main-grid'>
-        <div className='main-grid-section-1'>
-          <div className='flex'>
-            <OscController
-              name='osc 1'
-              changeWaveTable={changeWaveTable1}
-              changeOctaveOsc={changeOctaveOsc1}
-              detuneOsc={detuneOsc1}
-              changeGain={changeOsc1Gain}
-              initVals={{
-                wavetable: wavetable1,
-                envelope: initEnvelope,
-                offset: osc1OctaveOffset,
-                gain: oscGainDefaultVal,
-              }}
-            />
-            <OscController
-              name='osc 2'
-              changeWaveTable={changeWaveTable2}
-              changeOctaveOsc={changeOctaveOsc2}
-              detuneOsc={detuneOsc2}
-              changeGain={changeOsc2Gain}
-              initVals={{
-                wavetable: wavetable2,
-                envelope: initEnvelope,
-                offset: osc2OctaveOffset,
-                gain: oscGainDefaultVal,
-              }}
-            />
-          </div>
-
-          <div className='osc-mix center'>
-            <div className='center inputcontainer'>
-              <span className='oscname'>osc1</span>
-              <input type='range' onChange={mixGain} />
-              <span className='oscname'>osc2</span>
-            </div>
-          </div>
-
-          <div className='flex'>
-            <OscController
-              name='sub osc'
-              changeWaveTable={changeWaveTableSub}
-              changeOctaveOsc={changeOctaveSub}
-              changeGain={changeSubGain}
-              initVals={{
-                wavetable: subOscType,
-                envelope: initEnvelope,
-                offset: subOscOctaveOffset,
-                gain: oscGainDefaultVal,
-              }}
-            />
-            <NoiseOscController
-              changeNoiseGain={changeNoiseGain}
-              changeNoiseType={changeNoiseType}
-              initGain={noiseOscVol}
-            />
-          </div>
-        </div>
-        <div className='main-grid-section-2'>
-          <div className='section2-grid'>
-            <div className='section2-grid-1'>
-              <FilterController
-                changeFilter1Type={changeFilter1Type}
-                changeFilter1Freq={changeFilter1Freq}
-                changeFilter1Q={changeFilter1Q}
-                changeFilter1Mix={changeFilter1Mix}
-                changeFilter1Gain={changeFilter1Gain}
-                initParams={{
-                  type: filter1.type,
-                  frequency: filter1.frequency.value,
-                  Q: filter1.Q.value,
-                  mix: 100 - filter1.dryWet,
-                  gain: filter1.gain.value,
+    <>
+      <div className='synth'>
+        <div className='main-grid'>
+          <div className='main-grid-section-1'>
+            <div className='flex'>
+              <OscController
+                name='osc 1'
+                changeWaveTable={changeWaveTable1}
+                changeOctaveOsc={changeOctaveOsc1}
+                detuneOsc={detuneOsc1}
+                changeGain={changeOsc1Gain}
+                initVals={{
+                  wavetable: wavetable1,
+                  envelope: initEnvelope,
+                  offset: osc1OctaveOffset,
+                  gain: oscGainDefaultVal,
+                }}
+              />
+              <OscController
+                name='osc 2'
+                changeWaveTable={changeWaveTable2}
+                changeOctaveOsc={changeOctaveOsc2}
+                detuneOsc={detuneOsc2}
+                changeGain={changeOsc2Gain}
+                initVals={{
+                  wavetable: wavetable2,
+                  envelope: initEnvelope,
+                  offset: osc2OctaveOffset,
+                  gain: oscGainDefaultVal,
                 }}
               />
             </div>
-            <div className='section2-grid-2'>
-              <ADSRController
-                changeADSR={changeADSR}
-                initEnvelope={initEnvelope}
-              />
+
+            <div className='osc-mix center'>
+              <div className='center inputcontainer'>
+                <span className='oscname'>osc1</span>
+                <input type='range' onChange={mixGain} />
+                <span className='oscname'>osc2</span>
+              </div>
             </div>
 
-            <div className='section2-grid-3'>
-              <div className='flex'>
-                <MouseFieldController
-                  changeMouseLfo={changeMouseLfo}
-                  toggleLfo1={toggleLfo1}
-                >
-                  <div id='chord-panda' className='chord-panda'>
-                    <img
-                      src={currentPanda}
-                      alt='panda-display'
-                      id='panda-display'
-                      className='panda-display'
-                    />
-                  </div>
-                </MouseFieldController>
-                {/* <div>
+            <div className='flex'>
+              <OscController
+                name='sub osc'
+                changeWaveTable={changeWaveTableSub}
+                changeOctaveOsc={changeOctaveSub}
+                changeGain={changeSubGain}
+                initVals={{
+                  wavetable: subOscType,
+                  envelope: initEnvelope,
+                  offset: subOscOctaveOffset,
+                  gain: oscGainDefaultVal,
+                }}
+              />
+              <NoiseOscController
+                changeNoiseGain={changeNoiseGain}
+                changeNoiseType={changeNoiseType}
+                initGain={noiseOscVol}
+              />
+            </div>
+          </div>
+          <div className='main-grid-section-2'>
+            <div className='section2-grid'>
+              <div className='section2-grid-1'>
+                <FilterController
+                  changeFilter1Type={changeFilter1Type}
+                  changeFilter1Freq={changeFilter1Freq}
+                  changeFilter1Q={changeFilter1Q}
+                  changeFilter1Mix={changeFilter1Mix}
+                  changeFilter1Gain={changeFilter1Gain}
+                  initParams={{
+                    type: filter1.type,
+                    frequency: filter1.frequency.value,
+                    Q: filter1.Q.value,
+                    mix: 100 - filter1.dryWet,
+                    gain: filter1.gain.value,
+                  }}
+                />
+              </div>
+              <div className='section2-grid-2'>
+                <ADSRController
+                  changeADSR={changeADSR}
+                  initEnvelope={initEnvelope}
+                />
+              </div>
+
+              <div className='section2-grid-3'>
+                <div className='flex'>
+                  <MouseFieldController
+                    changeMouseLfo={changeMouseLfo}
+                    toggleLfo1={toggleLfo1}
+                  >
+                    <div id='chord-panda' className='chord-panda'>
+                      <img
+                        src={currentPanda}
+                        alt='panda-display'
+                        id='panda-display'
+                        className='panda-display'
+                      />
+                    </div>
+                  </MouseFieldController>
+                  {/* <div>
                   <div id='chord-panda' className='chord-panda'>
                     <img
                       src={currentPanda}
@@ -717,83 +726,88 @@ const Basic = () => {
                   </div>
                   <h6 id='chord-display' className='center chord-display'></h6>
                 </div> */}
-              </div>
-              <div>
-                <h6 id='chord-display' className='center chord-display'></h6>
+                </div>
+                <div>
+                  <h6 id='chord-display' className='center chord-display'></h6>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className='main-grid-section-3'>
-          <div className='effect-rack'>
-            <DistortionController
-              initVals={{ amountVal: 0, mixVal: dist1WetGain.gain.value * 100 }}
-              changeDistortion1Amount={changeDistortion1Amount}
-              changeDistortion1Mix={changeDistortion1Mix}
-            />
-            <EffectController
-              effectName='distortion II'
-              changeEffect={changeDistortion2Gain}
-              initVals={{ gain: distortion2.gain }}
-            />
-            <EffectController
-              effectName='ring mod'
-              initVals={ringModulatorInitVals}
-              changeEffect={changeRingModulator}
-            />
-            <EffectController
-              effectName='flanger'
-              initVals={flanger1InitVals}
-              changeEffect={changeFlanger1}
-              minified={true}
-            />
+          <div className='main-grid-section-3'>
+            <div className='effect-rack'>
+              <DistortionController
+                initVals={{
+                  amountVal: 0,
+                  mixVal: dist1WetGain.gain.value * 100,
+                }}
+                changeDistortion1Amount={changeDistortion1Amount}
+                changeDistortion1Mix={changeDistortion1Mix}
+              />
+              <EffectController
+                effectName='distortion II'
+                changeEffect={changeDistortion2Gain}
+                initVals={{ gain: distortion2.gain }}
+              />
+              <EffectController
+                effectName='ring mod'
+                initVals={ringModulatorInitVals}
+                changeEffect={changeRingModulator}
+              />
+              <EffectController
+                effectName='flanger'
+                initVals={flanger1InitVals}
+                changeEffect={changeFlanger1}
+                minified={true}
+              />
 
-            <EffectController
-              effectName='quadrafuzz'
-              changeEffect={changeQuadrafuzz}
-              initVals={quadrafuzzInitVals}
-              minified={true}
-            />
+              <EffectController
+                effectName='quadrafuzz'
+                changeEffect={changeQuadrafuzz}
+                initVals={quadrafuzzInitVals}
+                minified={true}
+              />
+            </div>
+
+            <div className='flex'>
+              <DelayController
+                changeMix={changeDelayMix}
+                changeDelayTime={changeDelayTime}
+                initVals={{
+                  time: delay1.delayTime.value,
+                  mix: delay1Wet.gain.value,
+                }}
+              />
+
+              <EffectController
+                effectName='ping pong'
+                initVals={pingPongDelayInitVals}
+                changeEffect={changePingPongDelay}
+              />
+              <ReverbController
+                changeReverbDecay={changeReverbDecay}
+                changeReverbDuration={changeReverbDuration}
+                mixReverbGain={mixReverbGain}
+                initVals={{
+                  ...reverb1.buffer,
+                  mixGain: reverb1Dry.gain.value,
+                }}
+              />
+              <EffectController
+                effectName='reverb II'
+                initVals={reverb2InitVals}
+                changeEffect={changeReverb2}
+              />
+            </div>
           </div>
 
-          <div className='flex'>
-            <DelayController
-              changeMix={changeDelayMix}
-              changeDelayTime={changeDelayTime}
-              initVals={{
-                time: delay1.delayTime.value,
-                mix: delay1Wet.gain.value,
-              }}
-            />
-
-            <EffectController
-              effectName='ping pong'
-              initVals={pingPongDelayInitVals}
-              changeEffect={changePingPongDelay}
-            />
-            <ReverbController
-              changeReverbDecay={changeReverbDecay}
-              changeReverbDuration={changeReverbDuration}
-              mixReverbGain={mixReverbGain}
-              initVals={{
-                ...reverb1.buffer,
-                mixGain: reverb1Dry.gain.value,
-              }}
-            />
-            <EffectController
-              effectName='reverb II'
-              initVals={reverb2InitVals}
-              changeEffect={changeReverb2}
-            />
+          <div className='main-grid-section-4'>
+            <div className='keyboard' id='keyboard' />
+            <MasterGain changeMasterGain={changeMasterGain} />
+            <canvas id='canvas' />
           </div>
-        </div>
-
-        <div className='main-grid-section-4'>
-          <div className='keyboard' id='keyboard' />
-          <MasterGain changeMasterGain={changeMasterGain} />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

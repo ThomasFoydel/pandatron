@@ -39,7 +39,7 @@ const MouseFieldController = ({ changeMouseLfo, toggleLfo1, children }) => {
   };
 
   const animationProps = useSpring({
-    background: `linear-gradient(45deg, rgba(${xVal * 255},0, ${
+    background: `linear-gradient(225deg, rgba(${xVal * 255},0, ${
       yVal * 90
     }, 0.9), rgba(${yVal * 255},0, ${xVal * 90}, 0.9))`,
     config: config.molasses,
