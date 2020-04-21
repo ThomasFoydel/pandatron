@@ -30,7 +30,6 @@ const MouseFieldController = ({ changeMouseLfo, toggleLfo1, children }) => {
 
   const handleMouseLeave = () => {
     if (active) {
-      let zero = 0;
       setActive(false);
       setXVal(0);
       setYVal(0);
@@ -40,7 +39,9 @@ const MouseFieldController = ({ changeMouseLfo, toggleLfo1, children }) => {
   };
 
   const animationProps = useSpring({
-    background: `rgba(${xVal * 255},${yVal * 90}, 0, 1)`,
+    background: `linear-gradient(45deg, rgba(${xVal * 255},0, ${
+      yVal * 90
+    }, 0.9), rgba(${yVal * 255},0, ${xVal * 90}, 0.9))`,
     config: config.molasses,
   });
 
@@ -52,7 +53,6 @@ const MouseFieldController = ({ changeMouseLfo, toggleLfo1, children }) => {
         onMouseLeave={handleMouseLeave}
         className='mousefield'
         style={animationProps}
-        // style={{ background: `rgba(${xVal * 255},${yVal * 90}, 0, 0.7)` }}
       >
         <div className='center'>x: {(xVal * 100).toFixed(0)}</div>
         <div className='center'>y: {(yVal * 100).toFixed(0)} </div>

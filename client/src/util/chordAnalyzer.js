@@ -17,7 +17,7 @@ function searchSet(spacings, chords) {
     if (chords.hasOwnProperty(property)) {
       equal = true;
       for (var k = 0; k < spacings.length; k++) {
-        if (spacings[k] != chords[property][k]) {
+        if (spacings[k] !== chords[property][k]) {
           equal = false;
           break;
         }
@@ -43,7 +43,7 @@ function removeOctaves(notes) {
     if (notes[i] > 11) {
       new_note = notes[i] - 12;
       for (var k = 0; k < notes.length; k++) {
-        if (new_note == notes[k]) {
+        if (new_note === notes[k]) {
           exists = true;
           break;
         }
@@ -157,24 +157,24 @@ const notes = [
   'B',
 ];
 
-// currently expects an array of numbers representing notes,
+// expects an array of numbers representing notes,
 // example: [0, 3, 7] = C Minor
 // example: [0, 3, 7, 11] = C mi maj7
-//
+// outputs chord name
 
 const chordAnalyzer = (positionsInput) => {
   let positions = [...positionsInput];
 
   //   let positions = [];
   let spacings = [];
-  let root_note = '';
+  // let root_note = '';
   let key_location = '';
   let formation = [];
   let num_inversions = 0;
   let exists = false;
   let chordName;
 
-  if (positions.length == 1) {
+  if (positions.length === 1) {
     let root_note = notes[positions[0]];
     return root_note;
   } else if (positions.length > 1) {
@@ -184,9 +184,8 @@ const chordAnalyzer = (positionsInput) => {
     positions.pop();
     spacings = findSpacings(positions);
     // if chord is a perfect octave
-    if (spacings.length == 0) {
+    if (spacings.length === 0) {
       key_location = positions[0] + 1;
-      //   root_note = $('#piano li:nth-child(' + key_location + ')').attr('id');
       const root_note = notes[positions[0]];
       chordName = root_note + ' ' + '8';
     }
@@ -210,7 +209,7 @@ const chordAnalyzer = (positionsInput) => {
           default:
             formation = [];
         }
-        if (formation.length != 0) {
+        if (formation.length !== 0) {
           // because of initial inversions, total inversions may be greater than
           // size of the positions array. Because inversions repeat themselves
           // modulo of the array length will give correct key location
@@ -225,7 +224,6 @@ const chordAnalyzer = (positionsInput) => {
       }
       // ensures the chord exists before finding root note
       if (!exists) {
-        // $('.chordbox').text('No Matches Found');
         chordName = 'no matches found';
       }
       exists = false;

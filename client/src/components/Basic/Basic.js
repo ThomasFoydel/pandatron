@@ -57,10 +57,10 @@ const Basic = () => {
   const actx = Pizzicato.context;
 
   //OSCILLATOR SETTINGS
-  let attack = 1;
+  let attack = 0.03;
   let decay = 1;
   let sustain = 1;
-  let release = 1;
+  let release = 0.3;
   let initEnvelope = { attack, decay, sustain, release };
 
   let wavetable1 = 'sawtooth';
@@ -80,10 +80,13 @@ const Basic = () => {
 
   const oscGain1 = actx.createGain();
   const oscGain2 = actx.createGain();
+  const oscGainDefaultVal = 0.2;
+  oscGain1.gain.value = oscGainDefaultVal;
+  oscGain2.gain.value = oscGainDefaultVal;
   const oscMasterGain1 = actx.createGain();
   const noiseGain = actx.createGain();
   const subGain = actx.createGain();
-  subGain.gain.value = 0;
+  subGain.gain.value = oscGainDefaultVal;
   const sourcesGain = actx.createGain();
 
   const subFilter = actx.createBiquadFilter();
@@ -612,7 +615,7 @@ const Basic = () => {
                 wavetable: wavetable1,
                 envelope: initEnvelope,
                 offset: osc1OctaveOffset,
-                gain: 0.5,
+                gain: oscGainDefaultVal,
               }}
             />
             <OscController
@@ -625,7 +628,7 @@ const Basic = () => {
                 wavetable: wavetable2,
                 envelope: initEnvelope,
                 offset: osc2OctaveOffset,
-                gain: 0.5,
+                gain: oscGainDefaultVal,
               }}
             />
           </div>
@@ -648,7 +651,7 @@ const Basic = () => {
                 wavetable: subOscType,
                 envelope: initEnvelope,
                 offset: subOscOctaveOffset,
-                gain: 0.3,
+                gain: oscGainDefaultVal,
               }}
             />
             <NoiseOscController
