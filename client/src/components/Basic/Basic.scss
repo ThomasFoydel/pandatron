@@ -88,22 +88,23 @@
 }
 
 .keyboard {
-  top: 13rem;
   position: absolute;
-  left: 50%;
+  left: 51.5%;
   transform: translateX(-50%);
   z-index: 1;
   // overflow: hidden;
-  border: 2px solid white;
 }
 
 .keyboard-container {
   // background: red;
-  width: 52.6rem;
+  width: 54rem;
+  margin-top: 13rem;
   margin-left: 50%;
   transform: translateX(-50%);
-  height: 40rem;
   overflow-x: hidden;
+  border: 2px solid black;
+  border-radius: 5px;
+  background: black;
 }
 
 .effect-rack {

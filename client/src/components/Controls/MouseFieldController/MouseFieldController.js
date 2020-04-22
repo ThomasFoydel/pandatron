@@ -1,9 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useContainerDimensions } from 'util/custom-hooks';
-import { animated, config, useSpring } from 'react-spring';
+import { animated, useSpring, config } from 'react-spring';
 import './MouseFieldController.scss';
 
 const MouseFieldController = ({ changeMouseLfo, toggleLfo1, children }) => {
+  const [springOn, setSpringOn] = useState(false);
+
+  useEffect(() => {
+    setSpringOn(true);
+  }, []);
+
   const componentRef = useRef();
   const { width, height } = useContainerDimensions(componentRef);
 
@@ -39,12 +45,11 @@ const MouseFieldController = ({ changeMouseLfo, toggleLfo1, children }) => {
   };
 
   const animationProps = useSpring({
-    background: `linear-gradient(225deg, rgba(${xVal * 255},0, ${
+    background: `radial-gradient( rgba(${xVal * 255},0, ${
       yVal * 90
     }, 0.9), rgba(${yVal * 255},0, ${xVal * 90}, 0.9))`,
     config: config.molasses,
   });
-
   return (
     <>
       <animated.div
@@ -52,7 +57,15 @@ const MouseFieldController = ({ changeMouseLfo, toggleLfo1, children }) => {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         className='mousefield'
-        style={animationProps}
+        style={
+          springOn
+            ? animationProps
+            : {
+                background: `radial-gradient( rgba(${xVal * 255},0, ${
+                  yVal * 90
+                }, 0.9), rgba(${yVal * 255},0, ${xVal * 90}, 0.9))`,
+              }
+        }
       >
         <div className='center'>x: {(xVal * 100).toFixed(0)}</div>
         <div className='center'>y: {(yVal * 100).toFixed(0)} </div>

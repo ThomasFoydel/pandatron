@@ -6,14 +6,14 @@ const MasterGain = ({ changeMasterGain }) => {
   const [display, setDisplay] = useState(1);
   const updateMasterGain = (e) => {
     changeMasterGain(e.toFixed(2));
-    setDisplay(e);
+    setDisplay(+e);
   };
   return (
     <div className='master-gain'>
       <div className='inner'>
         <div className=''>
           <h2 className='title'>master gain</h2>
-          <div className='center'>{display}</div>
+          <div className='center'>{display.toFixed(2)}</div>
         </div>
 
         <Knob
