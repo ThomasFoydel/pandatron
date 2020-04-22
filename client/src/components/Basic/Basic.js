@@ -203,14 +203,17 @@ const Basic = () => {
 
   lfo1.connect(lfo1Wet.gain);
 
+  const connectorGain = actx.createGain();
+
   const masterGain = actx.createGain();
 
   // analyzer
+
   const analyzer = actx.createAnalyser();
-  analyzer.fftSize = 256; // 32 64 128 256 512 1024 2048 4096 8192 16384 32768
+  analyzer.fftSize = 1024; // 512; // 256; // 32 64 128 256 512 1024 2048 4096 8192 16384 32768
   const analyzerBufferLength = analyzer.frequencyBinCount;
   const analyzerData = new Uint8Array(analyzerBufferLength);
-  console.log('DATA ARRAY: ', analyzerData);
+
   // // // CONNECTIONS // // //
   // // // CONNECTIONS // // //
   // // // CONNECTIONS // // //
@@ -262,22 +265,26 @@ const Basic = () => {
   reverb1Dry.connect(reverbJoinGain);
   reverb1Wet.connect(reverbJoinGain);
   reverbJoinGain.connect(reverb2);
-  reverb2.connect(limiter);
+  reverb2.connect(connectorGain);
 
   // SUB SHOULD PASS ALL/MOST FX
   subGain.connect(subFilter);
-  subFilter.connect(limiter);
+  subFilter.connect(connectorGain);
+
+  connectorGain.connect(lowPassFilter);
+  connectorGain.connect(lfo1Dry);
+
   // SUB SHOULD PASS ALL/MOST FX
-  limiter.connect(lowPassFilter);
-  limiter.connect(lfo1Dry);
+  // limiter.connect(lowPassFilter);
+  // limiter.connect(lfo1Dry);
 
   lowPassFilter.connect(lfo1Wet);
   lfo1Wet.connect(lfo1Combined);
   lfo1Dry.connect(lfo1Combined);
   lfo1Combined.connect(masterGain);
-  masterGain.connect(actx.destination);
-
   masterGain.connect(analyzer);
+  masterGain.connect(limiter);
+  limiter.connect(actx.destination);
 
   // // // FUNCTIONS // // //
   // // // FUNCTIONS // // //
@@ -515,9 +522,9 @@ const Basic = () => {
   useEffect(() => {
     const keyboard = new QwertyHancock({
       id: 'keyboard',
-      width: 400,
+      width: 450,
       height: 68,
-      octaves: 1.4,
+      octaves: 2,
       startNote: 'C4',
       whiteKeyColour: 'black',
       blackKeyColour: 'white',
@@ -611,6 +618,97 @@ const Basic = () => {
         updatePanda('');
       }
     };
+
+    ///////// ANALYZER
+
+    const canvas = document.getElementById('canvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const ctx = canvas.getContext('2d');
+
+    const WIDTH = canvas.width;
+    const HEIGHT = canvas.height;
+
+    const barWidth = (WIDTH / analyzerBufferLength) * 13;
+
+    let barHeight;
+    let x = 0;
+
+    function renderFrame() {
+      requestAnimationFrame(renderFrame); // Takes callback function to invoke before rendering
+
+      x = 0;
+
+      analyzer.getByteFrequencyData(analyzerData); // Copies the frequency data into dataArray
+      // Results in a normalized array of values between 0 and 255
+      // Before this step, dataArray's values are all zeros (but with length of 8192)
+
+      ctx.fillStyle = 'rgba(0,0,0,0.2)'; // Clears canvas before rendering bars (black with opacity 0.2)
+      ctx.fillRect(0, 0, WIDTH, HEIGHT); // Fade effect, set opacity to 1 for sharper rendering of bars
+
+      let r, g, b;
+      let bars = 118; // Set total number of bars you want per frame
+
+      for (let i = 0; i < bars; i++) {
+        barHeight = analyzerData[i] * 2.5;
+
+        if (analyzerData[i] > 210) {
+          // pink
+          // r = 255;
+          // g = 0;
+          // b = 255;
+          // white
+          r = 255;
+          g = 255;
+          b = 255;
+        } else if (analyzerData[i] > 200) {
+          // yellow
+          // r = 250;
+          // g = 255;
+          // b = 0;
+          r = 210;
+          g = 210;
+          b = 210;
+        } else if (analyzerData[i] > 190) {
+          // yellow/green
+          // r = 204;
+          // g = 255;
+          // b = 0;
+          r = 160;
+          g = 160;
+          b = 160;
+        } else if (analyzerData[i] > 180) {
+          // blue/green
+          // r = 0;
+          // g = 219;
+          // b = 131;
+          r = 120;
+          g = 120;
+          b = 120;
+        } else {
+          // light blue
+          // r = 0;
+          // g = 199;
+          // b = 255;
+          r = 80;
+          g = 80;
+          b = 80;
+        }
+
+        // if (i === 0){
+        //   console.log(analyzerData[i])
+        // }
+
+        ctx.fillStyle = `rgb(${r},${g},${b})`;
+        ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
+        // (x, y, i, j)
+        // (x, y) Represents start point
+        // (i, j) Represents end point
+
+        x += barWidth + 10; // Gives 10px space between each bar
+      }
+    }
+    renderFrame();
   }, []);
 
   return (
@@ -715,17 +813,6 @@ const Basic = () => {
                       />
                     </div>
                   </MouseFieldController>
-                  {/* <div>
-                  <div id='chord-panda' className='chord-panda'>
-                    <img
-                      src={currentPanda}
-                      alt='panda-display'
-                      id='panda-display'
-                      className='panda-display'
-                    />
-                  </div>
-                  <h6 id='chord-display' className='center chord-display'></h6>
-                </div> */}
                 </div>
                 <div>
                   <h6 id='chord-display' className='center chord-display'></h6>
@@ -801,10 +888,12 @@ const Basic = () => {
           </div>
 
           <div className='main-grid-section-4'>
-            <div className='keyboard' id='keyboard' />
-            <MasterGain changeMasterGain={changeMasterGain} />
-            <canvas id='canvas' />
+            <div className='keyboard-container'>
+              <div className='keyboard' id='keyboard' />
+            </div>
+            <canvas id='canvas' className='canvas' />
           </div>
+          <MasterGain changeMasterGain={changeMasterGain} />
         </div>
       </div>
     </>

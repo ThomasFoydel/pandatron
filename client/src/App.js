@@ -7,7 +7,7 @@ function App() {
   return (
     <div>
       <h1 className='synthname'>PANDATRON</h1>
-      <Register />
+      {/* <Register /> */}
       <Basic />
     </div>
   );

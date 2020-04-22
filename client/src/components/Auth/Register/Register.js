@@ -17,11 +17,7 @@ const Register = () => {
     console.log('auth result: ', authResult);
   };
   return (
-    <div
-    //   onKeyDown={(e) => {
-    //     console.log(e.keyCode);
-    //   }}
-    >
+    <div>
       <input onChange={updateInfo} type='text' id='name' placeholder='name' />
       <input onChange={updateInfo} type='text' id='email' placeholder='email' />
       <input

@@ -3,8 +3,10 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 8000;
 const cors = require('cors');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const Auth = require('./routes/Auth');
+require('dotenv').config();
 
 // static file declaration
 app.use(express.static(path.join(__dirname, 'client/build')));
@@ -27,6 +29,10 @@ app.get('*', (req, res) => {
 
 app.use('/auth', Auth);
 
-app.listen(port, () => {
-  console.log(`Server is up on port ${port}!`);
-});
+mongoose
+  .connect(process.env.MONGO_URI, { useNewUrlParser: true })
+  .then((res) => {
+    app.listen(port, () => {
+      console.log(`Server is up on port ${port}!`);
+    });
+  });

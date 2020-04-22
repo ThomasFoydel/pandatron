@@ -161,6 +161,7 @@ export function findWithAttr(array, attr, value) {
 }
 
 export const calcFreq = (frequency, offset) => {
+  // console.log('freq!: ', frequency);
   let calculatedFrequency = frequency;
   let octaveOffset = offset * 12;
 
@@ -169,9 +170,12 @@ export const calcFreq = (frequency, offset) => {
       return note.freq.toFixed(2) === frequency.toFixed(2);
     });
     const shiftedIndex = unshiftedIndex + octaveOffset;
+    // if (noteFreqs[shiftedIndex]) {
     calculatedFrequency = noteFreqs[shiftedIndex].freq;
+    // }
   }
 
+  // return 110;
   return calculatedFrequency;
 };
 

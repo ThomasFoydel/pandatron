@@ -1,6 +1,30 @@
 .master-gain {
-  width: 10rem;
+  width: 20rem;
   border: 2px solid black;
-  background: rgba(255, 255, 255, 0.623);
+  background: rgba(255, 255, 255, 1);
   border-radius: 5px;
+  height: 8rem;
+  line-height: 1.5rem;
+  align-items: center;
+  display: flex;
+  margin-top: 0.5rem;
+  .inner {
+    width: 100%;
+    align-items: center;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+  }
+  .title {
+    width: 10rem;
+    margin-right: 0.5rem;
+  }
+
+  .knob {
+    // margin-top: -0.4rem;
+    // margin-bottom: -0.4rem;
+    // max-width: 4.8rem;
+    margin-left: 0.5rem;
+    min-width: 4rem;
+  }
 }
