@@ -47,9 +47,15 @@ export default class oscClass {
   stop() {
     let { currentTime } = this.context;
     this.gateGain.gain.cancelScheduledValues(currentTime);
-    this.gateGain.gain.linearRampToValueAtTime(
+
+    // this.gateGain.gain.exponentialRampToValueAtTime(
+    //   0.000001,
+    //   currentTime + this.envelope.release + this.easing
+    // );
+    this.gateGain.gain.setTargetAtTime(
       0,
-      currentTime + this.envelope.release + this.easing
+      currentTime,
+      this.envelope.release + this.easing
     );
     setTimeout(() => {
       this.osc.disconnect();

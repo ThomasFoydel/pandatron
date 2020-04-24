@@ -589,7 +589,6 @@ const Basic = () => {
       const noteIndex = findWithAttr(noteFreqs, 'note', note);
       // it's minus 48 because the keyboard is set to start on C4 instead of C0
       notesForChordAnalysis.push(noteIndex - 48);
-      console.log('notesForChordAnalysis: ', notesForChordAnalysis);
       const chordName = chordAnalyzer(notesForChordAnalysis);
       chordDisplay.innerHTML = chordName;
       updatePanda(chordName);
@@ -698,10 +697,6 @@ const Basic = () => {
           g = 80;
           b = 80;
         }
-
-        // if (i === 0){
-        //   console.log(analyzerData[i])
-        // }
 
         ctx.fillStyle = `rgb(${r},${g},${b})`;
         ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
