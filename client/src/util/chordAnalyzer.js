@@ -167,7 +167,7 @@ const chordAnalyzer = (positionsInput) => {
 
   //   let positions = [];
   let spacings = [];
-  // let root_note = '';
+  let root_note = '';
   let key_location = '';
   let formation = [];
   let num_inversions = 0;
@@ -214,8 +214,8 @@ const chordAnalyzer = (positionsInput) => {
           // size of the positions array. Because inversions repeat themselves
           // modulo of the array length will give correct key location
 
-          const root_note = notes[positions[0]];
-
+          key_location = positions[num_inversions % positions.length];
+          const root_note = notes[key_location];
           exists = true;
           chordName = root_note + ' ' + formation[0];
         }
