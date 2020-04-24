@@ -121,7 +121,10 @@ const Basic = () => {
     highGain: 0.6,
     mix: 0,
   };
+
   const quadrafuzz1 = new Pizzicato.Effects.Quadrafuzz(quadrafuzzInitVals);
+  quadrafuzz1.dryGainNode.gain.value = 1;
+  quadrafuzz1.wetGainNode.gain.value = 0;
 
   const flanger1InitVals = {
     time: 0.45,

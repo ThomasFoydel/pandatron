@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useContainerDimensions } from 'util/custom-hooks';
 import { animated, useSpring, config } from 'react-spring';
 import './MouseFieldController.scss';
+import grid from 'imgs/background/grid.png';
 
 const MouseFieldController = ({ changeMouseLfo, toggleLfo1, children }) => {
   const [springOn, setSpringOn] = useState(false);
@@ -69,6 +70,7 @@ const MouseFieldController = ({ changeMouseLfo, toggleLfo1, children }) => {
       >
         <div className='center'>x: {(xVal * 100).toFixed(0)}</div>
         <div className='center'>y: {(yVal * 100).toFixed(0)} </div>
+        {/* <div className='grid' style={{ background: `url(${grid})` }} /> */}
         {children}
       </animated.div>
     </>
