@@ -544,6 +544,15 @@ const Basic = () => {
       const osc2Freq = calcFreq(freq, osc2OctaveOffset);
       const subOscFreq = calcFreq(freq, subOscOctaveOffset - 2);
 
+      const noiseOsc = new noiseOscClass(
+        actx,
+        noiseType,
+        envelope,
+        noiseGain,
+        freq,
+        noiseOscVol
+      );
+
       const newOsc1 = new oscClass(
         actx,
         wavetable1,
@@ -571,15 +580,6 @@ const Basic = () => {
         envelope,
         subGain,
         freq
-      );
-
-      const noiseOsc = new noiseOscClass(
-        actx,
-        noiseType,
-        envelope,
-        noiseGain,
-        freq,
-        noiseOscVol
       );
 
       nodes.push(newOsc1, newOsc2, subOsc, noiseOsc);
