@@ -84,6 +84,10 @@ const Basic = () => {
   const oscGainDefaultVal = 0.1;
   oscGain1.gain.value = oscGainDefaultVal;
   oscGain2.gain.value = oscGainDefaultVal;
+  const oscMixGain1 = actx.createGain();
+  const oscMixGain2 = actx.createGain();
+  oscMixGain1.gain.value = 0.5;
+  oscMixGain2.gain.value = 0.5;
 
   const oscMasterGain1 = actx.createGain();
   const noiseGain = actx.createGain();
@@ -213,7 +217,7 @@ const Basic = () => {
   // analyzer
 
   const analyzer = actx.createAnalyser();
-  analyzer.fftSize = 1024; // 512; // 256; // 32 64 128 256 512 1024 2048 4096 8192 16384 32768
+  analyzer.fftSize = 2048; // 1024; // 512; // 256; // 32 64 128 256 512 1024 2048 4096 8192 16384 32768
   const analyzerBufferLength = analyzer.frequencyBinCount;
   const analyzerData = new Uint8Array(analyzerBufferLength);
 
@@ -224,8 +228,10 @@ const Basic = () => {
   // // // CONNECTIONS // // //
 
   // SOURCES
-  oscGain1.connect(oscMasterGain1);
-  oscGain2.connect(oscMasterGain1);
+  oscGain1.connect(oscMixGain1);
+  oscGain2.connect(oscMixGain2);
+  oscMixGain1.connect(oscMasterGain1);
+  oscMixGain2.connect(oscMasterGain1);
   oscMasterGain1.connect(sourcesGain);
   noiseGain.connect(sourcesGain);
 
@@ -330,11 +336,11 @@ const Basic = () => {
   };
 
   const mixGain = (e) => {
-    oscGain1.gain.setValueAtTime(
+    oscMixGain1.gain.setValueAtTime(
       (100 - e.target.value) / 100,
       actx.currentTime
     );
-    oscGain2.gain.setValueAtTime(e.target.value / 100, actx.currentTime);
+    oscMixGain2.gain.setValueAtTime(e.target.value / 100, actx.currentTime);
   };
 
   const mixReverbGain = (e) => {
@@ -404,10 +410,6 @@ const Basic = () => {
     dist1WetGain.gain.setValueAtTime(newWet, actx.currentTime);
   };
 
-  const changeDistortion2Gain = (e) => {
-    distortion2.gain = e;
-  };
-
   const changeReverbDecay = (e) => {
     const newVal = e;
     const { durationVal, reverse } = reverb1.buffer;
@@ -448,24 +450,6 @@ const Basic = () => {
     }
   };
 
-  const changeQuadrafuzz = (prop, val) => {
-    if (prop === 'mix') {
-      quadrafuzz1.dryGainNode.gain.setValueAtTime(1 - val, actx.currentTime);
-      quadrafuzz1.wetGainNode.gain.setValueAtTime(val, actx.currentTime);
-    } else {
-      quadrafuzz1[prop] = val;
-    }
-  };
-
-  const changeFlanger1 = (prop, val) => {
-    if (prop === 'mix') {
-      flanger1.dryGainNode.gain.setValueAtTime(1 - val, actx.currentTime);
-      flanger1.wetGainNode.gain.setValueAtTime(val, actx.currentTime);
-    } else {
-      flanger1[prop] = val;
-    }
-  };
-
   const changePizzicatoEffect = (effect, prop, val) => {
     if (prop === 'mix') {
       effect.dryGainNode.gain.setValueAtTime(1 - val, actx.currentTime);
@@ -473,6 +457,18 @@ const Basic = () => {
     } else {
       effect[prop] = val;
     }
+  };
+
+  const changeQuadrafuzz = (prop, val) => {
+    changePizzicatoEffect(quadrafuzz1, prop, val);
+  };
+
+  const changeFlanger1 = (prop, val) => {
+    changePizzicatoEffect(flanger1, prop, val);
+  };
+
+  const changeDistortion2Gain = (prop, val) => {
+    changePizzicatoEffect(distortion2, prop, val);
   };
 
   const changeRingModulator = (prop, val) => {
