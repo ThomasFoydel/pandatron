@@ -5,6 +5,7 @@
   height: 100%;
   background: rgba(255, 255, 255, 0.623);
   position: relative;
+  width: 20rem;
 
   .frequency {
     margin-top: 3rem;
@@ -18,41 +19,6 @@
     }
   }
 }
-
-// .select-input {
-//   padding: 0;
-//   border: 1px solid rgb(0, 0, 0);
-//   width: 120px;
-//   border-radius: 3px;
-//   overflow: hidden;
-//   background-color: #fff;
-// }
-
-// select {
-//   padding: 5px 8px;
-//   width: 100%;
-//   border: none;
-//   box-shadow: none;
-//   //   background-color: transparent;
-//   background-image: none;
-//   -webkit-appearance: none;
-//   -moz-appearance: none;
-//   appearance: none;
-//   text-align: center;
-//   text-align-last: center;
-//   -moz-text-align-last: center;
-// }
-
-// select:focus {
-//   outline: none;
-//   text-align: center;
-// }
-
-// select {
-//   text-align: center;
-//   text-align-last: center;
-//   -moz-text-align-last: center;
-// }
 
 .filter1-dropdown-container {
 }

@@ -785,15 +785,14 @@ const Basic = () => {
                     gain: filter1.gain.value,
                   }}
                 />
-              </div>
-              <div className='section2-grid-2'>
+
                 <ADSRController
                   changeADSR={changeADSR}
                   initEnvelope={initEnvelope}
                 />
               </div>
 
-              <div className='section2-grid-3'>
+              <div className='section2-grid-2'>
                 <div className='flex'>
                   <MouseFieldController
                     changeMouseLfo={changeMouseLfo}
@@ -879,6 +878,7 @@ const Basic = () => {
                 initVals={reverb2InitVals}
                 changeEffect={changeReverb2}
               />
+              <MasterGain changeMasterGain={changeMasterGain} />
             </div>
           </div>
 
@@ -888,7 +888,6 @@ const Basic = () => {
             </div>
             <canvas id='canvas' className='canvas' />
           </div>
-          <MasterGain changeMasterGain={changeMasterGain} />
         </div>
       </div>
     </>

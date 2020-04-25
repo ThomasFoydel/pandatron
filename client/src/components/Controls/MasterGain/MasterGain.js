@@ -10,22 +10,18 @@ const MasterGain = ({ changeMasterGain }) => {
   };
   return (
     <div className='master-gain'>
-      <div className='inner'>
-        <div className=''>
-          <h2 className='title'>master gain</h2>
-          <div className='center'>{display.toFixed(2)}</div>
-        </div>
+      <h2 className='title'>master gain</h2>
 
-        <Knob
-          style={{ display: 'inline-block' }}
-          className='knob'
-          min={0}
-          max={100}
-          value={display.toFixed(2)}
-          unlockDistance={10}
-          onChange={updateMasterGain}
-        />
-      </div>
+      <Knob
+        style={{ display: 'inline-block' }}
+        className='knob center'
+        min={0}
+        max={100}
+        value={display.toFixed(2)}
+        unlockDistance={10}
+        onChange={updateMasterGain}
+      />
+      <div className='center'>{display.toFixed(2)}</div>
     </div>
   );
 };
