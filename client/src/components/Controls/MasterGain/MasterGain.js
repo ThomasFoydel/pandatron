@@ -10,7 +10,7 @@ const MasterGain = ({ changeMasterGain }) => {
   };
   return (
     <div className='master-gain'>
-      <h2 className='title'>master gain</h2>
+      <h2 className='title center'>master gain</h2>
 
       <Knob
         style={{ display: 'inline-block' }}

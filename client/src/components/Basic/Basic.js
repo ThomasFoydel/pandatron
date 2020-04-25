@@ -76,7 +76,6 @@ const Basic = () => {
 
   let subOscOctaveOffset = '0';
 
-  // let subOscVol = 0;
   let noiseOscVol = 0;
 
   const oscGain1 = actx.createGain();
@@ -187,15 +186,6 @@ const Basic = () => {
     ratio: 12,
   });
 
-  // const lowPassFilterInitVals = {
-  //   frequency: 400,
-  //   peak: 10,
-  // };
-
-  // const lowPassFilter = new Pizzicato.Effects.LowPassFilter(
-  //   lowPassFilterInitVals
-  // );
-
   const lfo1Osc = actx.createOscillator();
   const lfo1 = actx.createGain();
   const lowPassFilter = actx.createBiquadFilter();
@@ -266,7 +256,6 @@ const Basic = () => {
   delay1Dry.connect(delay1Combined);
   delay1Combined.connect(pingPongDelay);
 
-  //pingpong goes here
   pingPongDelay.connect(reverb1);
   pingPongDelay.connect(reverb1Dry);
 
@@ -282,10 +271,6 @@ const Basic = () => {
 
   connectorGain.connect(lowPassFilter);
   connectorGain.connect(lfo1Dry);
-
-  // SUB SHOULD PASS ALL/MOST FX
-  // limiter.connect(lowPassFilter);
-  // limiter.connect(lfo1Dry);
 
   lowPassFilter.connect(lfo1Wet);
   lfo1Wet.connect(lfo1Combined);
@@ -646,49 +631,28 @@ const Basic = () => {
       ctx.fillRect(0, 0, WIDTH, HEIGHT); // Fade effect, set opacity to 1 for sharper rendering of bars
 
       let r, g, b;
-      let bars = 118; // Set total number of bars you want per frame
+      let bars = 50; // Set total number of bars you want per frame
 
       for (let i = 0; i < bars; i++) {
         barHeight = analyzerData[i] * 2.5;
 
         if (analyzerData[i] > 210) {
-          // pink
-          // r = 255;
-          // g = 0;
-          // b = 255;
-          // white
           r = 255;
           g = 255;
           b = 255;
         } else if (analyzerData[i] > 200) {
-          // yellow
-          // r = 250;
-          // g = 255;
-          // b = 0;
           r = 210;
           g = 210;
           b = 210;
         } else if (analyzerData[i] > 190) {
-          // yellow/green
-          // r = 204;
-          // g = 255;
-          // b = 0;
           r = 160;
           g = 160;
           b = 160;
         } else if (analyzerData[i] > 180) {
-          // blue/green
-          // r = 0;
-          // g = 219;
-          // b = 131;
           r = 120;
           g = 120;
           b = 120;
         } else {
-          // light blue
-          // r = 0;
-          // g = 199;
-          // b = 255;
           r = 80;
           g = 80;
           b = 80;
@@ -711,105 +675,112 @@ const Basic = () => {
       <div className='synth'>
         <div className='main-grid'>
           <div className='main-grid-section-1'>
-            <div className='flex'>
-              <OscController
-                name='osc 1'
-                changeWaveTable={changeWaveTable1}
-                changeOctaveOsc={changeOctaveOsc1}
-                detuneOsc={detuneOsc1}
-                changeGain={changeOsc1Gain}
-                initVals={{
-                  wavetable: wavetable1,
-                  envelope: initEnvelope,
-                  offset: osc1OctaveOffset,
-                  gain: oscGainDefaultVal,
-                }}
-              />
-              <OscController
-                name='osc 2'
-                changeWaveTable={changeWaveTable2}
-                changeOctaveOsc={changeOctaveOsc2}
-                detuneOsc={detuneOsc2}
-                changeGain={changeOsc2Gain}
-                initVals={{
-                  wavetable: wavetable2,
-                  envelope: initEnvelope,
-                  offset: osc2OctaveOffset,
-                  gain: oscGainDefaultVal,
-                }}
-              />
-            </div>
-
-            <div className='osc-mix center'>
-              <div className='center inputcontainer'>
-                <span className='oscname'>osc1</span>
-                <input type='range' onChange={mixGain} />
-                <span className='oscname'>osc2</span>
+            <div className='oscillators-container'>
+              <div className='flex'>
+                <OscController
+                  name='osc 1'
+                  changeWaveTable={changeWaveTable1}
+                  changeOctaveOsc={changeOctaveOsc1}
+                  detuneOsc={detuneOsc1}
+                  changeGain={changeOsc1Gain}
+                  initVals={{
+                    wavetable: wavetable1,
+                    envelope: initEnvelope,
+                    offset: osc1OctaveOffset,
+                    gain: oscGainDefaultVal,
+                  }}
+                />
+                <OscController
+                  name='osc 2'
+                  changeWaveTable={changeWaveTable2}
+                  changeOctaveOsc={changeOctaveOsc2}
+                  detuneOsc={detuneOsc2}
+                  changeGain={changeOsc2Gain}
+                  initVals={{
+                    wavetable: wavetable2,
+                    envelope: initEnvelope,
+                    offset: osc2OctaveOffset,
+                    gain: oscGainDefaultVal,
+                  }}
+                />
               </div>
-            </div>
 
-            <div className='flex'>
-              <OscController
-                name='sub osc'
-                changeWaveTable={changeWaveTableSub}
-                changeOctaveOsc={changeOctaveSub}
-                changeGain={changeSubGain}
-                initVals={{
-                  wavetable: subOscType,
-                  envelope: initEnvelope,
-                  offset: subOscOctaveOffset,
-                  gain: oscGainDefaultVal,
-                }}
-              />
-              <NoiseOscController
-                changeNoiseGain={changeNoiseGain}
-                changeNoiseType={changeNoiseType}
-                initGain={noiseOscVol}
-              />
+              <div className='osc-mix center'>
+                <div className='center inputcontainer'>
+                  <span className='oscname'>osc1</span>
+                  <input type='range' onChange={mixGain} />
+                  <span className='oscname'>osc2</span>
+                </div>
+              </div>
+
+              <div className='flex'>
+                <OscController
+                  name='sub osc'
+                  changeWaveTable={changeWaveTableSub}
+                  changeOctaveOsc={changeOctaveSub}
+                  changeGain={changeSubGain}
+                  initVals={{
+                    wavetable: subOscType,
+                    envelope: initEnvelope,
+                    offset: subOscOctaveOffset,
+                    gain: oscGainDefaultVal,
+                  }}
+                />
+                <NoiseOscController
+                  changeNoiseGain={changeNoiseGain}
+                  changeNoiseType={changeNoiseType}
+                  initGain={noiseOscVol}
+                />
+              </div>
             </div>
           </div>
           <div className='main-grid-section-2'>
-            <div className='section2-grid'>
-              <div className='section2-grid-1'>
-                <FilterController
-                  changeFilter1Type={changeFilter1Type}
-                  changeFilter1Freq={changeFilter1Freq}
-                  changeFilter1Q={changeFilter1Q}
-                  changeFilter1Mix={changeFilter1Mix}
-                  changeFilter1Gain={changeFilter1Gain}
-                  initParams={{
-                    type: filter1.type,
-                    frequency: filter1.frequency.value,
-                    Q: filter1.Q.value,
-                    mix: 100 - filter1.dryWet,
-                    gain: filter1.gain.value,
-                  }}
-                />
+            <div className='adsr-filter-mouse'>
+              <div className='section2-grid'>
+                <div className='section2-grid-1'>
+                  <FilterController
+                    changeFilter1Type={changeFilter1Type}
+                    changeFilter1Freq={changeFilter1Freq}
+                    changeFilter1Q={changeFilter1Q}
+                    changeFilter1Mix={changeFilter1Mix}
+                    changeFilter1Gain={changeFilter1Gain}
+                    initParams={{
+                      type: filter1.type,
+                      frequency: filter1.frequency.value,
+                      Q: filter1.Q.value,
+                      mix: 100 - filter1.dryWet,
+                      gain: filter1.gain.value,
+                    }}
+                  />
 
-                <ADSRController
-                  changeADSR={changeADSR}
-                  initEnvelope={initEnvelope}
-                />
-              </div>
-
-              <div className='section2-grid-2'>
-                <div className='flex'>
-                  <MouseFieldController
-                    changeMouseLfo={changeMouseLfo}
-                    toggleLfo1={toggleLfo1}
-                  >
-                    <div id='chord-panda' className='chord-panda'>
-                      <img
-                        src={currentPanda}
-                        alt='panda-display'
-                        id='panda-display'
-                        className='panda-display'
-                      />
-                    </div>
-                  </MouseFieldController>
+                  <ADSRController
+                    changeADSR={changeADSR}
+                    initEnvelope={initEnvelope}
+                  />
                 </div>
-                <div>
-                  <h6 id='chord-display' className='center chord-display'></h6>
+
+                <div className='section2-grid-2'>
+                  <div className='flex'>
+                    <MouseFieldController
+                      changeMouseLfo={changeMouseLfo}
+                      toggleLfo1={toggleLfo1}
+                    >
+                      <div id='chord-panda' className='chord-panda'>
+                        <img
+                          src={currentPanda}
+                          alt='panda-display'
+                          id='panda-display'
+                          className='panda-display'
+                        />
+                      </div>
+                    </MouseFieldController>
+                  </div>
+                  <div>
+                    <h6
+                      id='chord-display'
+                      className='center chord-display'
+                    ></h6>
+                  </div>
                 </div>
               </div>
             </div>
@@ -849,7 +820,7 @@ const Basic = () => {
               />
             </div>
 
-            <div className='flex'>
+            <div className='effect-rack flex'>
               <DelayController
                 changeMix={changeDelayMix}
                 changeDelayTime={changeDelayTime}
