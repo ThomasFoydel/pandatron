@@ -40,7 +40,7 @@ const FilterController = ({
   const showQInput = type !== 'lowshelf' && type !== 'highshelf';
   return (
     <div className='filter1 '>
-      <h2 className='center'>filter one</h2>
+      <h1 className='center'>filter</h1>
 
       <div className='sliders'>
         <div className='frequency'>

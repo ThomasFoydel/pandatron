@@ -116,7 +116,7 @@ const OscController = ({
       </div>
       <div className='octave center'>
         <b>octave</b>
-        <div className=' osccontrol-dropdown'>
+        <div className='osccontrol-dropdown'>
           <DropDown
             options={[
               { val: 2, text: '+2' },

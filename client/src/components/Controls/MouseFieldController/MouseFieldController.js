@@ -68,9 +68,8 @@ const MouseFieldController = ({ changeMouseLfo, toggleLfo1, children }) => {
               }
         }
       >
-        <div className='center'>x: {(xVal * 100).toFixed(0)}</div>
-        <div className='center'>y: {(yVal * 100).toFixed(0)} </div>
-        {/* <div className='grid' style={{ background: `url(${grid})` }} /> */}
+        {/* <div className='center'>x: {(xVal * 100).toFixed(0)}</div>
+        <div className='center'>y: {(yVal * 100).toFixed(0)} </div> */}
         {children}
       </animated.div>
     </>
