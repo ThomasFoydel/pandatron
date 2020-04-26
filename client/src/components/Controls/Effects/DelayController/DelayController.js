@@ -18,9 +18,9 @@ const DelayController = ({ changeDelayTime, initVals, changeMix }) => {
 
   return (
     <div className='delay'>
-      <h2 className='center'>delay</h2>
+      <h2 className='center title'>delay</h2>
       <div className='time'>
-        <h6 className='title'>time</h6>
+        <h6 className='property'>time</h6>
 
         <Knob
           style={{ display: 'inline-block' }}
@@ -35,7 +35,7 @@ const DelayController = ({ changeDelayTime, initVals, changeMix }) => {
       </div>
 
       <div className='amount'>
-        <h6 className='title'>wet / dry</h6>
+        <h6 className='property'>mix</h6>
         <Knob
           style={{ display: 'inline-block' }}
           className='center knob'

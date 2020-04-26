@@ -5,9 +5,12 @@
   margin: 0.2rem 0.4rem;
   width: 10rem;
   background: rgb(250, 248, 248);
-
+  .property {
+    // background: white;
+  }
   .inner {
-    width: 100%;
+    // background: red;
+    width: 10rem;
     .knob {
       max-width: 40px;
     }

@@ -8,23 +8,23 @@ const DistortionController = ({
   initVals: { amountVal, mixVal },
 }) => {
   const [amount, setAmount] = useState(amountVal);
-  const [mix, setMix] = useState(mixVal.toFixed(0));
+  const [mix, setMix] = useState(mixVal.toFixed(2));
   const updateAmount = (e) => {
-    setAmount(e);
-    changeDistortion1Amount(e);
+    const { value } = e.target;
+    setAmount(value);
+    changeDistortion1Amount(value);
   };
 
   const updateMix = (e) => {
-    const { value } = e.target;
-    setMix(value);
-    changeDistortion1Mix(value);
+    setMix(e.toFixed(2));
+    changeDistortion1Mix(e);
   };
   const displayMixVal = (+mix).toFixed(0);
   return (
     <div className='distortion'>
       <div className='center inner'>
         <h2>distortion I</h2>
-        <h6 className='center'>amount</h6>
+        <h6 className='property'>amount</h6>
         <Knob
           className='knob'
           style={{ display: 'inline-block' }}
@@ -34,9 +34,20 @@ const DistortionController = ({
           unlockDistance={10}
           onChange={updateAmount}
         />
+        {/* <input value={amount} type='range' onChange={updateAmount} /> */}
         <div>{(amount * 5).toFixed(2)}</div>
-        <h6 className='center'>dry/wet</h6>
-        <input value={displayMixVal} type='range' onChange={updateMix} />
+        <h6 className='property'>mix</h6>
+        {/* <input value={displayMixVal} type='range' onChange={updateMix} /> */}
+
+        <Knob
+          className='knob'
+          style={{ display: 'inline-block' }}
+          min={0}
+          max={100}
+          value={displayMixVal}
+          unlockDistance={10}
+          onChange={updateMix}
+        />
         <div className='center'>{mix}</div>
       </div>
     </div>

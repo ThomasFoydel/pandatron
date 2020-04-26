@@ -1,7 +1,6 @@
 .synth {
   margin-left: 50%;
   transform: translateX(-50%);
-
   height: 90vh;
   min-width: 1200px;
   max-width: 1200px;
@@ -10,7 +9,7 @@
 .osc-mix {
   width: 36rem;
   margin: 1rem;
-  border: 2px solid black;
+  border: 2px solid rgba(0, 0, 0, 0);
   border-radius: 5px;
   z-index: 4;
   background: rgb(245, 245, 245);
@@ -41,9 +40,9 @@
   height: 84rem;
   border-radius: 5px;
 
-  box-shadow: 2rem 2rem 8rem rgba(0, 0, 0, 0.4),
-    -2rem -2rem 8rem rgba(247, 254, 255, 0.4);
-  background: linear-gradient(125deg, rgb(201, 201, 201), rgb(255, 255, 255));
+  box-shadow: 1.4rem 2rem 8rem rgba(0, 0, 0, 0.4),
+    -1rem -1rem 8rem rgba(247, 254, 255, 0.6);
+  background: linear-gradient(125deg, rgb(196, 196, 196), rgb(245, 245, 245));
   padding: 1rem;
   margin-bottom: 10rem;
 }
@@ -87,7 +86,6 @@
 
 .oscillators-container {
   border: 2px solid rgba(0, 0, 0, 0);
-  // background: rgba(245, 245, 245, 0.4);
   height: 57.5rem;
   background: rgba(0, 0, 0, 0.05);
   border-radius: 5px;
@@ -95,7 +93,6 @@
 }
 
 .adsr-filter-mouse {
-  // background: rgba(0, 0, 0, 0.1);
   background: rgba(255, 255, 255, 0.3);
   border-radius: 5px;
   padding: 1rem;
@@ -126,7 +123,6 @@
   display: flex;
   padding: 1rem;
   border-radius: 5px;
-  // filter: invert(180);
 }
 
 .chord-display {

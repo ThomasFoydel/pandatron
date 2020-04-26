@@ -6,26 +6,19 @@
   width: 10rem;
   background: rgb(250, 248, 248);
   margin: 0.2rem;
-  .time {
-    width: 100%;
-    .title {
-      text-align: center;
-      width: 100%;
-    }
-  }
-  .title {
+
+  .property {
     height: 1rem;
+    text-align: center;
+    width: 100%;
   }
 
-  .amount {
-    width: 100%;
-    .title {
-      text-align: center;
-      width: 100%;
-    }
-  }
   .knob {
     max-width: 5rem;
-    margin-bottom: -0.3rem;
+    margin-bottom: -0.6rem;
+  }
+
+  .value-display {
+    margin-bottom: 1.4rem;
   }
 }

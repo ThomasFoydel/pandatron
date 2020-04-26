@@ -33,7 +33,7 @@ const ReverbController = ({
 
   return (
     <div className='reverb'>
-      <h2 className='center'>reverb</h2>
+      <h2 className='center title'>reverb</h2>
       <div className='slider-input'>
         <div className='display'>
           <b>decay</b> {decay}

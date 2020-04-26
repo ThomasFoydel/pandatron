@@ -18,8 +18,7 @@ html {
   background-size: cover;
   height: 100vh;
   min-width: 1200px;
-  background-color: rgb(131, 131, 131);
-  padding-left: 0.5rem;
+  background-color: rgb(160, 160, 160);
 }
 
 body {
@@ -40,13 +39,21 @@ body {
   text-align: center;
 }
 
+.space {
+  height: 9rem;
+}
+
 .synthname {
   font-family: 'Lobster', 'sans-serif';
-  font-size: 5rem;
+  font-size: 6rem;
   letter-spacing: 2rem;
   margin-left: -2rem;
   text-align: center;
-  color: white;
+  color: rgb(41, 41, 41);
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 h1,
 h2,
