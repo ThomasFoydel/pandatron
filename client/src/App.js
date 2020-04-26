@@ -1,6 +1,6 @@
 import React from 'react';
 import Basic from 'components/Basic/Basic';
-// import Register from 'components/Auth/Register/Register';
+import logo from 'imgs/logo/pandatronlogogradient.png';
 import './App.scss';
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
     <div>
       <div className='space'></div>
       <Basic />
-      <h1 className='synthname'>PANDATRON</h1>
+      <img className='synthname' src={logo} alt='logo' />
     </div>
   );
 }

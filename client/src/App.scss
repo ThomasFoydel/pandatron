@@ -44,16 +44,11 @@ body {
 }
 
 .synthname {
-  font-family: 'Lobster', 'sans-serif';
-  font-size: 6rem;
-  letter-spacing: 2rem;
-  margin-left: -2rem;
-  text-align: center;
-  color: rgb(41, 41, 41);
   position: absolute;
-  top: 0;
+  top: 1rem;
   left: 50%;
   transform: translateX(-50%);
+  width: 60rem;
 }
 h1,
 h2,
