@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useContainerDimensions } from 'util/custom-hooks';
 import { animated, useSpring, config } from 'react-spring';
 import './MouseFieldController.scss';
-import grid from 'imgs/background/grid.png';
 
 const MouseFieldController = ({ changeMouseLfo, toggleLfo1, children }) => {
   const [springOn, setSpringOn] = useState(false);
@@ -46,9 +45,12 @@ const MouseFieldController = ({ changeMouseLfo, toggleLfo1, children }) => {
   };
 
   const animationProps = useSpring({
-    background: `radial-gradient( rgba(${xVal * 255},0, ${
-      yVal * 90
-    }, 0.9), rgba(${yVal * 255},0, ${xVal * 90}, 0.9))`,
+    // background: `radial-gradient( rgba(${xVal * 255},0, ${
+    //   yVal * 90
+    // }, 0.9), rgba(${yVal * 255},0, ${xVal * 90}, 0.9))`,
+    background: `radial-gradient( rgba(${xVal * 200 + 10},10, ${
+      yVal * 40 + 10
+    }, 0.9), rgba(${yVal * 200 + 10},10, ${xVal * 40 + 10}, 0.9))`,
     config: config.molasses,
   });
   return (

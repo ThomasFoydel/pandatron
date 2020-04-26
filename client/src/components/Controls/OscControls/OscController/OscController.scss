@@ -4,9 +4,9 @@
 
   border-radius: 5px;
   position: relative;
-  background: linear-gradient(120deg, rgb(204, 204, 204), rgb(240, 240, 240));
-  box-shadow: 0.5rem 0.2rem 3rem rgba(255, 255, 255, 0.4),
-    -0.2rem -0.2rem 3rem rgba(0, 0, 0, 0.4);
+  background: linear-gradient(120deg, rgb(240, 240, 240), rgb(204, 204, 204));
+  // box-shadow: 0.5rem 0.2rem 3rem rgba(255, 255, 255, 0.4),
+  //   -0.2rem -0.2rem 3rem rgba(0, 0, 0, 0.4);
   padding: 0.5rem 0;
   filter: invert(180);
   .name {

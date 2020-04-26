@@ -510,9 +510,10 @@ const Basic = () => {
       height: 68,
       octaves: 2,
       startNote: 'C4',
-      whiteKeyColour: 'black',
-      blackKeyColour: 'white',
-      activeColour: 'red',
+      whiteKeyColour: '#1c1c1c',
+      blackKeyColour: '#f7f7f7',
+      activeColour: '#c70c0c',
+      borderColour: '#1c1c1c',
     });
     let nodes = [];
     let notesForChordAnalysis = [];
@@ -627,7 +628,7 @@ const Basic = () => {
       // Results in a normalized array of values between 0 and 255
       // Before this step, dataArray's values are all zeros (but with length of 8192)
 
-      ctx.fillStyle = 'rgba(0,0,0,0.2)'; // Clears canvas before rendering bars (black with opacity 0.2)
+      ctx.fillStyle = '#1c1c1c'; // Clears canvas before rendering bars (black with opacity 0.2)
       ctx.fillRect(0, 0, WIDTH, HEIGHT); // Fade effect, set opacity to 1 for sharper rendering of bars
 
       let r, g, b;
