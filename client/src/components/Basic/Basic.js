@@ -3,6 +3,7 @@ import QwertyHancock from '../../qwerty-hancock/dist/qwerty-hancock';
 import Pizzicato from 'pizzicato';
 import oscClass from './oscClass';
 import noiseOscClass from './noiseOscClass';
+import preview from 'imgs/preview/pandatronpreview.png';
 
 import chordAnalyzer from 'util/chordAnalyzer';
 import {
@@ -861,6 +862,7 @@ const Basic = () => {
             <canvas id='canvas' className='canvas' />
           </div>
         </div>
+        <img src={preview} />
       </div>
     </>
   );
