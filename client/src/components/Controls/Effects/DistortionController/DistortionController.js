@@ -10,9 +10,8 @@ const DistortionController = ({
   const [amount, setAmount] = useState(amountVal);
   const [mix, setMix] = useState(mixVal.toFixed(2));
   const updateAmount = (e) => {
-    const { value } = e.target;
-    setAmount(value);
-    changeDistortion1Amount(value);
+    setAmount(e);
+    changeDistortion1Amount(e);
   };
 
   const updateMix = (e) => {
