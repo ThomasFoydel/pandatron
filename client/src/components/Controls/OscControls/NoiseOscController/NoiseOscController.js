@@ -27,7 +27,7 @@ const NoiseOscController = ({ changeNoiseGain, changeNoiseType, initGain }) => {
           className='knob'
           style={{ display: 'inline-block' }}
           min={0}
-          max={1000}
+          max={100}
           value={gain * 1000}
           unlockDistance={10}
           onChange={updateGain}

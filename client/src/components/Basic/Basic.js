@@ -58,7 +58,7 @@ const Basic = () => {
   const actx = Pizzicato.context;
 
   //OSCILLATOR SETTINGS
-  let attack = 0.03;
+  let attack = 0.0;
   let decay = 1;
   let sustain = 1;
   let release = 0.3;
@@ -191,6 +191,7 @@ const Basic = () => {
   const lowPassFilter = actx.createBiquadFilter();
   const lfo1Wet = actx.createGain();
   const lfo1Dry = actx.createGain();
+
   lfo1Wet.gain.value = 0;
   lfo1Dry.gain.value = 1;
   const lfo1Combined = actx.createGain();

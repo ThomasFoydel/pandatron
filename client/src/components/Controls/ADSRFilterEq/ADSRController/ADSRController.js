@@ -21,7 +21,7 @@ const ADSRController = ({ changeADSR, initEnvelope }) => {
           <span className='aspect-initial'>A</span>
           <input
             type='range'
-            max='500'
+            max='200'
             id='attack'
             value={attack * 100}
             onChange={updateADSR}
@@ -32,7 +32,7 @@ const ADSRController = ({ changeADSR, initEnvelope }) => {
           <input
             type='range'
             id='decay'
-            max='500'
+            max='200'
             value={decay * 100}
             onChange={updateADSR}
           />
@@ -42,7 +42,7 @@ const ADSRController = ({ changeADSR, initEnvelope }) => {
           <input
             type='range'
             id='sustain'
-            max='500'
+            max='200'
             value={sustain * 100}
             onChange={updateADSR}
           />
@@ -52,7 +52,7 @@ const ADSRController = ({ changeADSR, initEnvelope }) => {
           <input
             type='range'
             id='release'
-            max='500'
+            max='200'
             value={release * 100}
             onChange={updateADSR}
           />
