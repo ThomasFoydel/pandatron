@@ -180,7 +180,7 @@ const Basic = () => {
   };
   const reverb2 = new Pizzicato.Effects.Reverb(reverb2InitVals);
 
-  const compressor = actx.createDynamicsCompressor();
+  // const compressor = actx.createDynamicsCompressor();
   const limiter = new Pizzicato.Effects.Compressor({
     threshold: -24,
     ratio: 12,
@@ -248,10 +248,9 @@ const Basic = () => {
 
   flanger1.connect(ringModulator);
 
-  ringModulator.connect(pingPongDelay);
+  ringModulator.connect(delay1);
+  ringModulator.connect(delay1Dry);
 
-  compressor.connect(delay1);
-  compressor.connect(delay1Dry);
   delay1.connect(delay1Wet);
   delay1Wet.connect(delay1Combined);
   delay1Dry.connect(delay1Combined);
