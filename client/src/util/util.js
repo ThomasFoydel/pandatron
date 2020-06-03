@@ -170,12 +170,8 @@ export const calcFreq = (frequency, offset) => {
       return note.freq.toFixed(2) === frequency.toFixed(2);
     });
     const shiftedIndex = unshiftedIndex + octaveOffset;
-    // if (noteFreqs[shiftedIndex]) {
     calculatedFrequency = noteFreqs[shiftedIndex].freq;
-    // }
   }
-
-  // return 110;
   return calculatedFrequency;
 };
 
