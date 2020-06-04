@@ -17,7 +17,8 @@ const ADSRController = ({ changeADSR, initEnvelope }) => {
   return (
     <div className='adsr'>
       <div className='inner-rotate'>
-        <div>
+        <div className='aspect'>
+          <div className='val attack-val'>{attack.toFixed(2)}</div>
           <span className='aspect-initial'>A</span>
           <input
             type='range'
@@ -27,7 +28,8 @@ const ADSRController = ({ changeADSR, initEnvelope }) => {
             onChange={updateADSR}
           />
         </div>
-        <div>
+        <div className='aspect'>
+          <div className='val decay-val'>{decay.toFixed(2)}</div>
           <span className='aspect-initial'>D</span>
           <input
             type='range'
@@ -37,7 +39,8 @@ const ADSRController = ({ changeADSR, initEnvelope }) => {
             onChange={updateADSR}
           />
         </div>
-        <div>
+        <div className='aspect'>
+          <div className='val sustain-val'>{sustain.toFixed(2)}</div>
           <span className='aspect-initial'>S</span>
           <input
             type='range'
@@ -47,7 +50,8 @@ const ADSRController = ({ changeADSR, initEnvelope }) => {
             onChange={updateADSR}
           />
         </div>
-        <div>
+        <div className='aspect'>
+          <div className='val release-val'>{release.toFixed(2)}</div>
           <span className='aspect-initial'>R</span>
           <input
             type='range'
@@ -58,12 +62,7 @@ const ADSRController = ({ changeADSR, initEnvelope }) => {
           />
         </div>
       </div>
-      <div className='value-displays'>
-        <div className='attack-val'>{attack.toFixed(2)}</div>
-        <div className='decay-val'>{decay.toFixed(2)}</div>
-        <div className='sustain-val'>{sustain.toFixed(2)}</div>
-        <div className='release-val'>{release.toFixed(2)}</div>
-      </div>
+      <div className='value-displays'></div>
     </div>
   );
 };

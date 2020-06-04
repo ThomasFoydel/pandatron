@@ -1,39 +1,70 @@
 .adsr {
-  height: 100%;
-  position: relative;
-  padding: 0.2rem;
-  height: 24rem;
-  width: 20rem;
-
-  .inner-rotate {
-    transform: rotate(270deg) translateX(-2rem);
-
-    div {
-      input {
-        margin: 1rem;
-        width: 75%;
-      }
-    }
+  transform: rotate(270deg);
+  width: 23rem;
+  // background: red;
+  input {
+    width: 15rem;
+    margin-left: 1rem;
+    margin-top: 0.3rem;
   }
-  .value-displays {
+  .aspect {
     display: flex;
-    width: 100%;
-    position: absolute;
-    bottom: 0rem;
-    left: 2.3rem;
-    div {
-      margin: 0 0.5rem;
-      width: 2.9rem;
-      padding: 0.1rem 0rem;
-      border: 1px solid black;
-      border-radius: 5px;
-      text-align: center;
-    }
+    margin: 2rem 0;
+  }
+  .aspect-initial {
+    text-align: center;
+    // height: 2.5rem;
+    width: 2rem;
+    transform: rotate(90deg);
+  }
+  .val {
+    background: white;
+    padding: 0.2rem;
+    border-radius: 0.2rem;
+    text-align: center;
+    width: 2.9rem;
+    // height: 2.5rem;
+    transform: rotate(90deg);
   }
 }
-.aspect-initial {
-  display: inline-block;
-  transform: rotate(90deg) translateX(-0.4rem);
-  margin-right: 1rem;
-  font-weight: bold;
-}
+// .adsr {
+//   height: 100%;
+//   position: relative;
+//   padding: 0.2rem;
+//   height: 23rem;
+//   width: 20rem;
+
+//   .inner-rotate {
+//     background: red;
+//     margin-left: 0.2rem;
+//     transform: rotate(270deg) translateX(-2rem);
+
+//     div {
+//       input {
+//         margin: 1.2rem 0.6rem;
+//         width: 14rem;
+//       }
+//     }
+//   }
+//   .value-displays {
+//     display: flex;
+//     width: 100%;
+//     position: absolute;
+//     bottom: 0rem;
+//     left: 2.3rem;
+//     div {
+//       margin: 0 0.5rem;
+//       width: 2.9rem;
+//       padding: 0.1rem 0rem;
+//       border: 1px solid black;
+//       border-radius: 5px;
+//       text-align: center;
+//     }
+//   }
+// }
+// .aspect-initial {
+//   display: inline-block;
+//   transform: rotate(90deg) translateX(-0.4rem);
+//   margin-right: 1rem;
+//   font-weight: bold;
+// }
