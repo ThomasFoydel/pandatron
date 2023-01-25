@@ -1,0 +1,22 @@
+.oscMix {
+  height: 4rem;
+  width: 36rem;
+  margin: 1rem;
+  border-radius: 5px;
+  z-index: 4;
+  background: linear-gradient(120deg, rgb(214, 214, 214), rgb(245, 245, 245));
+  .inputContainer {
+    width: 100%;
+    padding: 0.4rem 0;
+    .oscName {
+      font-size: 1.2rem;
+      display: inline-block;
+      transform: translateY(-0.4rem);
+      margin: 0 1rem;
+    }
+    input {
+      margin-top: 0.7rem;
+      width: 70%;
+    }
+  }
+}

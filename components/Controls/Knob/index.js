@@ -1,13 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 
-const Knob = ({ onChange, className, style }) => {
+const Knob = ({ onChange, value, className, style, min, max }) => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       window.addEventListener('mouseup', handleMouseUp)
       window.addEventListener('mousemove', handleMouseMove)
     }
   }, [])
-  const [position, setPosition] = useState(0)
+  console.log({ value, max, valdivmax: value / max })
+  console.log('(value / max) * 360: ', (value / max) * 360)
+  // const [position, setPosition] = useState(0)
   const mouseDown = useRef(false)
   const startY = useRef(0)
 
@@ -23,8 +25,9 @@ const Knob = ({ onChange, className, style }) => {
       let newPosition = (startY.current - e.clientY) * 2
       if (newPosition < 0) newPosition = 0
       if (newPosition > 360) newPosition = 360
-      if (onChange) onChange(newPosition)
-      setPosition(newPosition)
+      const relativePosition = (newPosition / 360) * max
+      if (onChange) onChange(relativePosition)
+      // setPosition(newPosition)
     }
   }
 
@@ -171,7 +174,9 @@ const Knob = ({ onChange, className, style }) => {
               id='knob'
               transform='translate(27.431373, 27.431373)'
               style={{
-                transform: `rotate(${position}deg) translateY(25px) translateX(25px)`,
+                transform: `rotate(${
+                  (value / max) * 360
+                }deg) translateY(25px) translateX(25px)`,
                 transformOrigin: '96px 96px'
               }}>
               <circle

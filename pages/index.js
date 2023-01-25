@@ -3,8 +3,8 @@ import dynamic from 'next/dynamic'
 import styles from '../styles/Home.module.scss'
 import logo from '../assets/imgs/logo/logo.png'
 
-const DynamicBasic = dynamic(() => import('../components/Basic/Basic'), {
-  loading: () => 'Loading...',
+const Basic = dynamic(() => import('../components/Basic/Basic'), {
+  ssr: false
 })
 
 export default function Home() {
@@ -16,7 +16,7 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <div className={styles.space} />
-      <DynamicBasic />
+      <Basic />
       <img className={styles.synthname} src={logo.src} alt='logo' />
     </div>
   )
