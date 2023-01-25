@@ -8,7 +8,6 @@ const Oscillators = () => {
     globalState
 
   const detuneOsc1 = (value) => {
-    console.log(value)
     setGlobalState({ type: 'detuneOsc1', payload: { value } })
   }
 
