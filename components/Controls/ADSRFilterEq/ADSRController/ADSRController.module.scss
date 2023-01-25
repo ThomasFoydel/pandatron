@@ -1,0 +1,27 @@
+.adsr {
+  transform: rotate(270deg);
+  width: 23rem;
+
+  input {
+    width: 15rem;
+    margin-left: 1rem;
+    margin-top: 0.3rem;
+  }
+  .aspect {
+    display: flex;
+    margin: 2rem 0;
+  }
+  .aspectInitial {
+    text-align: center;
+    width: 2rem;
+    transform: rotate(90deg);
+  }
+  .val {
+    background: white;
+    padding: 0.2rem;
+    border-radius: 0.2rem;
+    text-align: center;
+    width: 2.9rem;
+    transform: rotate(90deg);
+  }
+}

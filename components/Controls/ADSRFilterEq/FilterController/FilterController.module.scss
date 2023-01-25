@@ -1,0 +1,20 @@
+.filter1 {
+  border: 2px solid rgba(0, 0, 0, 0);
+  border-radius: 5px;
+  height: 100%;
+  background: #faf8f8;
+  position: relative;
+  width: 20rem;
+
+  .frequency {
+    margin-top: 3rem;
+  }
+
+  .sliders {
+    position: absolute;
+    width: 100%;
+    input {
+      width: 90%;
+    }
+  }
+}

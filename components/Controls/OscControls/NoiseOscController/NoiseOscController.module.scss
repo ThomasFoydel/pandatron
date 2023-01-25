@@ -1,0 +1,29 @@
+.noiseOscControl {
+  width: 17rem;
+  margin: 0 1rem;
+  border-radius: 5px;
+  position: relative;
+  background: linear-gradient(120deg, rgb(240, 240, 240), rgb(204, 204, 204));
+  filter: invert(180);
+
+  .name {
+    font-size: 2rem;
+    letter-spacing: 0.2rem;
+    width: 12rem;
+    white-space: nowrap;
+    margin-top: 0.5rem;
+  }
+
+  .dropdown {
+    position: absolute;
+    top: 4.2rem;
+  }
+  .gainKnob {
+    margin-top: 8.4rem;
+  }
+  .knob {
+    display: inline-block;
+    max-width: 5rem;
+    max-height: 5rem;
+  }
+}
