@@ -5,7 +5,7 @@ import {
   findWithAttr,
   impulseResponse,
   makeDistortionCurve,
-  noteFreqs
+  noteFreqs,
 } from '../util/util'
 import oscClass from '../util/classes/osc'
 import noiseOscClass from '../util/classes/noise'
@@ -23,7 +23,9 @@ const initialValues = {
   filter1: {
     type: 'highpass',
     dryWet: 1,
-    gain: 1
+    gain: 1,
+    Q: 0,
+    frequency: 1000,
   },
   filter1WetGain: 1,
   filter1DryGain: 0,
@@ -33,7 +35,7 @@ const initialValues = {
     midLowGain: 0.8,
     midHighGain: 0.5,
     highGain: 0.6,
-    mix: 0
+    mix: 0,
   },
   quadrafuzzDryGain: 1,
   quadrafuzzWetGain: 0,
@@ -42,17 +44,17 @@ const initialValues = {
     speed: 0.2,
     depth: 0.1,
     feedback: 0.1,
-    mix: 0
+    mix: 0,
   },
   ringModulator: {
     speed: 10,
     distortion: 4,
-    mix: 0
+    mix: 0,
   },
   pingPongDelay: {
     feedback: 0.2,
     time: 0.4,
-    mix: 0
+    mix: 0,
   },
   delay1: 5.0,
   delay1Dry: 1,
@@ -62,13 +64,13 @@ const initialValues = {
   reverb1: {
     duration: 4,
     decay: 4,
-    reversed: false
+    reversed: false,
   },
   reverb2: {
     time: 1,
     decay: 0.8,
     reverse: true,
-    mix: 0
+    mix: 0,
   },
   lfo1Wet: 0,
   lfo1Dry: 1,
@@ -77,7 +79,7 @@ const initialValues = {
     attack: 0.0,
     decay: 1,
     sustain: 1,
-    release: 0.3
+    release: 0.3,
   },
 
   wavetable1: 'sawtooth',
@@ -103,7 +105,7 @@ const initialValues = {
 
   lowPassFilter: 0,
   lfo1OscFreq: 0,
-  chordName: ''
+  chordName: '',
 }
 
 const oscGain1 = actx.createGain()
@@ -134,7 +136,7 @@ const distortion1MixedGain = actx.createGain()
 
 const filter1 = actx.createBiquadFilter()
 filter1.type = initialValues.filter1.type
-filter1.dryWet = initialValues.filter1.dryWet
+filter1.dryWet = initialValues.filter1.filter1WetGain
 filter1.gain.setValueAtTime(initialValues.filter1.gain, actx.currentTime)
 
 const filter1WetGain = actx.createGain()
@@ -152,13 +154,9 @@ quadrafuzz.wetGainNode.gain.value = initialValues.quadrafuzzWetGain
 
 const flanger = new Pizzicato.Effects.Flanger(initialValues.flanger)
 
-const ringModulator = new Pizzicato.Effects.RingModulator(
-  initialValues.ringModulator
-)
+const ringModulator = new Pizzicato.Effects.RingModulator(initialValues.ringModulator)
 
-const pingPongDelay = new Pizzicato.Effects.PingPongDelay(
-  initialValues.pingPongDelay
-)
+const pingPongDelay = new Pizzicato.Effects.PingPongDelay(initialValues.pingPongDelay)
 
 const delay1 = actx.createDelay(initialValues.delay1)
 const delay1Dry = actx.createGain()
@@ -185,7 +183,7 @@ const reverb2 = new Pizzicato.Effects.Reverb(initialValues.reverb2)
 
 const limiter = new Pizzicato.Effects.Compressor({
   threshold: -24,
-  ratio: 12
+  ratio: 12,
 })
 
 const lfo1Osc = actx.createOscillator()
@@ -304,7 +302,7 @@ function reducer(state, action) {
       return {
         ...state,
         filter1DryGain: newDryVal,
-        filter1WetGain: newWetVal
+        filter1WetGain: newWetVal,
       }
     }
 
@@ -329,7 +327,7 @@ function reducer(state, action) {
       return {
         ...state,
         oscMixGain1: newOsc1Gain,
-        oscMixGain2: newOsc2Gain
+        oscMixGain2: newOsc2Gain,
       }
     }
 
@@ -442,7 +440,7 @@ function reducer(state, action) {
         effect.wetGainNode.gain.setValueAtTime(val, actx.currentTime)
         return {
           ...state,
-          [effect]: { ...state[effect], wet: val, dry: 1 - val }
+          [effect]: { ...state[effect], wet: val, dry: 1 - val },
         }
       } else {
         effect[prop] = val
@@ -473,7 +471,7 @@ function reducer(state, action) {
       changePizzicatoEffect(ringModulator, prop, val)
       return {
         ...state,
-        ringModulator: { ...state.ringModulator, [prop]: val }
+        ringModulator: { ...state.ringModulator, [prop]: val },
       }
     }
 
@@ -482,7 +480,7 @@ function reducer(state, action) {
       changePizzicatoEffect(pingPongDelay, prop, val)
       return {
         ...state,
-        pingPongDelay: { ...state.pingPongDelay, [prop]: val }
+        pingPongDelay: { ...state.pingPongDelay, [prop]: val },
       }
     }
 
@@ -499,18 +497,12 @@ function reducer(state, action) {
         lfo1Osc.start()
         lfo1Started = true
       }
-      lowPassFilter.frequency.linearRampToValueAtTime(
-        newLowPassFreq,
-        actx.currentTime
-      )
-      lfo1Osc.frequency.linearRampToValueAtTime(
-        newLfo1OscFreq,
-        actx.currentTime
-      )
+      lowPassFilter.frequency.linearRampToValueAtTime(newLowPassFreq, actx.currentTime)
+      lfo1Osc.frequency.linearRampToValueAtTime(newLfo1OscFreq, actx.currentTime)
       return {
         ...state,
         lowPassFilter: newLowPassFreq,
-        lfo1OscFreq: newLfo1OscFreq
+        lfo1OscFreq: newLfo1OscFreq,
       }
     }
 
@@ -551,7 +543,7 @@ function reducer(state, action) {
         osc2Detune,
         wavetable2,
         subOscType,
-        noiseGainAmount
+        noiseGainAmount,
       } = state
 
       const osc1Freq = calcFreq(freq, osc1OctaveOffset)
@@ -567,35 +559,11 @@ function reducer(state, action) {
         noiseGainAmount
       )
 
-      const newOsc1 = new oscClass(
-        actx,
-        wavetable1,
-        osc1Freq,
-        osc1Detune,
-        envelope,
-        oscGain1,
-        freq
-      )
+      const newOsc1 = new oscClass(actx, wavetable1, osc1Freq, osc1Detune, envelope, oscGain1, freq)
 
-      const newOsc2 = new oscClass(
-        actx,
-        wavetable2,
-        osc2Freq,
-        osc2Detune,
-        envelope,
-        oscGain2,
-        freq
-      )
+      const newOsc2 = new oscClass(actx, wavetable2, osc2Freq, osc2Detune, envelope, oscGain2, freq)
 
-      const subOsc = new oscClass(
-        actx,
-        subOscType,
-        subOscFreq,
-        0,
-        envelope,
-        subGain,
-        freq
-      )
+      const subOsc = new oscClass(actx, subOscType, subOscFreq, 0, envelope, subGain, freq)
 
       nodes.push(newOsc1, newOsc2, subOsc, noiseOsc)
 

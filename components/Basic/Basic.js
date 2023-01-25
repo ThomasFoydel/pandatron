@@ -31,6 +31,7 @@ const Basic = () => {
           <div className={styles.adsrFilterMouse}>
             <div className={styles.section2Grid}>
               <div className={styles.section2Grid1}>
+                <FilterController />
                 {/* <FilterController
                   changeFilter1Type={changeFilter1Type}
                   changeFilter1Freq={changeFilter1Freq}
