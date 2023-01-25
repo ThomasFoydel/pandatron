@@ -7,9 +7,7 @@ const Knob = ({ onChange, value, className, style, min, max }) => {
       window.addEventListener('mousemove', handleMouseMove)
     }
   }, [])
-  console.log({ value, max, valdivmax: value / max })
-  console.log('(value / max) * 360: ', (value / max) * 360)
-  // const [position, setPosition] = useState(0)
+
   const mouseDown = useRef(false)
   const startY = useRef(0)
 
@@ -25,11 +23,17 @@ const Knob = ({ onChange, value, className, style, min, max }) => {
       let newPosition = (startY.current - e.clientY) * 2
       if (newPosition < 0) newPosition = 0
       if (newPosition > 360) newPosition = 360
-      const relativePosition = (newPosition / 360) * max
+
+      const ratio = newPosition / 360
+      const difference = max - min
+      const relativeDifference = ratio * difference
+      const relativePosition = min + relativeDifference
+
       if (onChange) onChange(relativePosition)
-      // setPosition(newPosition)
     }
   }
+
+  const rotation = (value / (max - min)) * 360
 
   return (
     <svg
@@ -174,9 +178,7 @@ const Knob = ({ onChange, value, className, style, min, max }) => {
               id='knob'
               transform='translate(27.431373, 27.431373)'
               style={{
-                transform: `rotate(${
-                  (value / max) * 360
-                }deg) translateY(25px) translateX(25px)`,
+                transform: `rotate(${rotation}deg) translateY(25px) translateX(25px)`,
                 transformOrigin: '96px 96px'
               }}>
               <circle

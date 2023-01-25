@@ -14,10 +14,9 @@ const OscController = ({
   name
 }) => {
   const { gain, detune, wavetable } = values
-  console.log({ gain, detune, wavetable })
-  const handleOscGain = (e) => changeGain(e / 1000)
+  const handleOscGain = (e) => changeGain(e)
   const handleWaveTable = (e) => changeWaveTable(e.target.id)
-  const handleDetune = (e) => detuneOsc(e / 10)
+  const handleDetune = (e) => detuneOsc(e)
   const handleOctave = (e) => changeOctaveOsc(e.target.value)
 
   const waveNames = ['sine', 'sawtooth', 'triangle', 'square']
@@ -52,13 +51,12 @@ const OscController = ({
           </div>
           <Knob
             className={styles.knob}
-            style={{ display: 'inline-block' }}
             min={0}
             max={1}
             value={gain}
             onChange={handleOscGain}
           />
-          {/* <div>{gain && (gain * 1000).toFixed(2)}</div> */}
+          <div>{gain.toFixed(2)}</div>
         </div>
 
         {detuneOsc && (
@@ -67,15 +65,13 @@ const OscController = ({
               <h3>detune</h3>
             </div>
             <Knob
-              style={{ display: 'inline-block' }}
               className={styles.knob}
               min={-200}
               max={200}
-              value={detune * 10}
-              unlockDistance={10}
+              value={detune}
               onChange={handleDetune}
             />
-            {/* {detune && detune.toFixed(2)} */}
+            {detune.toFixed(2)}
           </div>
         )}
       </div>

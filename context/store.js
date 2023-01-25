@@ -315,11 +315,9 @@ function reducer(state, action) {
     }
 
     case 'detuneOsc1': {
-      osc1Detune = value
       return { ...state, osc1Detune: value }
     }
     case 'detuneOsc2': {
-      osc2Detune = value
       return { ...state, osc2Detune: value }
     }
 

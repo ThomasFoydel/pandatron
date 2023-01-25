@@ -7,12 +7,23 @@ const Oscillators = () => {
   const { wavetable1, envelope, osc1OctaveOffset, oscGain1, osc1Detune } =
     globalState
 
-  const detuneOsc1 = (e) => console.log('detune', e)
+  const detuneOsc1 = (value) => {
+    console.log(value)
+    setGlobalState({ type: 'detuneOsc1', payload: { value } })
+  }
+
   const changeOsc1Gain = (value) => {
     setGlobalState({ type: 'changeOsc1Gain', payload: { value } })
   }
-  const changeOctaveOsc1 = (e) => console.log('changeOctaveOsc1', e)
-  const changeWaveTable1 = (e) => console.log('changeWaveTable1', e)
+
+  const changeOctaveOsc1 = (value) => {
+    setGlobalState({ type: 'changeOctaveOsc1', payload: { value } })
+  }
+
+  const changeWaveTable1 = (value) => {
+    setGlobalState({ type: 'changeWaveTable1', payload: { value } })
+  }
+
   return (
     <>
       <div className='flex'>
