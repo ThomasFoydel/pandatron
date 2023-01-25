@@ -379,7 +379,7 @@ function reducer(state, action) {
     }
 
     case 'changeSubGain': {
-      subGain.gain.value = e
+      subGain.gain.value = value
       return { ...state, subGain: value }
     }
 

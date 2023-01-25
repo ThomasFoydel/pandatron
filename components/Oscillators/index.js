@@ -9,11 +9,14 @@ const Oscillators = () => {
   const {
     wavetable1,
     wavetable2,
+    subOscType,
     envelope,
     osc1OctaveOffset,
     osc2OctaveOffset,
+    subOscOctaveOffset,
     oscGain1,
     oscGain2,
+    subGain,
     osc1Detune,
     osc2Detune
   } = globalState
@@ -67,23 +70,26 @@ const Oscillators = () => {
       </div>
 
       <div className='flex'>
-        {/* <OscController
-      name='sub osc'
-      changeWaveTable={changeWaveTableSub}
-      changeOctaveOsc={changeOctaveSub}
-      changeGain={changeSubGain}
-      initVals={{
-        wavetable: subOscType,
-        envelope: initEnvelope,
-        offset: subOscOctaveOffset,
-        gain: oscGainDefaultVal
-      }}
-    />
-    <NoiseOscController
-      changeNoiseGain={changeNoiseGain}
-      changeNoiseType={changeNoiseType}
-      initGain={noiseOscVol}
-    /> */}
+        <OscController
+          name='sub osc'
+          updateState={updateState}
+          changeWaveTable='changeWaveTableSub'
+          changeOctaveOsc='changeOctaveSub'
+          changeGain='changeSubGain'
+          values={{
+            wavetable: subOscType,
+            envelope,
+            offset: subOscOctaveOffset,
+            gain: subGain
+          }}
+        />
+        {/* 
+        <NoiseOscController
+          changeNoiseGain={changeNoiseGain}
+          changeNoiseType={changeNoiseType}
+          initGain={noiseOscVol}
+        />
+    */}
       </div>
     </>
   )
