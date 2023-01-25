@@ -6,6 +6,7 @@ import styles from './OscController.module.scss'
 import Knob from '../../Knob'
 
 const OscController = ({
+  updateState,
   changeWaveTable,
   changeOctaveOsc,
   changeGain,
@@ -14,10 +15,10 @@ const OscController = ({
   name
 }) => {
   const { gain, detune, wavetable } = values
-  const handleOscGain = (e) => changeGain(e)
-  const handleWaveTable = (e) => changeWaveTable(e.target.id)
-  const handleDetune = (e) => detuneOsc(e)
-  const handleOctave = (e) => changeOctaveOsc(e.target.value)
+  const handleOscGain = (value) => updateState(changeGain, value)
+  const handleWaveTable = (e) => updateState(changeWaveTable, e.target.id)
+  const handleDetune = (value) => updateState(detuneOsc, value)
+  const handleOctave = (e) => updateState(changeOctaveOsc, e.target.value)
 
   const waveNames = ['sine', 'sawtooth', 'triangle', 'square']
 

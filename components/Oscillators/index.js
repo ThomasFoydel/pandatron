@@ -4,34 +4,31 @@ import OscController from '../Controls/OscControls/OscController/OscController'
 
 const Oscillators = () => {
   const [globalState, setGlobalState] = useContext(CTX)
-  const { wavetable1, envelope, osc1OctaveOffset, oscGain1, osc1Detune } =
-    globalState
+  const {
+    wavetable1,
+    wavetable2,
+    envelope,
+    osc1OctaveOffset,
+    osc2OctaveOffset,
+    oscGain1,
+    oscGain2,
+    osc1Detune,
+    osc2Detune
+  } = globalState
 
-  const detuneOsc1 = (value) => {
-    setGlobalState({ type: 'detuneOsc1', payload: { value } })
-  }
-
-  const changeOsc1Gain = (value) => {
-    setGlobalState({ type: 'changeOsc1Gain', payload: { value } })
-  }
-
-  const changeOctaveOsc1 = (value) => {
-    setGlobalState({ type: 'changeOctaveOsc1', payload: { value } })
-  }
-
-  const changeWaveTable1 = (value) => {
-    setGlobalState({ type: 'changeWaveTable1', payload: { value } })
-  }
+  const updateState = (type, value) =>
+    setGlobalState({ type, payload: { value } })
 
   return (
     <>
       <div className='flex'>
         <OscController
           name='osc 1'
-          changeWaveTable={changeWaveTable1}
-          changeOctaveOsc={changeOctaveOsc1}
-          detuneOsc={detuneOsc1}
-          changeGain={changeOsc1Gain}
+          updateState={updateState}
+          changeWaveTable='changeWaveTable1'
+          changeOctaveOsc='changeOctaveOsc1'
+          detuneOsc='detuneOsc1'
+          changeGain='changeOsc1Gain'
           values={{
             wavetable: wavetable1,
             envelope,
@@ -40,19 +37,21 @@ const Oscillators = () => {
             gain: oscGain1
           }}
         />
-        {/* <OscController
+        <OscController
           name='osc 2'
-          changeWaveTable={changeWaveTable2}
-          changeOctaveOsc={changeOctaveOsc2}
-          detuneOsc={detuneOsc2}
-          changeGain={changeOsc2Gain}
-          initVals={{
+          updateState={updateState}
+          changeWaveTable='changeWaveTable2'
+          changeOctaveOsc='changeOctaveOsc2'
+          detuneOsc='detuneOsc2'
+          changeGain='changeOsc2Gain'
+          values={{
             wavetable: wavetable2,
-            envelope: initEnvelope,
+            envelope,
+            detune: osc2Detune,
             offset: osc2OctaveOffset,
-            gain: oscGainDefaultVal
+            gain: oscGain2
           }}
-        /> */}
+        />
       </div>
 
       {/* <div className={styles.oscMix}>
