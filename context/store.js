@@ -91,7 +91,7 @@ const initialValues = {
   osc2OctaveOffset: 0,
   subOscOctaveOffset: 0,
 
-  noiseOscVol: 0,
+  noiseGainAmount: 0,
 
   oscMixGain1: 0.5,
   oscMixGain2: 0.5,
@@ -384,7 +384,7 @@ function reducer(state, action) {
     }
 
     case 'changeNoiseGain': {
-      return { ...state, noiseOscVol: value }
+      return { ...state, noiseGainAmount: value }
     }
 
     case 'changeDistortion1Amount': {
@@ -546,12 +546,12 @@ function reducer(state, action) {
         osc2OctaveOffset,
         subOscOctaveOffset,
         noiseType,
-        noiseOscVol,
         osc1Detune,
         wavetable1,
         osc2Detune,
         wavetable2,
-        subOscType
+        subOscType,
+        noiseGainAmount
       } = state
 
       const osc1Freq = calcFreq(freq, osc1OctaveOffset)
@@ -564,7 +564,7 @@ function reducer(state, action) {
         envelope,
         noiseGain,
         freq,
-        noiseOscVol
+        noiseGainAmount
       )
 
       const newOsc1 = new oscClass(

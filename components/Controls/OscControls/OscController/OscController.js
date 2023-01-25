@@ -14,7 +14,7 @@ const OscController = ({
   values,
   name
 }) => {
-  const { gain, detune, wavetable } = values
+  const { gain, detune, wavetable, offset } = values
   const handleOscGain = (value) => updateState(changeGain, value)
   const handleWaveTable = (e) => updateState(changeWaveTable, e.target.id)
   const handleDetune = (value) => updateState(detuneOsc, value)
@@ -89,7 +89,7 @@ const OscController = ({
             ]}
             updateFunction={handleOctave}
             inputId={'type'}
-            initVal={{ val: 0, text: '0' }}
+            current={offset}
           />
         </div>
       </div>

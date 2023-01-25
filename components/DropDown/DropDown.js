@@ -2,12 +2,10 @@ import cn from 'classnames'
 import React, { useState } from 'react'
 import styles from './DropDown.module.scss'
 
-const DropDown = ({ options, updateFunction, initVal, inputId }) => {
+const DropDown = ({ options, updateFunction, inputId, current }) => {
   const [opened, setOpened] = useState(false)
-  const [currentVal, setCurrentVal] = useState(initVal.val)
 
   const selectOption = (e) => {
-    setCurrentVal(e)
     setOpened(false)
     updateFunction({ target: { value: e, id: inputId } })
   }
@@ -16,7 +14,7 @@ const DropDown = ({ options, updateFunction, initVal, inputId }) => {
     <div
       className={cn(styles.dropdown, 'center', opened && styles.open)}
       onClick={() => setOpened((o) => !o)}>
-      <div className={cn(styles.closed, styles.option)}>{currentVal}</div>
+      <div className={cn(styles.closed, styles.option)}>{current}</div>
 
       {opened && (
         <div
@@ -26,7 +24,7 @@ const DropDown = ({ options, updateFunction, initVal, inputId }) => {
             <div
               className={cn(
                 styles.option,
-                currentVal === option.val && styles.currentOption
+                current === option.val && styles.currentOption
               )}
               value={option.val}
               id={option.val}

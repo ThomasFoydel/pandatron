@@ -3,6 +3,7 @@ import { CTX } from '../../context/store'
 import OscController from '../Controls/OscControls/OscController/OscController'
 import styles from './Oscillators.module.scss'
 import Range from '../Range'
+import NoiseOscController from '../Controls/OscControls/NoiseOscController/NoiseOscController'
 
 const Oscillators = () => {
   const [globalState, setGlobalState] = useContext(CTX)
@@ -10,6 +11,7 @@ const Oscillators = () => {
     wavetable1,
     wavetable2,
     subOscType,
+    noiseType,
     envelope,
     osc1OctaveOffset,
     osc2OctaveOffset,
@@ -17,6 +19,7 @@ const Oscillators = () => {
     oscGain1,
     oscGain2,
     subGain,
+    noiseGainAmount,
     osc1Detune,
     osc2Detune
   } = globalState
@@ -83,13 +86,12 @@ const Oscillators = () => {
             gain: subGain
           }}
         />
-        {/* 
+
         <NoiseOscController
-          changeNoiseGain={changeNoiseGain}
-          changeNoiseType={changeNoiseType}
-          initGain={noiseOscVol}
+          updateState={updateState}
+          gain={noiseGainAmount}
+          type={noiseType}
         />
-    */}
       </div>
     </>
   )
