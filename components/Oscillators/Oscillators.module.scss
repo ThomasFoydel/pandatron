@@ -2,6 +2,8 @@
   height: 4rem;
   width: 36rem;
   margin: 1rem;
+  margin-left: 50%;
+  transform: translateX(-50%);
   border-radius: 5px;
   z-index: 4;
   background: linear-gradient(120deg, rgb(214, 214, 214), rgb(245, 245, 245));

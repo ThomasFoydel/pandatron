@@ -1,6 +1,8 @@
 import React, { useContext } from 'react'
 import { CTX } from '../../context/store'
 import OscController from '../Controls/OscControls/OscController/OscController'
+import styles from './Oscillators.module.scss'
+import Range from '../Range'
 
 const Oscillators = () => {
   const [globalState, setGlobalState] = useContext(CTX)
@@ -18,6 +20,8 @@ const Oscillators = () => {
 
   const updateState = (type, value) =>
     setGlobalState({ type, payload: { value } })
+
+  const mixGain = (e) => updateState('mixGain', e.target.value)
 
   return (
     <>
@@ -54,13 +58,13 @@ const Oscillators = () => {
         />
       </div>
 
-      {/* <div className={styles.oscMix}>
-        <div className={cn('center', styles.inputContainer)}>
+      <div className={styles.oscMix}>
+        <div className={styles.inputContainer}>
           <span className={styles.oscName}>osc1</span>
           <Range onChange={mixGain} />
           <span className={styles.oscName}>osc2</span>
         </div>
-      </div> */}
+      </div>
 
       <div className='flex'>
         {/* <OscController
