@@ -1,79 +1,62 @@
 import cn from 'classnames'
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import styles from './EffectController.module.scss'
+import { CTX } from '../../../../context/store'
 import Range from '../../../Range'
 import Knob from '../../Knob'
 
-const EffectController = ({ effectName, initVals, changeEffect, minified }) => {
-  const [display, setDisplay] = useState(initVals)
-  const [reversed, setReversed] = useState(false)
+const EffectController = ({ name, values, minified }) => {
+  const [globalState, setGlobalState] = useContext(CTX)
 
-  const update = (e) => {
-    const { id, value } = e.target
-    changeEffect(id, value / 100)
-    setDisplay((display) => {
-      return { ...display, [id]: value }
-    })
-  }
-
-  const toggleReverse = () => {
-    changeEffect('reverse', !reversed)
-    setReversed(!reversed)
+  const update = ({ updateFunction, val, prop }) => {
+    setGlobalState({ type: updateFunction, payload: { value: { prop, val } } })
   }
 
   return (
     <div className={cn(styles.effectController, minified && styles.minified)}>
-      <h2 className={cn(styles.name, styles.center)}>{effectName}</h2>
+      <h2 className={cn(styles.name, styles.center)}>{name}</h2>
       <div className={styles.inputsContainer}>
-        {Object.keys(initVals).map((parameter) => {
-          if (parameter === 'mix' || parameter === 'gain') {
+        {values.map(({ name, propertyName, updateFunction, max }) => {
+          if (name === 'mix' || name === 'gain') {
             return (
-              <div key={parameter}>
-                <h6 className='center'>{parameter}</h6>
+              <div key={propertyName}>
+                <h6 className="center">{name}</h6>
                 <Knob
-                  style={{ display: 'inline-block' }}
                   className={cn('center', styles.knob)}
                   min={0}
-                  max={100}
-                  value={display[parameter]}
-                  unlockDistance={10}
-                  onChange={(e) =>
-                    update({ target: { id: parameter, value: e } })
-                  }
+                  max={1}
+                  value={globalState[propertyName]}
+                  onChange={(val) => update({ updateFunction, val, prop: name })}
                 />
-                <div className='center'>{display[parameter].toFixed(2)}</div>
+                <div className="center">{globalState[propertyName].toFixed(2)}</div>
               </div>
             )
-          } else if (parameter === 'reverse') {
+          } else if (name === 'reverse') {
             return (
-              <div key={parameter}>
+              <div key={propertyName}>
                 <div
                   className={cn(styles.reverseBtn, 'center')}
-                  onClick={toggleReverse}>
-                  <div
-                    className={cn(
-                      styles.reversible,
-                      reversed && styles.reversed
-                    )}>
-                    reverse
-                  </div>
+                  onClick={() =>
+                    update({ updateFunction, val: !globalState[propertyName].reversed, prop: name })
+                  }
+                >
+                  <div className={cn(styles.reversible, reversed && styles.reversed)}>reverse</div>
                 </div>
               </div>
             )
           } else {
             return (
-              <div key={parameter}>
+              <div key={propertyName}>
                 <div className={cn(styles.paramName, 'center')}>
-                  <b>{parameter} </b>{' '}
-                  <span className={styles.val}>{display[parameter]}</span>
+                  <b>{name}</b> <span className={styles.val}>{globalState[propertyName]}</span>
                 </div>
                 <Range
                   className={cn('center', styles.input)}
-                  id={parameter}
+                  id={propertyName}
                   onChange={update}
                   min={0}
-                  max={parameter.max || 100}
-                  value={display[parameter]}
+                  max={max || 100}
+                  value={globalState[propertyName]}
                 />
               </div>
             )

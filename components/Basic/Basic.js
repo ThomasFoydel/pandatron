@@ -47,6 +47,16 @@ const Basic = () => {
         <div className={styles.mainGridSection3}>
           <div className={styles.effectRack}>
             <DistortionController />
+            <EffectController
+              name="distortion II"
+              values={[
+                {
+                  name: 'gain',
+                  propertyName: 'distortion2Gain',
+                  updateFunction: 'changeDistortion2Gain',
+                },
+              ]}
+            />
             {/* 
             <EffectController
               effectName='distortion II'

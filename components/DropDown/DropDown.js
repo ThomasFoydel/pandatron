@@ -13,23 +13,20 @@ const DropDown = ({ options, updateFunction, inputId, current }) => {
   return (
     <div
       className={cn(styles.dropdown, 'center', opened && styles.open)}
-      onClick={() => setOpened((o) => !o)}>
+      onClick={() => setOpened((o) => !o)}
+    >
       <div className={cn(styles.closed, styles.option)}>{current}</div>
 
       {opened && (
-        <div
-          onClick={() => setOpened((o) => !o)}
-          className={cn(styles.open, 'center')}>
+        <div onClick={() => setOpened((o) => !o)} className={cn(styles.open, 'center')}>
           {options.map((option) => (
             <div
-              className={cn(
-                styles.option,
-                current === option.val && styles.currentOption
-              )}
+              className={cn(styles.option, current === option.val && styles.currentOption)}
               value={option.val}
               id={option.val}
               onClick={() => selectOption(option.val)}
-              key={option.val}>
+              key={option.val}
+            >
               {option.text}
             </div>
           ))}
