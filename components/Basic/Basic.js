@@ -24,7 +24,7 @@ const Basic = () => {
       <div className={styles.mainGrid}>
         <div className={styles.mainGridSection1}>
           <div className={styles.oscillatorsContainer}>
-          <Oscillators />
+            <Oscillators />
           </div>
         </div>
         <div className={styles.mainGridSection2}>
@@ -32,6 +32,7 @@ const Basic = () => {
             <div className={styles.section2Grid}>
               <div className={styles.section2Grid1}>
                 <FilterController />
+                <ADSRController />
                 {/* <FilterController
                   changeFilter1Type={changeFilter1Type}
                   changeFilter1Freq={changeFilter1Freq}
