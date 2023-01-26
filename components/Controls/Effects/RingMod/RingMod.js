@@ -13,7 +13,7 @@ const RingMod = () => {
   }
 
   return (
-    <div className={styles.effectController}>
+    <div className={cn(styles.effectController, styles.white)}>
       <h2 className={cn(styles.name, styles.center)}>ring mod</h2>
       <div className={styles.inputsContainer}>
         <div>

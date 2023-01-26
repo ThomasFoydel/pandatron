@@ -22,7 +22,8 @@ const Quadrafuzz = () => {
         {properties.map((property) => (
           <div key={property}>
             <div className={cn(styles.paramName, 'center')}>
-              <b>{property}</b> <span className={styles.val}>{globalState.quadrafuzz[property]}</span>
+              <b>{property}</b>{' '}
+              <span className={styles.val}>{globalState.quadrafuzz[property]}</span>
             </div>
             <Range
               className={cn('center', styles.input)}
