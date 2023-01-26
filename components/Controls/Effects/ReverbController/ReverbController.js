@@ -1,41 +1,33 @@
 import cn from 'classnames'
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import styles from './ReverbController.module.scss'
+import { CTX } from '../../../../context/store'
 import Range from '../../../Range'
 import Knob from '../../Knob'
 
-const ReverbController = ({
-  changeReverbDecay,
-  changeReverbDuration,
-  mixReverbGain,
-  initVals: { decayVal, durationVal, reverse, mixGain }
-}) => {
-  let decayTimesSeven = decayVal * 7
-  let initDecay = decayTimesSeven.toFixed(0)
-  let durationTimesSeven = durationVal * 7
-  let initDuration = durationTimesSeven.toFixed(0)
+const ReverbController = () => {
+  const [globalState, setGlobalState] = useContext(CTX)
+  const {
+    reverb1Wet,
+    reverb1: { duration, decay, reversed },
+  } = globalState
 
-  const [decay, setDecay] = useState(initDecay)
-  const [duration, setDuration] = useState(durationVal * 7)
-  const [isReversed, setIsReverse] = useState(reverse)
-  const [mix, setMix] = useState(mixGain.toFixed(2))
-
-  const updateDecay = (e) => {
-    const newVal = +e.target.value
-
-    changeReverbDecay((newVal / 7).toFixed(0))
-    setDecay(newVal.toFixed(0))
+  const handleDecay = (e) => {
+    const value = +e.target.value
+    setGlobalState({ type: 'changeReverbDecay', payload: { value } })
   }
 
-  const updateDuration = (e) => {
-    const newVal = +e.target.value
-    changeReverbDuration((newVal / 7).toFixed(0))
-    setDuration(newVal.toFixed(0))
+  const handleDuration = (e) => {
+    const value = +e.target.value
+    setGlobalState({ type: 'changeReverbDuration', payload: { value } })
   }
 
-  const updateMix = (e) => {
-    mixReverbGain(e.toFixed(0))
-    setMix(e.toFixed(2))
+  const handleMix = (value) => {
+    setGlobalState({ type: 'mixReverbGain', payload: { value } })
+  }
+
+  const handleReverse = () => {
+    setGlobalState({ type: 'changeReverb1Reverse', payload: { value: !reversed } })
   }
 
   return (
@@ -44,38 +36,39 @@ const ReverbController = ({
 
       <div className={styles.sliderInput}>
         <div className={styles.display}>
-          <b>time</b> {duration}
+          <b>duration</b> {duration}
         </div>
 
-        <Range
-          value={duration}
-          min={7.0}
-          onChange={updateDuration}
-        />
+        <Range value={duration} min={1} max={20} onChange={handleDuration} />
       </div>
 
       <div className={styles.sliderInput}>
         <div className={styles.display}>
           <b>decay</b> {decay}
         </div>
-        <Range value={decay} max={100} onChange={updateDecay} />
+        <Range value={decay} max={100} onChange={handleDecay} />
       </div>
+
       <div>
-        <div className='center'>
+        <div className={cn(styles.reverseBtn, 'center')} onClick={handleReverse}>
+          <div className={cn(styles.reversible, reversed && styles.reversed)}>reverse</div>
+        </div>
+      </div>
+
+      <div>
+        <div className="center">
           <b>mix</b>
         </div>
 
         <Knob
-          className={cn('center', styles.knob)}
-          style={{ display: 'inline-block' }}
+          className={cn(styles.knob, 'center')}
           min={0}
-          max={100}
-          value={mix}
-          unlockDistance={10}
-          onChange={updateMix}
+          max={1}
+          value={reverb1Wet}
+          onChange={handleMix}
         />
 
-        <div className='center'>{mix}</div>
+        <div className="center">{reverb1Wet.toFixed(2)}</div>
       </div>
     </div>
   )

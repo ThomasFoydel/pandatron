@@ -175,7 +175,7 @@ const reverbJoinGain = actx.createGain()
 const reverb1 = actx.createConvolver()
 const impulseBuffer = impulseResponse(
   initialValues.reverb1.duration,
-  initialValues.reverb1.decay,
+  initialValues.reverb1.decay / 10,
   initialValues.reverb1.reversed,
   actx
 )
@@ -334,8 +334,8 @@ function reducer(state, action) {
     }
 
     case 'mixReverbGain': {
-      const newDryVal = value < 100 ? (100 - e) / 100 : 0
-      const newWetVal = value / 100
+      const newDryVal = 1 - value
+      const newWetVal = value
       reverb1Dry.gain.setValueAtTime(newDryVal.toFixed(2), actx.currentTime)
       reverb1Wet.gain.linearRampToValueAtTime(newWetVal, actx.currentTime)
       return { ...state, reverb1Dry: newDryVal, reverb1Wet: newWetVal }
@@ -401,8 +401,8 @@ function reducer(state, action) {
     }
 
     case 'changeReverbDecay': {
-      const { durationVal, reverse } = state.reverb1
-      const newBuffer = impulseResponse(durationVal, value, reverse, actx)
+      const { durationVal, reverse } = reverb1.buffer
+      const newBuffer = impulseResponse(durationVal, value / 10, reverse, actx)
       reverb1.buffer = newBuffer
       return { ...state, reverb1: { ...state.reverb1, decay: value } }
     }
@@ -412,6 +412,13 @@ function reducer(state, action) {
       const newBuffer = impulseResponse(value, decayVal, reverse, actx)
       reverb1.buffer = newBuffer
       return { ...state, reverb1: { ...state.reverb1, duration: value } }
+    }
+
+    case 'changeReverb1Reverse': {
+      const { decayVal, durationVal } = reverb1.buffer
+      const newBuffer = impulseResponse(durationVal, decayVal, value, actx)
+      reverb1.buffer = newBuffer
+      return { ...state, reverb1: { ...state.reverb1, reversed: value } }
     }
 
     case 'changeDelayTime': {

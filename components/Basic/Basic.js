@@ -61,29 +61,17 @@ const Basic = () => {
           <div className={cn(styles.effectRack, 'flex')}>
             <DelayController />
             <PingPongDelay />
-            {/* <DelayController
-              changeMix={changeDelayMix}
-              changeDelayTime={changeDelayTime}
-              initVals={{
-                time: delay1.delayTime.value,
-                mix: delay1Wet.gain.value
-              }}
-            />
-
-            <EffectController
-              effectName='ping pong'
-              initVals={pingPongDelayInitVals}
-              changeEffect={changePingPongDelay}
-            />
             <ReverbController
-              changeReverbDecay={changeReverbDecay}
-              changeReverbDuration={changeReverbDuration}
-              mixReverbGain={mixReverbGain}
-              initVals={{
-                ...reverb1.buffer,
-                mixGain: reverb1Dry.gain.value
-              }}
+              // changeReverbDecay={changeReverbDecay}
+              // changeReverbDuration={changeReverbDuration}
+              // mixReverbGain={mixReverbGain}
+              // initVals={{
+              //   ...reverb1.buffer,
+              //   mixGain: reverb1Dry.gain.value
+              // }}
             />
+          
+            {/* 
             <EffectController
               effectName='reverb II'
               initVals={reverb2InitVals}

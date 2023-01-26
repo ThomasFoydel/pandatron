@@ -4,32 +4,32 @@ export function makeDistortionCurve(amount, actx) {
     curve = new Float32Array(n_samples),
     deg = Math.PI / 180,
     i = 0,
-    x;
+    x
   for (; i < n_samples; ++i) {
-    x = (i * 2) / n_samples - 1;
-    curve[i] = ((3 + k) * x * 20 * deg) / (Math.PI + k * Math.abs(x));
+    x = (i * 2) / n_samples - 1
+    curve[i] = ((3 + k) * x * 20 * deg) / (Math.PI + k * Math.abs(x))
   }
-  return curve;
+  return curve
 }
 
 export function impulseResponse(duration, decay, reverse, actx) {
-  var sampleRate = actx.sampleRate;
-  var length = sampleRate * duration;
-  var impulse = actx.createBuffer(2, length, sampleRate);
-  var impulseL = impulse.getChannelData(0);
-  var impulseR = impulse.getChannelData(1);
+  var sampleRate = actx.sampleRate
+  var length = sampleRate * duration
+  var impulse = actx.createBuffer(2, length, sampleRate)
+  var impulseL = impulse.getChannelData(0)
+  var impulseR = impulse.getChannelData(1)
 
-  if (!decay) decay = 2.0;
+  if (!decay) decay = 2.0
   for (var i = 0; i < length; i++) {
-    var n = reverse ? length - i : i;
-    impulseL[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, decay);
-    impulseR[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, decay);
+    var n = reverse ? length - i : i
+    impulseL[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, decay)
+    impulseR[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, decay)
   }
-  impulse.decayVal = decay;
-  impulse.durationVal = duration;
-  impulse.reverse = reverse;
+  impulse.decayVal = decay
+  impulse.durationVal = duration
+  impulse.reverse = reverse
 
-  return impulse;
+  return impulse
 }
 
 export const noteFreqs = [
@@ -149,86 +149,82 @@ export const noteFreqs = [
   { note: 'A8', freq: 7040 },
   { note: 'A#8', freq: 7458.62 },
   { note: 'B8', freq: 7902.13 },
-];
+]
 
 export function findWithAttr(array, attr, value) {
   for (var i = 0; i < array.length; i += 1) {
     if (array[i][attr] === value) {
-      return i;
+      return i
     }
   }
-  return -1;
+  return -1
 }
 
 export const calcFreq = (frequency, offset) => {
-  let calculatedFrequency = frequency;
-  let octaveOffset = offset * 12;
+  let calculatedFrequency = frequency
+  let octaveOffset = offset * 12
 
   if (offset !== 0) {
     const unshiftedIndex = noteFreqs.findIndex((note) => {
-      return note.freq.toFixed(2) === frequency.toFixed(2);
-    });
-    const shiftedIndex = unshiftedIndex + octaveOffset;
-    calculatedFrequency = noteFreqs[shiftedIndex].freq;
+      return note.freq.toFixed(2) === frequency.toFixed(2)
+    })
+    const shiftedIndex = unshiftedIndex + octaveOffset
+    calculatedFrequency = noteFreqs[shiftedIndex].freq
   }
-  return calculatedFrequency;
-};
+  return calculatedFrequency
+}
 
-var bufferSize = 4096;
+var bufferSize = 4096
 export var brownNoise = function (audioContext) {
-  var lastOut = 0.0;
-  var node = audioContext.createScriptProcessor(bufferSize, 1, 1);
+  var lastOut = 0.0
+  var node = audioContext.createScriptProcessor(bufferSize, 1, 1)
   node.onaudioprocess = function (e) {
-    var output = e.outputBuffer.getChannelData(0);
+    var output = e.outputBuffer.getChannelData(0)
     for (var i = 0; i < bufferSize; i++) {
-      var white = Math.random() * 2 - 1;
-      output[i] = (lastOut + 0.02 * white) / 1.02;
-      lastOut = output[i];
-      output[i] *= 3.5; // (roughly) compensate for gain
+      var white = Math.random() * 2 - 1
+      output[i] = (lastOut + 0.02 * white) / 1.02
+      lastOut = output[i]
+      output[i] *= 3.5 // (roughly) compensate for gain
     }
-  };
-  return node;
-};
+  }
+  return node
+}
 
 export var pinkNoise = function (audioContext) {
-  var b0, b1, b2, b3, b4, b5, b6;
-  b0 = b1 = b2 = b3 = b4 = b5 = b6 = 0.0;
-  var node = audioContext.createScriptProcessor(bufferSize, 1, 1);
+  var b0, b1, b2, b3, b4, b5, b6
+  b0 = b1 = b2 = b3 = b4 = b5 = b6 = 0.0
+  var node = audioContext.createScriptProcessor(bufferSize, 1, 1)
   node.onaudioprocess = function (e) {
-    var output = e.outputBuffer.getChannelData(0);
+    var output = e.outputBuffer.getChannelData(0)
     for (var i = 0; i < bufferSize; i++) {
-      var white = Math.random() * 2 - 1;
-      b0 = 0.99886 * b0 + white * 0.0555179;
-      b1 = 0.99332 * b1 + white * 0.0750759;
-      b2 = 0.969 * b2 + white * 0.153852;
-      b3 = 0.8665 * b3 + white * 0.3104856;
-      b4 = 0.55 * b4 + white * 0.5329522;
-      b5 = -0.7616 * b5 - white * 0.016898;
-      output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
-      output[i] *= 0.11; // (roughly) compensate for gain
-      b6 = white * 0.115926;
+      var white = Math.random() * 2 - 1
+      b0 = 0.99886 * b0 + white * 0.0555179
+      b1 = 0.99332 * b1 + white * 0.0750759
+      b2 = 0.969 * b2 + white * 0.153852
+      b3 = 0.8665 * b3 + white * 0.3104856
+      b4 = 0.55 * b4 + white * 0.5329522
+      b5 = -0.7616 * b5 - white * 0.016898
+      output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362
+      output[i] *= 0.11 // (roughly) compensate for gain
+      b6 = white * 0.115926
     }
-  };
-  return node;
-};
+  }
+  return node
+}
 
 export var whiteNoise = function (audioContext) {
   var bufferSize = 2 * audioContext.sampleRate,
-    noiseBuffer = audioContext.createBuffer(
-      1,
-      bufferSize,
-      audioContext.sampleRate
-    ),
-    output = noiseBuffer.getChannelData(0);
+    noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate),
+    output = noiseBuffer.getChannelData(0)
   for (var i = 0; i < bufferSize; i++) {
-    output[i] = Math.random() * 2 - 1;
+    output[i] = Math.random() * 2 - 1
   }
-  var whiteNoise = audioContext.createBufferSource();
-  whiteNoise.buffer = noiseBuffer;
-  whiteNoise.loop = true;
-  whiteNoise.start(0);
-  return whiteNoise;
-};
+  var whiteNoise = audioContext.createBufferSource()
+  whiteNoise.buffer = noiseBuffer
+  whiteNoise.loop = true
+  whiteNoise.start(0)
+  return whiteNoise
+}
 
 /*
 C4

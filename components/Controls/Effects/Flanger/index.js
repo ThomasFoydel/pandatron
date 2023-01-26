@@ -42,7 +42,7 @@ const Flanger = () => {
             value={globalState.flanger.mix}
             onChange={(val) => update({ prop: 'mix', val })}
           />
-          <div className="center">{globalState.quadrafuzz.mix.toFixed(2)}</div>
+          <div className="center">{globalState.flanger.mix.toFixed(2)}</div>
         </div>
       </div>
     </div>

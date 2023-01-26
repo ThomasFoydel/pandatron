@@ -22,14 +22,14 @@ const Quadrafuzz = () => {
         {properties.map((property) => (
           <div key={property}>
             <div className={cn(styles.paramName, 'center')}>
-              <b>{property}</b> <span className={styles.val}>{globalState.flanger[property]}</span>
+              <b>{property}</b> <span className={styles.val}>{globalState.quadrafuzz[property]}</span>
             </div>
             <Range
               className={cn('center', styles.input)}
               onChange={(e) => update({ prop: property, val: e.target.value })}
               min={0}
               max={100}
-              value={globalState.flanger[property]}
+              value={globalState.quadrafuzz[property]}
             />
           </div>
         ))}
@@ -40,10 +40,10 @@ const Quadrafuzz = () => {
             className={cn('center', styles.knob)}
             min={0}
             max={1}
-            value={globalState.flanger.mix}
+            value={globalState.quadrafuzz.mix}
             onChange={(val) => update({ prop: 'mix', val })}
           />
-          <div className="center">{globalState.flanger.mix.toFixed(2)}</div>
+          <div className="center">{globalState.quadrafuzz.mix.toFixed(2)}</div>
         </div>
       </div>
     </div>

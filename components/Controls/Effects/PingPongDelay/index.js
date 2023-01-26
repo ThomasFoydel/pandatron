@@ -9,7 +9,6 @@ const PingPongDelay = () => {
   const [globalState, setGlobalState] = useContext(CTX)
 
   const update = ({ val, prop }) => {
-    console.log({ val, prop })
     setGlobalState({ type: 'changePingPongDelay', payload: { value: { prop, val } } })
   }
 
@@ -22,14 +21,15 @@ const PingPongDelay = () => {
         {properties.map((property) => (
           <div key={property}>
             <div className={cn(styles.paramName, 'center')}>
-              <b>{property}</b> <span className={styles.val}>{globalState.flanger[property]}</span>
+              <b>{property}</b>{' '}
+              <span className={styles.val}>{globalState.pingPongDelay[property]}</span>
             </div>
             <Range
               className={cn('center', styles.input)}
               onChange={(e) => update({ prop: property, val: e.target.value })}
               min={0}
               max={100}
-              value={globalState.flanger[property]}
+              value={globalState.pingPongDelay[property]}
             />
           </div>
         ))}
@@ -40,10 +40,10 @@ const PingPongDelay = () => {
             className={cn('center', styles.knob)}
             min={0}
             max={1}
-            value={globalState.flanger.mix}
+            value={globalState.pingPongDelay.mix}
             onChange={(val) => update({ prop: 'mix', val })}
           />
-          <div className="center">{globalState.flanger.mix.toFixed(2)}</div>
+          <div className="center">{globalState.pingPongDelay.mix.toFixed(2)}</div>
         </div>
       </div>
     </div>
