@@ -102,6 +102,8 @@ const initialValues = {
   oscGain2: 0.1,
   subGain: 0.1,
   distortion1: 0,
+  dist1WetGain: 0,
+  dist1DryGain: 1,
 
   lowPassFilter: 0,
   lfo1OscFreq: 0,
@@ -130,8 +132,8 @@ distortion1.curve = makeDistortionCurve(initialValues.distortion1, actx)
 
 const dist1WetGain = actx.createGain()
 const dist1DryGain = actx.createGain()
-dist1WetGain.gain.value = 0
-dist1DryGain.gain.value = 1
+dist1WetGain.gain.value = initialValues.dist1WetGain
+dist1DryGain.gain.value = initialValues.dist1DryGain
 const distortion1MixedGain = actx.createGain()
 
 const filter1 = actx.createBiquadFilter()

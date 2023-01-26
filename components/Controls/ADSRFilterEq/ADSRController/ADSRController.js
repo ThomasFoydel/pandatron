@@ -1,21 +1,17 @@
 import cn from 'classnames'
 import React, { useContext } from 'react'
 import styles from './ADSRController.module.scss'
-import Range from '../../../Range'
 import { CTX } from '../../../../context/store'
+import Range from '../../../Range'
 
 const ADSRController = () => {
   const [globalState, setGlobalState] = useContext(CTX)
   const { envelope } = globalState
   const { attack, decay, sustain, release } = envelope
 
-  const changeDisplayState = (aspect, newVal) => {
-    setGlobalState({ type: 'changeADSR', payload: { value: { aspect, newVal } } })
-  }
-
   const updateADSR = (e) => {
     let { value, id } = e.target
-    changeDisplayState(id, +value / 100)
+    setGlobalState({ type: 'changeADSR', payload: { value: { aspect: id, newVal: +value / 100 } } })
   }
 
   return (

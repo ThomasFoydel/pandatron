@@ -33,25 +33,6 @@ const Basic = () => {
               <div className={styles.section2Grid1}>
                 <FilterController />
                 <ADSRController />
-                {/* <FilterController
-                  changeFilter1Type={changeFilter1Type}
-                  changeFilter1Freq={changeFilter1Freq}
-                  changeFilter1Q={changeFilter1Q}
-                  changeFilter1Mix={changeFilter1Mix}
-                  changeFilter1Gain={changeFilter1Gain}
-                  initParams={{
-                    type: filter1.type,
-                    frequency: filter1.frequency.value,
-                    Q: filter1.Q.value,
-                    mix: 100 - filter1.dryWet,
-                    gain: filter1.gain.value
-                  }}
-                />
-
-                <ADSRController
-                  changeADSR={changeADSR}
-                  initEnvelope={initEnvelope}
-                /> */}
               </div>
 
               <div className={styles.section2Grid2}>
@@ -65,14 +46,8 @@ const Basic = () => {
         </div>
         <div className={styles.mainGridSection3}>
           <div className={styles.effectRack}>
-            {/* <DistortionController
-              initVals={{
-                amountVal: 0,
-                mixVal: dist1WetGain.gain.value * 100
-              }}
-              changeDistortion1Amount={changeDistortion1Amount}
-              changeDistortion1Mix={changeDistortion1Mix}
-            />
+            <DistortionController />
+            {/* 
             <EffectController
               effectName='distortion II'
               changeEffect={changeDistortion2Gain}
