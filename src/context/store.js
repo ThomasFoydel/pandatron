@@ -14,9 +14,8 @@ import {
 const CTX = createContext()
 const actx = Pizzicato.context
 
-let analyzer
-
-let nodes = []
+const analyzer = actx.createAnalyser()
+analyzer.fftSize = 2048 // 1024; // 512; // 256; // 32 64 128 256 512 1024 2048 4096 8192 16384 32768
 
 const initialValues = {
   filter1: {
@@ -110,6 +109,7 @@ const initialValues = {
   chordName: '',
   masterGain: 1,
   notesForChordAnalysis: [],
+  nodes: [],
 }
 
 const oscGain1 = actx.createGain()
@@ -214,9 +214,6 @@ const connectorGain = actx.createGain()
 
 const masterGain = actx.createGain()
 
-analyzer = actx.createAnalyser()
-analyzer.fftSize = 2048 // 1024; // 512; // 256; // 32 64 128 256 512 1024 2048 4096 8192 16384 32768
-
 oscGain1.connect(oscMixGain1)
 oscGain2.connect(oscMixGain2)
 oscMixGain1.connect(oscMasterGain1)
@@ -285,7 +282,7 @@ const changePizzicatoEffect = (effect, prop, val) => {
 
 function reducer(state, action) {
   let { payload } = action
-  let { prop, value } = payload ? payload : {}
+  let { value } = payload ? payload : {}
   switch (action.type) {
     case 'changeFilter1Type': {
       filter1.type = value
@@ -584,26 +581,29 @@ function reducer(state, action) {
 
       const subOsc = new oscClass(actx, subOscType, subOscFreq, 0, envelope, subGain, freq)
 
-      nodes.push(newOsc1, newOsc2, subOsc, noiseOsc)
+      const newNodes = [...state.nodes, newOsc1, newOsc2, subOsc, noiseOsc]
 
       const noteIndex = findWithAttr(noteFreqs, 'note', note)
       // it's minus 48 because the keyboard is set to start on C4 instead of C0
       const currentNotesForChordAnalysis = [...state.notesForChordAnalysis, noteIndex - 48]
       const chordName = chordAnalyzer(currentNotesForChordAnalysis)
-      return { ...state, chordName, notesForChordAnalysis: currentNotesForChordAnalysis }
+      return {
+        ...state,
+        chordName,
+        notesForChordAnalysis: currentNotesForChordAnalysis,
+        nodes: newNodes,
+      }
     }
 
     case 'killOsc': {
       const { freq, note } = value
-      let new_nodes = []
-      for (let i = 0; i < nodes.length; i++) {
-        if (Math.round(nodes[i].initialFreq) === Math.round(freq)) {
-          nodes[i].stop(0)
-        } else {
-          new_nodes.push(nodes[i])
+      const newNodes = state.nodes.filter((node) => {
+        if (Math.round(node.initialFreq) === Math.round(freq)) {
+          node.stop(0)
+          return false
         }
-      }
-      nodes = new_nodes
+        return true
+      })
 
       // CHORD ANALYSIS
       const noteIndex = findWithAttr(noteFreqs, 'note', note)
@@ -612,7 +612,7 @@ function reducer(state, action) {
         (item) => item !== noteIndex - 48
       )
       const chordName = chordAnalyzer(filteredNoteArray) || ''
-      return { ...state, chordName, notesForChordAnalysis: filteredNoteArray }
+      return { ...state, chordName, notesForChordAnalysis: filteredNoteArray, nodes: newNodes }
     }
 
     default:
