@@ -1,0 +1,52 @@
+.reverb {
+  width: 30%;
+  border: rgba(0, 0, 0, 0) 2px solid;
+  background: rgb(250, 248, 248);
+  border-radius: 5px;
+  margin: 0.2rem 0.4rem;
+  width: 10rem;
+  padding: 0.3rem;
+  line-height: 1.9rem;
+
+  .title {
+    margin-top: 0.1rem;
+  }
+
+  b {
+    height: 1rem;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  .sliderInput {
+    width: 100%;
+  }
+
+  .display {
+    text-align: center;
+    min-width: 100%;
+  }
+
+  .knob {
+    display: inline-block;
+    max-width: 5rem;
+    max-height: 5rem;
+  }
+
+  .reversible {
+    border-radius: 3px;
+    background: #eee;
+    color: #222;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .reversed {
+    color: #eee;
+    background: #222;
+    transform: rotateY(180deg);
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,35 @@
+.dropdown {
+  position: absolute;
+  border-radius: 5px;
+  width: 9rem;
+
+  .open {
+    position: absolute;
+    z-index: 1;
+    background: white;
+    border: 1px solid rgb(19, 19, 19);
+    width: 9rem;
+    border-radius: 5px;
+
+    .currentOption {
+      background: rgb(150, 150, 150);
+    }
+  }
+
+  .closed {
+    border: solid rgb(77, 77, 77) 2px;
+  }
+
+  .option {
+    cursor: pointer;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: rgb(185, 185, 185);
+    }
+  }
+
+  .active {
+    background-color: crimson;
+  }
+}

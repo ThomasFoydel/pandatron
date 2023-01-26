@@ -2,7 +2,7 @@
 
 <div align="center"><h5>A synthesizer for the browser <a href="http://pandatron.herokuapp.com/">live demo here</a></h5></div>
 
-<img src="/client/public/imgs/preview/pandatronpreview.jpg" width="100%" >
+<img src="/client/public/imgs/preview/preview.jpg" width="100%" >
 
 As soon as I heard about the webaudio API in a dev conference talk on youtube I knew I was going to have a hard time sleeping until I had finished building a synthesizer with it.
 
