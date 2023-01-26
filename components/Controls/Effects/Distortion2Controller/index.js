@@ -12,7 +12,7 @@ const Distortion2Controller = () => {
   }
 
   return (
-    <div className={cn(styles.effectController)}>
+    <div className={styles.effectController}>
       <h2 className={cn(styles.name, styles.center)}>distortion II</h2>
       <div className={styles.inputsContainer}>
         <h6 className="center">gain</h6>

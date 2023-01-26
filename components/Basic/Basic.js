@@ -18,6 +18,7 @@ import Visualizer from '../Visualizer'
 import Keyboard from '../Keyboard'
 import Oscillators from '../Oscillators'
 import Distortion2Controller from '../Controls/Effects/Distortion2Controller'
+import RingMod from '../Controls/Effects/RingMod'
 
 const Basic = () => {
   return (
@@ -49,6 +50,7 @@ const Basic = () => {
           <div className={styles.effectRack}>
             <DistortionController />
             <Distortion2Controller />
+            <RingMod />
             {/* <EffectController
               name="distortion II"
               values={[
