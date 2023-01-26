@@ -1,15 +1,15 @@
 import React from 'react'
 import Pizzicato from 'pizzicato'
+import noiseOscClass from '../util/classes/noise'
+import chordAnalyzer from '../util/chordAnalyzer'
+import oscClass from '../util/classes/osc'
 import {
   calcFreq,
+  noteFreqs,
   findWithAttr,
   impulseResponse,
   makeDistortionCurve,
-  noteFreqs,
 } from '../util/util'
-import oscClass from '../util/classes/osc'
-import noiseOscClass from '../util/classes/noise'
-import chordAnalyzer from '../util/chordAnalyzer'
 
 const CTX = React.createContext()
 const actx = Pizzicato.context
@@ -104,8 +104,9 @@ const initialValues = {
   dist1WetGain: 0,
   dist1DryGain: 1,
 
-  lowPassFilter: 0,
-  lfo1OscFreq: 0,
+  lfo: { filterFreq: 0, oscFreq: 0, active: false },
+  mouseField: { x: 0, y: 0 },
+
   chordName: '',
   masterGain: 1,
   notesForChordAnalysis: [],
@@ -198,11 +199,14 @@ const lowPassFilter = actx.createBiquadFilter()
 const lfo1Wet = actx.createGain()
 const lfo1Dry = actx.createGain()
 
+lowPassFilter.frequency.linearRampToValueAtTime(initialValues.lfo.filterFreq, actx.currentTime)
+lfo1Osc.frequency.linearRampToValueAtTime(initialValues.lfo.oscFreq, actx.currentTime)
+
 lfo1Wet.gain.value = initialValues.lfo1Wet
 lfo1Dry.gain.value = initialValues.lfo1Dry
+
 const lfo1Combined = actx.createGain()
 
-let lfo1Started = false
 lfo1Osc.connect(lfo1)
 lfo1.connect(lfo1Wet.gain)
 
@@ -504,35 +508,38 @@ function reducer(state, action) {
     }
 
     case 'changeMouseLfo': {
+      const { x, y } = value
       const newLowPassFreq = ((1 - y) * 18000).toFixed(2)
       const newLfo1OscFreq = (x * 12).toFixed(2)
-      if (!lfo1Started) {
+      if (!lfo1.started) {
+        lfo1.started = true
         lfo1Osc.start()
-        lfo1Started = true
       }
+
       lowPassFilter.frequency.linearRampToValueAtTime(newLowPassFreq, actx.currentTime)
       lfo1Osc.frequency.linearRampToValueAtTime(newLfo1OscFreq, actx.currentTime)
+
       return {
         ...state,
-        lowPassFilter: newLowPassFreq,
-        lfo1OscFreq: newLfo1OscFreq,
+        mouseField: { x, y },
+        lfo: { ...state.lfo, filterFreq: newLowPassFreq, oscFreq: newLfo1OscFreq },
       }
     }
 
     case 'toggleLfo1': {
       const now = actx.currentTime
-      if (state.lfoIsActive) {
+      if (state.lfo.active) {
         // TURN OFF
         lfo1Dry.gain.exponentialRampToValueAtTime(1, now)
         lfo1Wet.gain.exponentialRampToValueAtTime(0.01, now)
         lfo1.gain.exponentialRampToValueAtTime(0.01, now)
-        return { ...state, lfoIsActive: false }
+        return { ...state, lfo: { ...state.lfo, active: false } }
       } else {
         // TURN ON
         lfo1Dry.gain.exponentialRampToValueAtTime(0.01, now)
         lfo1Wet.gain.exponentialRampToValueAtTime(1, now)
         lfo1.gain.exponentialRampToValueAtTime(1, now)
-        return { ...state, lfoIsActive: true }
+        return { ...state, lfo: { ...state.lfo, active: true } }
       }
     }
 
