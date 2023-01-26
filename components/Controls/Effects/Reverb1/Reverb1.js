@@ -1,11 +1,11 @@
 import cn from 'classnames'
 import React, { useContext } from 'react'
-import styles from './ReverbController.module.scss'
+import styles from './Reverb1.module.scss'
 import { CTX } from '../../../../context/store'
 import Range from '../../../Range'
 import Knob from '../../Knob'
 
-const ReverbController = () => {
+const Reverb = () => {
   const [globalState, setGlobalState] = useContext(CTX)
   const {
     reverb1Wet,
@@ -74,4 +74,4 @@ const ReverbController = () => {
   )
 }
 
-export default ReverbController
+export default Reverb

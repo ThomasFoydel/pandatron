@@ -1,10 +1,10 @@
 import cn from 'classnames'
 import React, { useContext } from 'react'
-import styles from './DistortionController.module.scss'
-import Knob from '../../Knob'
+import styles from './Distortion1.module.scss'
 import { CTX } from '../../../../context/store'
+import Knob from '../../Knob'
 
-const DistortionController = () => {
+const Distortion1 = () => {
   const [globalState, setGlobalState] = useContext(CTX)
   const { distortion1, dist1WetGain } = globalState
 
@@ -45,4 +45,4 @@ const DistortionController = () => {
   )
 }
 
-export default DistortionController
+export default Distortion1

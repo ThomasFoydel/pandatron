@@ -1,6 +1,6 @@
 import cn from 'classnames'
 import React, { useContext } from 'react'
-import styles from '../ReverbController/ReverbController.module.scss'
+import styles from '../Reverb1/Reverb1.module.scss'
 import { CTX } from '../../../../context/store'
 import Range from '../../../Range'
 import Knob from '../../Knob'

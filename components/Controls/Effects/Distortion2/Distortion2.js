@@ -1,10 +1,10 @@
 import cn from 'classnames'
 import React, { useContext } from 'react'
-import { CTX } from '../../../../context/store'
 import styles from '../EffectController.module.scss'
+import { CTX } from '../../../../context/store'
 import Knob from '../../Knob'
 
-const Distortion2Controller = () => {
+const Distortion2 = () => {
   const [globalState, setGlobalState] = useContext(CTX)
 
   const update = (val) => {
@@ -29,4 +29,4 @@ const Distortion2Controller = () => {
   )
 }
 
-export default Distortion2Controller
+export default Distortion2

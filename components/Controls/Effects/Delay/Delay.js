@@ -1,10 +1,10 @@
 import cn from 'classnames'
 import React, { useContext } from 'react'
-import styles from './DelayController.module.scss'
 import { CTX } from '../../../../context/store'
+import styles from './Delay.module.scss'
 import Knob from '../../Knob'
 
-const DelayController = () => {
+const Delay = () => {
   const [globalState, setGlobalState] = useContext(CTX)
   const { delay1, delay1Wet } = globalState
 
@@ -47,4 +47,4 @@ const DelayController = () => {
   )
 }
 
-export default DelayController
+export default Delay

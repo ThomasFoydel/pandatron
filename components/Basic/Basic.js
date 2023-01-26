@@ -1,9 +1,9 @@
 import cn from 'classnames'
-import DistortionController from '../../components/Controls/Effects/DistortionController/DistortionController'
-import FilterController from '../../components/Controls/ADSRFilterEq/FilterController/FilterController'
-import ReverbController from '../../components/Controls/Effects/ReverbController/ReverbController'
-import ADSRController from '../../components/Controls/ADSRFilterEq/ADSRController/ADSRController'
-import DelayController from '../../components/Controls/Effects/DelayController/DelayController'
+import Distortion1 from '../Controls/Effects/Distortion1/Distortion1'
+import Filter from '../../components/Controls/Filter/Filter'
+import Reverb1 from '../Controls/Effects/Reverb1/Reverb1'
+import ADSR from '../../components/Controls/ADSR/ADSR'
+import Delay from '../Controls/Effects/Delay/Delay'
 import MasterGain from '../../components/Controls/MasterGain/MasterGain'
 import PandaSection from '../PandaSection'
 import ChordDisplay from '../ChordDisplay'
@@ -11,12 +11,12 @@ import styles from './Basic.module.scss'
 import Visualizer from '../Visualizer'
 import Keyboard from '../Keyboard'
 import Oscillators from '../Oscillators'
-import Distortion2Controller from '../Controls/Effects/Distortion2Controller'
-import RingMod from '../Controls/Effects/RingMod'
-import Flanger from '../Controls/Effects/Flanger'
-import Quadrafuzz from '../Controls/Effects/Quadrafuzz'
-import PingPongDelay from '../Controls/Effects/PingPongDelay'
-import Reverb2 from '../Controls/Effects/Reverb2'
+import Distortion2 from '../Controls/Effects/Distortion2/Distortion2'
+import RingMod from '../Controls/Effects/RingMod/RingMod'
+import Flanger from '../Controls/Effects/Flanger/Flanger'
+import Quadrafuzz from '../Controls/Effects/Quadrafuzz/Quadrafuzz'
+import PingPong from '../Controls/Effects/PingPong/PingPong'
+import Reverb2 from '../Controls/Effects/Reverb2/Reverb2'
 
 const Basic = () => {
   return (
@@ -31,8 +31,8 @@ const Basic = () => {
           <div className={styles.adsrFilterMouse}>
             <div className={styles.section2Grid}>
               <div className={styles.section2Grid1}>
-                <FilterController />
-                <ADSRController />
+                <Filter />
+                <ADSR />
               </div>
 
               <div className={styles.section2Grid2}>
@@ -46,17 +46,17 @@ const Basic = () => {
         </div>
         <div className={styles.mainGridSection3}>
           <div className={styles.effectRack}>
-            <DistortionController />
-            <Distortion2Controller />
+            <Distortion1 />
+            <Distortion2 />
             <RingMod />
             <Flanger />
             <Quadrafuzz />
           </div>
 
           <div className={cn(styles.effectRack, 'flex')}>
-            <DelayController />
-            <PingPongDelay />
-            <ReverbController />
+            <Delay />
+            <PingPong />
+            <Reverb1 />
             <Reverb2 />
             <MasterGain />
           </div>

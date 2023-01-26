@@ -1,11 +1,11 @@
 import cn from 'classnames'
 import React, { useContext } from 'react'
-import styles from './FilterController.module.scss'
-import DropDown from '../../../DropDown/DropDown'
-import { CTX } from '../../../../context/store'
-import Range from '../../../Range'
+import styles from './Filter.module.scss'
+import DropDown from '../../DropDown/DropDown'
+import { CTX } from '../../../context/store'
+import Range from '../../Range'
 
-const FilterController = () => {
+const Filter = () => {
   const [globalState, setGlobalState] = useContext(CTX)
   const { filter1WetGain, filter1 } = globalState
   const { type, gain, Q, frequency } = filter1
@@ -87,4 +87,4 @@ const FilterController = () => {
   )
 }
 
-export default FilterController
+export default Filter

@@ -1,10 +1,10 @@
 import cn from 'classnames'
 import React, { useContext } from 'react'
-import styles from './ADSRController.module.scss'
-import { CTX } from '../../../../context/store'
-import Range from '../../../Range'
+import styles from './ADSR.module.scss'
+import { CTX } from '../../../context/store'
+import Range from '../../Range'
 
-const ADSRController = () => {
+const ADSR = () => {
   const [globalState, setGlobalState] = useContext(CTX)
   const { envelope } = globalState
   const { attack, decay, sustain, release } = envelope
@@ -44,4 +44,4 @@ const ADSRController = () => {
   )
 }
 
-export default ADSRController
+export default ADSR

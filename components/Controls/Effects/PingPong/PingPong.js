@@ -5,7 +5,7 @@ import { CTX } from '../../../../context/store'
 import Range from '../../../Range'
 import Knob from '../../Knob'
 
-const PingPongDelay = () => {
+const PingPong = () => {
   const [globalState, setGlobalState] = useContext(CTX)
 
   const update = ({ val, prop }) => {
@@ -50,4 +50,4 @@ const PingPongDelay = () => {
   )
 }
 
-export default PingPongDelay
+export default PingPong
