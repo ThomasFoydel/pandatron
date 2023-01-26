@@ -181,7 +181,10 @@ const impulseBuffer = impulseResponse(
 )
 reverb1.buffer = impulseBuffer
 
-const reverb2 = new Pizzicato.Effects.Reverb(initialValues.reverb2)
+const reverb2 = new Pizzicato.Effects.Reverb({
+  ...initialValues.reverb2,
+  decay: initialValues.reverb2.decay / 2,
+})
 
 const limiter = new Pizzicato.Effects.Compressor({
   threshold: -24,
@@ -495,7 +498,7 @@ function reducer(state, action) {
 
     case 'changeReverb2': {
       const { prop, val } = value
-      changePizzicatoEffect(reverb2, prop, val)
+      changePizzicatoEffect(reverb2, prop, prop === 'decay' ? val / 2 : val)
       return { ...state, reverb2: { ...state.reverb2, [prop]: val } }
     }
 

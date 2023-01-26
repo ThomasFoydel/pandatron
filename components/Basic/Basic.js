@@ -22,6 +22,7 @@ import RingMod from '../Controls/Effects/RingMod'
 import Flanger from '../Controls/Effects/Flanger'
 import Quadrafuzz from '../Controls/Effects/Quadrafuzz'
 import PingPongDelay from '../Controls/Effects/PingPongDelay'
+import Reverb2 from "../Controls/Effects/Reverb2"
 
 const Basic = () => {
   return (
@@ -61,16 +62,9 @@ const Basic = () => {
           <div className={cn(styles.effectRack, 'flex')}>
             <DelayController />
             <PingPongDelay />
-            <ReverbController
-              // changeReverbDecay={changeReverbDecay}
-              // changeReverbDuration={changeReverbDuration}
-              // mixReverbGain={mixReverbGain}
-              // initVals={{
-              //   ...reverb1.buffer,
-              //   mixGain: reverb1Dry.gain.value
-              // }}
-            />
-          
+            <ReverbController />
+            <Reverb2 />
+
             {/* 
             <EffectController
               effectName='reverb II'
