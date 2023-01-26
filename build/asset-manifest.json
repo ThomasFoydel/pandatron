@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/pandatron/static/css/main.e910f0e7.css",
+    "main.js": "/pandatron/static/js/main.89becd69.js",
+    "static/media/logo.png": "/pandatron/static/media/logo.86912e4e1d7e56118e22.png",
+    "static/media/panda2.png": "/pandatron/static/media/panda2.2f84611cdb0a9d0c2768.png",
+    "static/media/panda3.png": "/pandatron/static/media/panda3.5f80905c4adf87eb61e8.png",
+    "static/media/panda5.png": "/pandatron/static/media/panda5.1dc2508f94fed964347f.png",
+    "static/media/panda4.png": "/pandatron/static/media/panda4.0c7f89126edb196f8638.png",
+    "static/media/panda6.png": "/pandatron/static/media/panda6.0121a80ec16775b67cdf.png",
+    "static/media/panda1.png": "/pandatron/static/media/panda1.0ac81e5f9af600aec96d.png",
+    "static/media/panda7.png": "/pandatron/static/media/panda7.3b94db81706d6ee5c6cc.png",
+    "index.html": "/pandatron/index.html",
+    "main.e910f0e7.css.map": "/pandatron/static/css/main.e910f0e7.css.map",
+    "main.89becd69.js.map": "/pandatron/static/js/main.89becd69.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e910f0e7.css",
+    "static/js/main.89becd69.js"
+  ]
+}
