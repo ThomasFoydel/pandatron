@@ -1,20 +1,19 @@
 import cn from 'classnames'
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import styles from './DelayController.module.scss'
+import { CTX } from '../../../../context/store'
 import Knob from '../../Knob'
 
-const DelayController = ({ changeDelayTime, initVals, changeMix }) => {
-  const [time, setTime] = useState(initVals.time * 100)
-  const [mix, setMix] = useState(initVals.mix)
+const DelayController = () => {
+  const [globalState, setGlobalState] = useContext(CTX)
+  const { delay1, delay1Wet } = globalState
 
-  const updateDelayTime = (e) => {
-    changeDelayTime(e / 100)
-    setTime(e / 100)
+  const updateDelayTime = (value) => {
+    setGlobalState({ type: 'changeDelayTime', payload: { value } })
   }
 
-  const updateDelayMix = (e) => {
-    changeMix(e)
-    setMix(e / 100)
+  const updateDelayMix = (value) => {
+    setGlobalState({ type: 'changeDelayMix', payload: { value } })
   }
 
   return (
@@ -25,15 +24,12 @@ const DelayController = ({ changeDelayTime, initVals, changeMix }) => {
 
         <Knob
           className={cn('center', styles.knob)}
-          // min={0}
-          // max={100}
-          // value={time * 100}
-          // unlockDistance={10}
+          min={0}
+          max={100}
+          value={delay1}
           onChange={updateDelayTime}
         />
-        <div className={cn(styles.valueDisplay, 'center')}>
-          {time.toFixed(2)}
-        </div>
+        <div className={cn(styles.valueDisplay, 'center')}>{delay1.toFixed(2)}</div>
       </div>
 
       <div className={styles.amount}>
@@ -42,13 +38,10 @@ const DelayController = ({ changeDelayTime, initVals, changeMix }) => {
           className={cn('center', styles.knob)}
           min={0}
           max={100}
-          value={mix * 100}
-          unlockDistance={10}
+          value={delay1Wet * 100}
           onChange={updateDelayMix}
         />
-        <div className={cn(styles.valueDisplay, 'center')}>
-          {mix.toFixed(2)}
-        </div>
+        <div className={cn(styles.valueDisplay, 'center')}>{(+delay1Wet).toFixed(2)}</div>
       </div>
     </div>
   )

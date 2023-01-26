@@ -100,6 +100,7 @@ const Basic = () => {
           </div>
 
           <div className={cn(styles.effectRack, 'flex')}>
+            <DelayController />
             {/* <DelayController
               changeMix={changeDelayMix}
               changeDelayTime={changeDelayTime}
