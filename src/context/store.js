@@ -17,7 +17,6 @@ const actx = Pizzicato.context
 let analyzer
 
 let nodes = []
-let notesForChordAnalysis = []
 
 const initialValues = {
   filter1: {
@@ -109,6 +108,7 @@ const initialValues = {
   lfo1OscFreq: 0,
   chordName: '',
   masterGain: 1,
+  notesForChordAnalysis: [],
 }
 
 const oscGain1 = actx.createGain()
@@ -581,9 +581,9 @@ function reducer(state, action) {
 
       const noteIndex = findWithAttr(noteFreqs, 'note', note)
       // it's minus 48 because the keyboard is set to start on C4 instead of C0
-      notesForChordAnalysis.push(noteIndex - 48)
-      const chordName = chordAnalyzer(notesForChordAnalysis)
-      return { ...state, chordName }
+      const currentNotesForChordAnalysis = [...state.notesForChordAnalysis, noteIndex - 48]
+      const chordName = chordAnalyzer(currentNotesForChordAnalysis)
+      return { ...state, chordName, notesForChordAnalysis: currentNotesForChordAnalysis }
     }
 
     case 'killOsc': {
@@ -600,13 +600,12 @@ function reducer(state, action) {
 
       // CHORD ANALYSIS
       const noteIndex = findWithAttr(noteFreqs, 'note', note)
-      const filteredNoteArray = notesForChordAnalysis.filter(
+      const filteredNoteArray = state.notesForChordAnalysis.filter(
         // it's minus 48 because the keyboard is set to start on C4 instead of C0
         (item) => item !== noteIndex - 48
       )
-      notesForChordAnalysis = [...filteredNoteArray]
-      const chordName = chordAnalyzer(notesForChordAnalysis) || ''
-      return { ...state, chordName }
+      const chordName = chordAnalyzer(filteredNoteArray) || ''
+      return { ...state, chordName, notesForChordAnalysis: filteredNoteArray }
     }
 
     default:
