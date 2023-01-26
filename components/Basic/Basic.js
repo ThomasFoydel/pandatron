@@ -19,6 +19,7 @@ import Keyboard from '../Keyboard'
 import Oscillators from '../Oscillators'
 import Distortion2Controller from '../Controls/Effects/Distortion2Controller'
 import RingMod from '../Controls/Effects/RingMod'
+import Flanger from '../Controls/Effects/Flanger'
 
 const Basic = () => {
   return (
@@ -51,6 +52,7 @@ const Basic = () => {
             <DistortionController />
             <Distortion2Controller />
             <RingMod />
+            <Flanger />
             {/* <EffectController
               name="distortion II"
               values={[
