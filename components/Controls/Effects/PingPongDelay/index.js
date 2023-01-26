@@ -5,19 +5,19 @@ import { CTX } from '../../../../context/store'
 import Range from '../../../Range'
 import Knob from '../../Knob'
 
-const Quadrafuzz = () => {
+const PingPongDelay = () => {
   const [globalState, setGlobalState] = useContext(CTX)
 
   const update = ({ val, prop }) => {
     console.log({ val, prop })
-    setGlobalState({ type: 'changeQuadrafuzz', payload: { value: { prop, val } } })
+    setGlobalState({ type: 'changePingPongDelay', payload: { value: { prop, val } } })
   }
 
-  const properties = ['lowGain', 'midLowGain', 'midHighGain', 'highGain']
+  const properties = ['feedback', 'time']
 
   return (
     <div className={cn(styles.effectController, styles.minified)}>
-      <h2 className={cn(styles.name, styles.center)}>quadrafuzz</h2>
+      <h2 className={cn(styles.name, styles.center)}>ping pong</h2>
       <div className={styles.inputsContainer}>
         {properties.map((property) => (
           <div key={property}>
@@ -50,4 +50,4 @@ const Quadrafuzz = () => {
   )
 }
 
-export default Quadrafuzz
+export default PingPongDelay

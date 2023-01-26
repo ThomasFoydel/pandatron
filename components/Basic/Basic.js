@@ -21,6 +21,7 @@ import Distortion2Controller from '../Controls/Effects/Distortion2Controller'
 import RingMod from '../Controls/Effects/RingMod'
 import Flanger from '../Controls/Effects/Flanger'
 import Quadrafuzz from '../Controls/Effects/Quadrafuzz'
+import PingPongDelay from '../Controls/Effects/PingPongDelay'
 
 const Basic = () => {
   return (
@@ -55,52 +56,11 @@ const Basic = () => {
             <RingMod />
             <Flanger />
             <Quadrafuzz />
-            {/* <EffectController
-              name="distortion II"
-              values={[
-                {
-                  name: 'gain',
-                  propertyName: 'distortion2Gain',
-                  updateFunction: 'changeDistortion2Gain',
-                },
-              ]}
-            /> */}
-            {/* <EffectController
-              label="ring mod"
-              name="ringModulator"
-              values={[
-                {
-                  // name: 'ring mod',
-                  propertyName: 'ringModulator',
-                  changeEffect: 'changeRingModulator',
-                },
-              ]}
-              // changeEffect={changeDistortion2Gain}
-              // initVals={{ gain: distortion2.gain }}
-            /> */}
-            {/* 
-            <EffectController
-              effectName='ring mod'
-              initVals={ringModulatorInitVals}
-              changeEffect={changeRingModulator}
-            />
-            <EffectController
-              effectName='flanger'
-              initVals={flanger1InitVals}
-              changeEffect={changeFlanger1}
-              minified={true}
-            />
-
-            <EffectController
-              effectName='quadrafuzz'
-              changeEffect={changeQuadrafuzz}
-              initVals={quadrafuzzInitVals}
-              minified={true}
-            /> */}
           </div>
 
           <div className={cn(styles.effectRack, 'flex')}>
             <DelayController />
+            <PingPongDelay />
             {/* <DelayController
               changeMix={changeDelayMix}
               changeDelayTime={changeDelayTime}
