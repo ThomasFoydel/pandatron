@@ -7,9 +7,7 @@ import './MouseFieldController.scss'
 const MouseFieldController = ({ children }) => {
   const [springOn, setSpringOn] = useState(false)
 
-  useEffect(() => {
-    setSpringOn(true)
-  }, [])
+  useEffect(() => setSpringOn(true), [])
 
   const componentRef = useRef()
   const { width, height } = useContainerDimensions(componentRef)
@@ -20,11 +18,9 @@ const MouseFieldController = ({ children }) => {
     mouseField: { x, y },
   } = globalState
 
-  const toggleLfo1 = (e) => {
-    setGlobalState({ type: 'toggleLfo1' })
-  }
+  const toggleLfo1 = () => setGlobalState({ type: 'toggleLfo1' })
+
   const changeMouseLfo = (x, y) => {
-    // console.log('changeMouseLfo: ', e)
     setGlobalState({ type: 'changeMouseLfo', payload: { value: { x, y } } })
   }
 

@@ -9,7 +9,6 @@ const Quadrafuzz = () => {
   const [globalState, setGlobalState] = useContext(CTX)
 
   const update = ({ val, prop }) => {
-    console.log({ val, prop })
     setGlobalState({ type: 'changeQuadrafuzz', payload: { value: { prop, val } } })
   }
 
