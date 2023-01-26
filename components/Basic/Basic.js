@@ -17,6 +17,7 @@ import styles from './Basic.module.scss'
 import Visualizer from '../Visualizer'
 import Keyboard from '../Keyboard'
 import Oscillators from '../Oscillators'
+import Distortion2Controller from '../Controls/Effects/Distortion2Controller'
 
 const Basic = () => {
   return (
@@ -47,7 +48,8 @@ const Basic = () => {
         <div className={styles.mainGridSection3}>
           <div className={styles.effectRack}>
             <DistortionController />
-            <EffectController
+            <Distortion2Controller />
+            {/* <EffectController
               name="distortion II"
               values={[
                 {
@@ -56,13 +58,21 @@ const Basic = () => {
                   updateFunction: 'changeDistortion2Gain',
                 },
               ]}
-            />
+            /> */}
+            {/* <EffectController
+              label="ring mod"
+              name="ringModulator"
+              values={[
+                {
+                  // name: 'ring mod',
+                  propertyName: 'ringModulator',
+                  changeEffect: 'changeRingModulator',
+                },
+              ]}
+              // changeEffect={changeDistortion2Gain}
+              // initVals={{ gain: distortion2.gain }}
+            /> */}
             {/* 
-            <EffectController
-              effectName='distortion II'
-              changeEffect={changeDistortion2Gain}
-              initVals={{ gain: distortion2.gain }}
-            />
             <EffectController
               effectName='ring mod'
               initVals={ringModulatorInitVals}
