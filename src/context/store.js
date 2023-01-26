@@ -1,5 +1,5 @@
-import React from 'react'
 import Pizzicato from 'pizzicato'
+import { createContext, useReducer } from 'react'
 import noiseOscClass from '../util/classes/noise'
 import chordAnalyzer from '../util/chordAnalyzer'
 import oscClass from '../util/classes/osc'
@@ -11,7 +11,7 @@ import {
   makeDistortionCurve,
 } from '../util/util'
 
-const CTX = React.createContext()
+const CTX = createContext()
 const actx = Pizzicato.context
 
 let analyzer
@@ -622,7 +622,7 @@ function reducer(state, action) {
 }
 
 const Store = ({ children }) => {
-  const stateHook = React.useReducer(reducer, initialValues)
+  const stateHook = useReducer(reducer, initialValues)
   return <CTX.Provider value={stateHook}>{children}</CTX.Provider>
 }
 

@@ -1,8 +1,8 @@
 import cn from 'classnames'
 import React, { useContext } from 'react'
-import DropDown from '../../DropDown/DropDown'
+import DropDown from '../DropDown/DropDown'
 import { CTX } from '../../../context/store'
-import Range from '../../Range'
+import Range from '../Range/Range'
 import './Filter.scss'
 
 const Filter = () => {

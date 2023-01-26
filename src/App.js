@@ -1,4 +1,3 @@
-import React from 'react'
 import Basic from './components/Basic/Basic'
 import logo from './assets/imgs/logo/logo.png'
 import './App.scss'

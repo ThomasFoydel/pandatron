@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
-import NoiseOscController from '../Controls/OscControls/NoiseOscController/NoiseOscController'
-import OscController from '../Controls/OscControls/OscController/OscController'
-import { CTX } from '../../context/store'
-import Range from '../Range'
+import NoiseOscController from './OscControls/NoiseOscController/NoiseOscController'
+import OscController from './OscControls/OscController/OscController'
+import { CTX } from '../../../context/store'
+import Range from '../Range/Range'
 import './Oscillators.scss'
 
 const Oscillators = () => {

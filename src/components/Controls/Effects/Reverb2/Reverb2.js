@@ -1,7 +1,7 @@
 import cn from 'classnames'
 import React, { useContext } from 'react'
 import { CTX } from '../../../../context/store'
-import Range from '../../../Range'
+import Range from '../../Range/Range'
 import '../Reverb1/Reverb1.scss'
 import Knob from '../../Knob'
 

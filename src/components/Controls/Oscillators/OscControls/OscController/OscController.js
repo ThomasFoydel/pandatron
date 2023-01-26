@@ -1,8 +1,7 @@
 import cn from 'classnames'
-import React from 'react'
-import waves from '../../../../assets/imgs/waves'
+import waves from '../../../../../assets/imgs/waves'
 import DropDown from '../../../DropDown/DropDown'
-import Knob from '../../Knob'
+import Knob from '../../../Knob'
 import './OscController.scss'
 
 const OscController = ({

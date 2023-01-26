@@ -1,6 +1,6 @@
+import QwertyHancock from 'qwerty-hancock'
 import { useContext, useEffect } from 'react'
-import QwertyHancock from '../qwerty-hancock/dist/qwerty-hancock'
-import { CTX } from '../../context/store'
+import { CTX } from '../../../context/store'
 
 const Keyboard = ({ className }) => {
   const [, setGlobalState] = useContext(CTX)
