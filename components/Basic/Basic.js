@@ -22,7 +22,7 @@ import RingMod from '../Controls/Effects/RingMod'
 import Flanger from '../Controls/Effects/Flanger'
 import Quadrafuzz from '../Controls/Effects/Quadrafuzz'
 import PingPongDelay from '../Controls/Effects/PingPongDelay'
-import Reverb2 from "../Controls/Effects/Reverb2"
+import Reverb2 from '../Controls/Effects/Reverb2'
 
 const Basic = () => {
   return (
@@ -64,14 +64,7 @@ const Basic = () => {
             <PingPongDelay />
             <ReverbController />
             <Reverb2 />
-
-            {/* 
-            <EffectController
-              effectName='reverb II'
-              initVals={reverb2InitVals}
-              changeEffect={changeReverb2}
-            />
-            <MasterGain changeMasterGain={changeMasterGain} /> */}
+            <MasterGain />
           </div>
         </div>
 

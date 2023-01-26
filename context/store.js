@@ -108,6 +108,7 @@ const initialValues = {
   lowPassFilter: 0,
   lfo1OscFreq: 0,
   chordName: '',
+  masterGain: 1,
 }
 
 const oscGain1 = actx.createGain()
@@ -536,10 +537,9 @@ function reducer(state, action) {
     }
 
     case 'changeMasterGain': {
-      const newValue = value < 10 ? 10 : value
-      const newGain = newValue / 100
-      masterGain.gain.exponentialRampToValueAtTime(newGain, actx.currentTime)
-      return { ...state, masterGain: newGain }
+      if (value === 0) masterGain.gain.value = 0
+      else masterGain.gain.exponentialRampToValueAtTime(value, actx.currentTime)
+      return { ...state, masterGain: value }
     }
 
     case 'generateOsc': {
