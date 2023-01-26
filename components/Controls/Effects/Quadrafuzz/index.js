@@ -5,18 +5,19 @@ import { CTX } from '../../../../context/store'
 import Range from '../../../Range'
 import Knob from '../../Knob'
 
-const Flanger = () => {
+const EffectController = () => {
   const [globalState, setGlobalState] = useContext(CTX)
 
   const update = ({ val, prop }) => {
     console.log({ val, prop })
-    setGlobalState({ type: 'changeFlanger', payload: { value: { prop, val } } })
+    setGlobalState({ type: 'changeQuadrafuzz', payload: { value: { prop, val } } })
   }
 
-  const properties = ['time', 'speed', 'depth', 'feedback']
+  const properties = ['lowGain', 'midLowGain', 'midHighGain', 'highGain']
+
   return (
     <div className={cn(styles.effectController, styles.minified)}>
-      <h2 className={cn(styles.name, styles.center)}>flanger</h2>
+      <h2 className={cn(styles.name, styles.center)}>quadrafuzz</h2>
       <div className={styles.inputsContainer}>
         {properties.map((property) => (
           <div key={property}>
@@ -42,11 +43,11 @@ const Flanger = () => {
             value={globalState.flanger.mix}
             onChange={(val) => update({ prop: 'mix', val })}
           />
-          <div className="center">{globalState.quadrafuzz.mix.toFixed(2)}</div>
+          <div className="center">{globalState.flanger.mix.toFixed(2)}</div>
         </div>
       </div>
     </div>
   )
 }
 
-export default Flanger
+export default EffectController

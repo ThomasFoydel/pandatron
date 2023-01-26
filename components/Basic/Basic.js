@@ -20,6 +20,7 @@ import Oscillators from '../Oscillators'
 import Distortion2Controller from '../Controls/Effects/Distortion2Controller'
 import RingMod from '../Controls/Effects/RingMod'
 import Flanger from '../Controls/Effects/Flanger'
+import Quadrafuzz from '../Controls/Effects/Quadrafuzz'
 
 const Basic = () => {
   return (
@@ -53,6 +54,7 @@ const Basic = () => {
             <Distortion2Controller />
             <RingMod />
             <Flanger />
+            <Quadrafuzz />
             {/* <EffectController
               name="distortion II"
               values={[
