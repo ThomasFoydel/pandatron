@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import { CTX } from '../../../../context/store'
 import Range from '../../Range/Range'
 import '../EffectController.scss'
-import Knob from '../../Knob'
+import Knob from '../../Knob/Knob'
 
 const RingMod = () => {
   const [globalState, setGlobalState] = useContext(CTX)

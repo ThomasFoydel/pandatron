@@ -2,7 +2,7 @@ import cn from 'classnames'
 import React, { useContext } from 'react'
 import { CTX } from '../../../../context/store'
 import Range from '../../Range/Range'
-import Knob from '../../Knob'
+import Knob from '../../Knob/Knob'
 import './Reverb1.scss'
 
 const Reverb = () => {

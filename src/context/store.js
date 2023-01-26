@@ -67,7 +67,7 @@ const initialValues = {
   reverb2: {
     time: 1,
     decay: 0.8,
-    reverse: true,
+    reverse: false,
     mix: 0,
   },
   lfo1Wet: 0,

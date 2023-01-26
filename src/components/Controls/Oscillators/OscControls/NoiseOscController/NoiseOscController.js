@@ -1,7 +1,7 @@
 import cn from 'classnames'
 import DropDown from '../../../DropDown/DropDown'
+import Knob from '../../../Knob/Knob'
 import './NoiseOscController.scss'
-import Knob from '../../../Knob'
 
 const NoiseOscController = ({ updateState, gain, type }) => {
   const updateGain = (value) => updateState('changeNoiseGain', value)

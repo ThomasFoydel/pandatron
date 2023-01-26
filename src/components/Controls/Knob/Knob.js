@@ -1,28 +1,39 @@
 import React, { useEffect, useRef } from 'react'
 
 const Knob = ({ onChange, value, className, style, min, max }) => {
+  const rotation = (value / (max - min)) * 360
+  const rotationRef = useRef(rotation)
+  const lastRotation = useRef(rotation)
+  const mouseDown = useRef(false)
+  const startY = useRef(0)
+
+  useEffect(() => {
+    rotationRef.current = rotation
+  }, [rotation])
+
   useEffect(() => {
     window.addEventListener('mouseup', handleMouseUp)
     window.addEventListener('mousemove', handleMouseMove)
   }, [])
-
-  const mouseDown = useRef(false)
-  const startY = useRef(0)
 
   const handleMouseDown = (e) => {
     mouseDown.current = true
     startY.current = e.clientY
   }
 
-  const handleMouseUp = () => (mouseDown.current = false)
+  const handleMouseUp = () => {
+    mouseDown.current = false
+    lastRotation.current = rotationRef.current
+  }
 
   const handleMouseMove = (e) => {
     if (mouseDown.current) {
-      let newPosition = (startY.current - e.clientY) * 2
-      if (newPosition < 0) newPosition = 0
-      if (newPosition > 360) newPosition = 360
+      const distanceTravelled = (startY.current - e.clientY) * 2
+      let newRotation = lastRotation.current + distanceTravelled
+      if (newRotation < 0) newRotation = 0
+      if (newRotation > 360) newRotation = 360
 
-      const ratio = newPosition / 360
+      const ratio = newRotation / 360
       const difference = max - min
       const relativeDifference = ratio * difference
       const relativePosition = min + relativeDifference
@@ -30,8 +41,6 @@ const Knob = ({ onChange, value, className, style, min, max }) => {
       if (onChange) onChange(relativePosition)
     }
   }
-
-  const rotation = (value / (max - min)) * 360
 
   return (
     <svg

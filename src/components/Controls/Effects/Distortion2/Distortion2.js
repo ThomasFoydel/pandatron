@@ -2,7 +2,7 @@ import cn from 'classnames'
 import React, { useContext } from 'react'
 import { CTX } from '../../../../context/store'
 import '../EffectController.scss'
-import Knob from '../../Knob'
+import Knob from '../../Knob/Knob'
 
 const Distortion2 = () => {
   const [globalState, setGlobalState] = useContext(CTX)

@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import { CTX } from '../../../../context/store'
 import Range from '../../Range/Range'
 import '../Reverb1/Reverb1.scss'
-import Knob from '../../Knob'
+import Knob from '../../Knob/Knob'
 
 const Reverb2 = () => {
   const [globalState, setGlobalState] = useContext(CTX)
