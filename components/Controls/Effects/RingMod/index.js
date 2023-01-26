@@ -1,6 +1,6 @@
 import cn from 'classnames'
 import React, { useContext } from 'react'
-import styles from '../EffectController/EffectController.module.scss'
+import styles from '../EffectController.module.scss'
 import { CTX } from '../../../../context/store'
 import Range from '../../../Range'
 import Knob from '../../Knob'

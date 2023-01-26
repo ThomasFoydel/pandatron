@@ -1,7 +1,7 @@
 import cn from 'classnames'
 import React, { useContext } from 'react'
 import { CTX } from '../../../../context/store'
-import styles from '../EffectController/EffectController.module.scss'
+import styles from '../EffectController.module.scss'
 import Knob from '../../Knob'
 
 const Distortion2Controller = () => {
