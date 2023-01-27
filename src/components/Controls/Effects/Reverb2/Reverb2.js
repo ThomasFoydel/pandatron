@@ -3,11 +3,11 @@ import React, { useContext } from 'react'
 import { CTX } from '../../../../context/store'
 import Range from '../../Range/Range'
 import '../Reverb1/Reverb1.scss'
-import Knob from '../../Knob'
+import Knob from '../../Knob/Knob'
 
 const Reverb2 = () => {
   const [globalState, setGlobalState] = useContext(CTX)
-  const { duration, decay, reverse, mix } = globalState.reverb2
+  const { time, decay, reverse, mix } = globalState.reverb2
 
   const updateState = (prop, val) => {
     setGlobalState({ type: 'changeReverb2', payload: { value: { prop, val } } })
@@ -27,17 +27,17 @@ const Reverb2 = () => {
 
       <div className="sliderInput">
         <div className="display">
-          <b>duration</b> {duration}
+          <b>duration</b> {time}
         </div>
 
-        <Range value={duration} min={1} max={20} onChange={handleDuration} />
+        <Range value={time} min={0.1} step={0.1} max={10} onChange={handleDuration} />
       </div>
 
       <div className="sliderInput">
         <div className="display">
           <b>decay</b> {decay}
         </div>
-        <Range value={decay} max={100} onChange={handleDecay} />
+        <Range value={decay} max={10} step={0.1} onChange={handleDecay} />
       </div>
 
       <div>
@@ -51,7 +51,7 @@ const Reverb2 = () => {
           <b>mix</b>
         </div>
 
-        <Knob className={cn('knob', 'center')} min={0} max={1} value={mix} onChange={handleMix} />
+        <Knob className={cn('knob', 'center')} max={1} min={0} value={mix} onChange={handleMix} />
 
         <div className="center">{mix.toFixed(2)}</div>
       </div>

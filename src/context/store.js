@@ -17,6 +17,8 @@ const actx = Pizzicato.context
 const analyzer = actx.createAnalyser()
 analyzer.fftSize = 2048 // 1024; // 512; // 256; // 32 64 128 256 512 1024 2048 4096 8192 16384 32768
 
+let nodes = []
+
 const initialValues = {
   filter1: {
     type: 'highpass',
@@ -67,7 +69,7 @@ const initialValues = {
   reverb2: {
     time: 1,
     decay: 0.8,
-    reverse: true,
+    reverse: false,
     mix: 0,
   },
   lfo1Wet: 0,
@@ -109,7 +111,6 @@ const initialValues = {
   chordName: '',
   masterGain: 1,
   notesForChordAnalysis: [],
-  nodes: [],
 }
 
 const oscGain1 = actx.createGain()
@@ -301,9 +302,9 @@ function reducer(state, action) {
     case 'changeFilter1Mix': {
       const num = +value
       const val = num.toFixed(2)
-      const newDryVal = ((100 - val) / 100).toFixed(2)
+      const newDryVal = 1 - val
       filter1.dryWet = newDryVal
-      const newWetVal = (val / 100).toFixed(2)
+      const newWetVal = val
       filter1DryGain.gain.setValueAtTime(newDryVal, actx.currentTime)
       filter1WetGain.gain.setValueAtTime(newWetVal, actx.currentTime)
       return {
@@ -314,7 +315,7 @@ function reducer(state, action) {
     }
 
     case 'changeFilter1Gain': {
-      const newVal = +value / 20
+      const newVal = +value
       filter1.gain.setValueAtTime(newVal, actx.currentTime)
       return { ...state, filter1: { ...state.filter1, gain: newVal } }
     }
@@ -581,7 +582,7 @@ function reducer(state, action) {
 
       const subOsc = new oscClass(actx, subOscType, subOscFreq, 0, envelope, subGain, freq)
 
-      const newNodes = [...state.nodes, newOsc1, newOsc2, subOsc, noiseOsc]
+      nodes = [...nodes, newOsc1, newOsc2, subOsc, noiseOsc]
 
       const noteIndex = findWithAttr(noteFreqs, 'note', note)
       // it's minus 48 because the keyboard is set to start on C4 instead of C0
@@ -591,13 +592,12 @@ function reducer(state, action) {
         ...state,
         chordName,
         notesForChordAnalysis: currentNotesForChordAnalysis,
-        nodes: newNodes,
       }
     }
 
     case 'killOsc': {
       const { freq, note } = value
-      const newNodes = state.nodes.filter((node) => {
+      nodes = nodes.filter((node) => {
         if (Math.round(node.initialFreq) === Math.round(freq)) {
           node.stop(0)
           return false
@@ -612,7 +612,7 @@ function reducer(state, action) {
         (item) => item !== noteIndex - 48
       )
       const chordName = chordAnalyzer(filteredNoteArray) || ''
-      return { ...state, chordName, notesForChordAnalysis: filteredNoteArray, nodes: newNodes }
+      return { ...state, chordName, notesForChordAnalysis: filteredNoteArray }
     }
 
     default:

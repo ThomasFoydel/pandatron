@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import { CTX } from '../../../../context/store'
 import Range from '../../Range/Range'
 import '../EffectController.scss'
-import Knob from '../../Knob'
+import Knob from '../../Knob/Knob'
 
 const Quadrafuzz = () => {
   const [globalState, setGlobalState] = useContext(CTX)
@@ -26,8 +26,8 @@ const Quadrafuzz = () => {
             <Range
               className={cn('center', 'input')}
               onChange={(e) => update({ prop: property, val: e.target.value })}
-              min={0}
-              max={100}
+              step={0.01}
+              max={1}
               value={globalState.quadrafuzz[property]}
             />
           </div>

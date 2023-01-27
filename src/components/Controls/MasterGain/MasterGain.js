@@ -1,7 +1,7 @@
 import cn from 'classnames'
 import React, { useContext } from 'react'
 import { CTX } from '../../../context/store'
-import Knob from '../Knob'
+import Knob from '../Knob/Knob'
 import './MasterGain.scss'
 
 const MasterGain = () => {
