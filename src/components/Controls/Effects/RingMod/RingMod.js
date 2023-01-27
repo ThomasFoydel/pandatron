@@ -32,7 +32,7 @@ const RingMod = () => {
         <div>
           <div className={cn('paramName', 'center')}>
             <b>distortion</b>{' '}
-            <span className="val">{globalState.ringModulator.distortion.toFixed(1)}</span>
+            <span className="val">{(+globalState.ringModulator.distortion).toFixed(1)}</span>
           </div>
           <Range
             className={cn('center', 'input')}
