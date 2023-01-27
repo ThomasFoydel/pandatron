@@ -15,7 +15,7 @@ const PingPong = () => {
   const properties = ['feedback', 'time']
 
   return (
-    <div className={cn('effectController', 'minified')}>
+    <div className="effectController">
       <h2 className={cn('name', 'center')}>ping pong</h2>
       <div className="inputsContainer">
         {properties.map((property) => (
