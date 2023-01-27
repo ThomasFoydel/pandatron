@@ -17,6 +17,8 @@ const actx = Pizzicato.context
 const analyzer = actx.createAnalyser()
 analyzer.fftSize = 2048 // 1024; // 512; // 256; // 32 64 128 256 512 1024 2048 4096 8192 16384 32768
 
+let nodes = []
+
 const initialValues = {
   filter1: {
     type: 'highpass',
@@ -109,7 +111,6 @@ const initialValues = {
   chordName: '',
   masterGain: 1,
   notesForChordAnalysis: [],
-  nodes: [],
 }
 
 const oscGain1 = actx.createGain()
@@ -581,7 +582,7 @@ function reducer(state, action) {
 
       const subOsc = new oscClass(actx, subOscType, subOscFreq, 0, envelope, subGain, freq)
 
-      const newNodes = [...state.nodes, newOsc1, newOsc2, subOsc, noiseOsc]
+      nodes = [...nodes, newOsc1, newOsc2, subOsc, noiseOsc]
 
       const noteIndex = findWithAttr(noteFreqs, 'note', note)
       // it's minus 48 because the keyboard is set to start on C4 instead of C0
@@ -591,13 +592,12 @@ function reducer(state, action) {
         ...state,
         chordName,
         notesForChordAnalysis: currentNotesForChordAnalysis,
-        nodes: newNodes,
       }
     }
 
     case 'killOsc': {
       const { freq, note } = value
-      const newNodes = state.nodes.filter((node) => {
+      nodes = nodes.filter((node) => {
         if (Math.round(node.initialFreq) === Math.round(freq)) {
           node.stop(0)
           return false
@@ -612,7 +612,7 @@ function reducer(state, action) {
         (item) => item !== noteIndex - 48
       )
       const chordName = chordAnalyzer(filteredNoteArray) || ''
-      return { ...state, chordName, notesForChordAnalysis: filteredNoteArray, nodes: newNodes }
+      return { ...state, chordName, notesForChordAnalysis: filteredNoteArray }
     }
 
     default:
