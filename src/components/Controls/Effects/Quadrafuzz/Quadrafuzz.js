@@ -12,16 +12,21 @@ const Quadrafuzz = () => {
     setGlobalState({ type: 'changeQuadrafuzz', payload: { value: { prop, val } } })
   }
 
-  const properties = ['lowGain', 'midLowGain', 'midHighGain', 'highGain']
+  const properties = [
+    { property: 'lowGain', label: 'low' },
+    { property: 'midLowGain', label: 'mid low' },
+    { property: 'midHighGain', label: 'mid high' },
+    { property: 'highGain', label: 'high' },
+  ]
 
   return (
-    <div className={cn('effectController', 'minified')}>
+    <div className="effectController">
       <h2 className={cn('name', 'center')}>quadrafuzz</h2>
       <div className="inputsContainer">
-        {properties.map((property) => (
+        {properties.map(({ property, label }) => (
           <div key={property}>
             <div className={cn('paramName', 'center')}>
-              <b>{property}</b> <span className="val">{globalState.quadrafuzz[property]}</span>
+              <b>{label}</b> <span className="val">{globalState.quadrafuzz[property]}</span>
             </div>
             <Range
               className={cn('center', 'input')}

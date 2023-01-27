@@ -14,7 +14,7 @@ const Flanger = () => {
 
   const properties = ['time', 'speed', 'depth', 'feedback']
   return (
-    <div className={cn('effectController', 'minified')}>
+    <div className="effectController">
       <h2 className={cn('name', 'center')}>flanger</h2>
       <div className="inputsContainer">
         {properties.map((property) => (
