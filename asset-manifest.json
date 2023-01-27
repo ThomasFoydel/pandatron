@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/pandatron/static/css/main.e910f0e7.css",
-    "main.js": "/pandatron/static/js/main.3fea1839.js",
+    "main.js": "/pandatron/static/js/main.672c0efd.js",
     "static/media/logo.png": "/pandatron/static/media/logo.86912e4e1d7e56118e22.png",
     "static/media/panda6.png": "/pandatron/static/media/panda6.efb893fd28ab8c83fc9c.png",
     "static/media/panda2.png": "/pandatron/static/media/panda2.8952e38b23e7b2359a99.png",
@@ -12,10 +12,10 @@
     "static/media/panda7.png": "/pandatron/static/media/panda7.a97151ebac3abd88b537.png",
     "index.html": "/pandatron/index.html",
     "main.e910f0e7.css.map": "/pandatron/static/css/main.e910f0e7.css.map",
-    "main.3fea1839.js.map": "/pandatron/static/js/main.3fea1839.js.map"
+    "main.672c0efd.js.map": "/pandatron/static/js/main.672c0efd.js.map"
   },
   "entrypoints": [
     "static/css/main.e910f0e7.css",
-    "static/js/main.3fea1839.js"
+    "static/js/main.672c0efd.js"
   ]
 }
