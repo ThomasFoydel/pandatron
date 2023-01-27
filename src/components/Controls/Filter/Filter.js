@@ -27,7 +27,7 @@ const Filter = () => {
           </div>
           <Range
             className="center"
-            max="19000"
+            max="20000"
             id="changeFilter1Freq"
             value={frequency}
             onChange={updateFilter}
@@ -47,6 +47,7 @@ const Filter = () => {
           <div>
             <div className="center">
               <b>gain</b>
+              {(+gain).toFixed(2)}
             </div>
             <Range className="center" value={gain} id="changeFilter1Gain" onChange={updateFilter} />
           </div>
@@ -55,11 +56,13 @@ const Filter = () => {
         <div>
           <div className="center">
             <b>mix </b>
-            {(filter1WetGain * 100).toFixed(0)}
+            {(+filter1WetGain).toFixed(2)}
           </div>
           <Range
+            max={1}
+            step={0.01}
             className="center"
-            value={filter1WetGain * 100}
+            value={filter1WetGain}
             id="changeFilter1Mix"
             onChange={updateFilter}
           />

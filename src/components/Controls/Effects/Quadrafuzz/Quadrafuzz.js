@@ -26,8 +26,8 @@ const Quadrafuzz = () => {
             <Range
               className={cn('center', 'input')}
               onChange={(e) => update({ prop: property, val: e.target.value })}
-              min={0}
-              max={100}
+              step={0.01}
+              max={1}
               value={globalState.quadrafuzz[property]}
             />
           </div>

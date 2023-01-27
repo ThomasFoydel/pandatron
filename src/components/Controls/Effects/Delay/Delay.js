@@ -25,7 +25,7 @@ const Delay = () => {
         <Knob
           className={cn('center', 'knob')}
           min={0}
-          max={100}
+          max={5}
           value={delay1}
           onChange={updateDelayTime}
         />

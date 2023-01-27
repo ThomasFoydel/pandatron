@@ -2,8 +2,8 @@ import cn from 'classnames'
 import React, { useContext } from 'react'
 import { CTX } from '../../../../context/store'
 import Range from '../../Range/Range'
-import '../EffectController.scss'
 import Knob from '../../Knob/Knob'
+import '../EffectController.scss'
 
 const RingMod = () => {
   const [globalState, setGlobalState] = useContext(CTX)
@@ -23,21 +23,22 @@ const RingMod = () => {
           <Range
             className={cn('center', 'input')}
             onChange={(e) => update({ prop: 'speed', val: e.target.value })}
-            min={0}
-            max={100}
+            step={10}
+            max={2000}
             value={globalState.ringModulator.speed}
           />
         </div>
 
         <div>
           <div className={cn('paramName', 'center')}>
-            <b>distortion</b> <span className="val">{globalState.ringModulator.distortion}</span>
+            <b>distortion</b>{' '}
+            <span className="val">{globalState.ringModulator.distortion.toFixed(1)}</span>
           </div>
           <Range
             className={cn('center', 'input')}
             onChange={(e) => update({ prop: 'distortion', val: e.target.value })}
-            min={0}
-            max={100}
+            step={0.5}
+            max={50}
             value={globalState.ringModulator.distortion}
           />
         </div>

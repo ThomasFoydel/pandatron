@@ -302,9 +302,9 @@ function reducer(state, action) {
     case 'changeFilter1Mix': {
       const num = +value
       const val = num.toFixed(2)
-      const newDryVal = ((100 - val) / 100).toFixed(2)
+      const newDryVal = 1 - val
       filter1.dryWet = newDryVal
-      const newWetVal = (val / 100).toFixed(2)
+      const newWetVal = val
       filter1DryGain.gain.setValueAtTime(newDryVal, actx.currentTime)
       filter1WetGain.gain.setValueAtTime(newWetVal, actx.currentTime)
       return {
@@ -315,7 +315,7 @@ function reducer(state, action) {
     }
 
     case 'changeFilter1Gain': {
-      const newVal = +value / 20
+      const newVal = +value
       filter1.gain.setValueAtTime(newVal, actx.currentTime)
       return { ...state, filter1: { ...state.filter1, gain: newVal } }
     }
