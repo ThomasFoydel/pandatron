@@ -1,8 +1,10 @@
-<div align="center"><h1>pandatron</h1></div>
+<div align="center"><h1>PANDATRON</h1></div>
 
 <div align="center"><h5>A synthesizer for the browser <a href="https://thomasfoydel.github.io/pandatron/">live demo here</a></h5></div>
 
 <img src="./public/preview.jpg" width="100%" >
+
+Pandatron is a synthesizer built with the Web Audio API. The interface is built with React. Some of the effects are from a library names Pizzicato. React-Spring is used for some animation. Global state is stored using React Context. Originally the knobs were from a package called react-rotary-knob, but it is not compatible with react version 18, so a new knob component had to be built based on that package when this project was upgraded.
 
 As soon as I heard about the webaudio API in a dev conference talk on youtube I knew I was going to have a hard time sleeping until I had finished building a synthesizer with it.
 
