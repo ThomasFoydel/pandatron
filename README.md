@@ -2,7 +2,7 @@
 
 <div align="center"><h5>A synthesizer for the browser <a href="https://thomasfoydel.github.io/pandatron/">live demo here</a></h5></div>
 
-<img src="./public/preview.png" width="100%" >
+<img src="./public/preview.jpg" width="100%" >
 
 As soon as I heard about the webaudio API in a dev conference talk on youtube I knew I was going to have a hard time sleeping until I had finished building a synthesizer with it.
 
