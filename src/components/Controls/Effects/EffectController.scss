@@ -15,9 +15,11 @@
     width: 100%;
     font-size: 1rem;
   }
+
   .inputsContainer {
     padding: 0 0.6rem;
   }
+  
   .input {
     width: 100%;
     margin-top: -0.2rem;
@@ -35,6 +37,7 @@
     width: 9rem;
     cursor: pointer;
   }
+
   .reversible {
     border-radius: 3px;
     background: #eee;
@@ -42,6 +45,7 @@
     transition: all 0.3s ease;
     cursor: pointer;
   }
+
   .reversed {
     color: #eee;
     background: #222;
